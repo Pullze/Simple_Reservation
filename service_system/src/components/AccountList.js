@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../config/config.js';
-import './AccountList.css'
 import axios from 'axios';
 import { Table, Row, Col } from 'antd';
 
