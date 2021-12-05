@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../config/config.js';
+import './AccountList.css'
 import axios from 'axios';
+import { Table, Row, Col } from 'antd';
 
 export default class AccountList extends React.Component {
     constructor(props) {
@@ -22,21 +24,38 @@ export default class AccountList extends React.Component {
         this.getAccounts();
     }
 
+    columns = [
+        {
+            title: 'First Name',
+            dataIndex: 'first_Name',
+            key: 'first_Name',
+        },
+        {
+            title: 'Last Name',
+            dataIndex: 'last_Name',
+            key: 'last_Name',
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+        },
+        {
+            title: 'Password',
+            dataIndex: 'pass',
+            key: 'pass',
+        },
+    ]
+
     render() {
         
         return (
-            <>
-            <p> Welcome to the Demo! </p>
-            <React.Fragment>
-                <ul>
-                    {
-                        this.state.accounts.map((key, index) => {
-                            return <li key={index}>{key.email}   {key.first_Name}   {key.last_Name}  {key.pass}</li>
-                        })
-                    }
-                </ul>
-            </React.Fragment>
-            </>
+            <Row justify="center">
+                <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+                    <p> Welcome to the Demo! </p>
+                    <Table dataSource={this.state.accounts} columns={this.columns}/>
+                </Col>
+            </Row>
         );
     }
 

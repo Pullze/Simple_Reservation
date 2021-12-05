@@ -1,26 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css';
+import { Layout } from 'antd';
 import AccountList from './components/AccountList';
 
 function App() {
+  const { Content } = Layout;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Content style={{ margin: '24px 24px 0px', paddingBottom: '0px', backgroundColor: 'white' }}>
       <AccountList></AccountList>
-    </div>
+   </Content>
   );
 }
 
