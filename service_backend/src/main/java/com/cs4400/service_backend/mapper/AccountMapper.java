@@ -10,4 +10,6 @@ public interface AccountMapper {
 
    List<Account> getAllAccounts();
 
+   Account login(String email, String passwd);
+
 }
