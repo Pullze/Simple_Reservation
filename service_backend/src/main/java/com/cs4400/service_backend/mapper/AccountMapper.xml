@@ -31,7 +31,7 @@
     </select>
 
     <insert id="register_owner">
-        {call register_owner(#{owner_email}, #{owner_first_name}, #{owner_last_name}, #{password}, "217-301-2929");}
+        {call register_owner(#{owner_email}, #{owner_first_name}, #{owner_last_name}, #{password}, #{phone_number})}
     </insert>
 
     <insert id="register_customer">

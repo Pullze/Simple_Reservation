@@ -27,6 +27,7 @@ public class RegisterUserImpl implements RegisterUser {
         if (accountMapper.check_owner_exist(owner_email) != null) {
             // owner already exist
             return 1;
+
         }
         accountMapper.register_owner(owner_email,owner_first_name,owner_last_name,password,phone_number);
         return 0;
