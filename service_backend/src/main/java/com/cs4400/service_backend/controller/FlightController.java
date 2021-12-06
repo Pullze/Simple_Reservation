@@ -3,6 +3,8 @@ package com.cs4400.service_backend.controller;
 import com.cs4400.service_backend.entity.Flight;
 import com.cs4400.service_backend.service.FlightProcess;
 import com.cs4400.service_backend.vo.FlightInfo;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +31,10 @@ public class FlightController {
                                                       @RequestParam String airline_name,
                                                       @RequestParam String from_airport,
                                                       @RequestParam String  to_airport,
-                                                      @RequestParam Time departure_time,
-                                                      @RequestParam Time arrival_time,
+                             @JsonFormat(pattern = "HH:mm:ss") @RequestParam Time departure_time,
+                             @JsonFormat(pattern = "HH:mm:ss") @RequestParam Time arrival_time,
                                                       @RequestParam Date flight_date,
-                                                      @RequestParam int cost,
+                                                      @RequestParam double cost,
                                                       @RequestParam int capacity,
                                                       @RequestParam Date current_date) {
 

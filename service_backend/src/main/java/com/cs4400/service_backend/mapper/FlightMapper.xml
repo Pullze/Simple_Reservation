@@ -9,9 +9,9 @@
 
 
     <insert id = "schedule_flight">
-    INSERT INTO Flight (Flight_Num, Airline_Name, From_Airport, To_Airport, Departure_Time,  Arrival_Time, Flight_Date,
+    insert into Flight (Flight_Num, Airline_Name, From_Airport, To_Airport, Departure_Time,  Arrival_Time, Flight_Date,
                         Cost, Capacity)
-    VALUES (#{flight_num}, #{airline_name}, #{from_airport}, #{to_airport}, #{departure_time}, #{arrival_time},
+    values (#{flight_num}, #{airline_name}, #{from_airport}, #{to_airport}, #{departure_time}, #{arrival_time},
              #{flight_date}, #{cost}, #{capacity});
     </insert>
 </mapper>

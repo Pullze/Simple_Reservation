@@ -1,15 +1,17 @@
 package com.cs4400.service_backend.entity;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.Date;
 
+@Data
 public class Flight {
     @ApiModelProperty(value = "flight_num")
-    private int Flight_Num;
+    private String Flight_Num;
 
     @ApiModelProperty(value = "airline_name")
-    private int Airline_Name;
+    private String Airline_Name;
 
     @ApiModelProperty(value = "departure_time")
     private Date Departure_Time;
