@@ -10,7 +10,15 @@
         from accounts;
     </select>
 
-    <select id="login" resultType="com.cs4400.service_backend.entity.Account">
-        select * from accounts where Email = #{email} and Pass = #{passwd};
+    <select id="login" resultType="com.cs4400.service_backend.vo.LoginInfo">
+        select Email,
+               First_Name,
+               Last_Name,
+               exists(select * from admins where admins.Email = #{email}) as is_admin,
+               exists(select * from clients where clients.Email = #{email}) as is_client,
+               exists(select * from customer where customer.Email = #{email}) as is_customer,
+               exists(select * from owners where owners.Email = #{email}) as is_owner
+        from accounts
+        where Email = #{email} and Pass = #{passwd};
     </select>
 </mapper>
