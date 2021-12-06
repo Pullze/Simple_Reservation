@@ -1,44 +1,47 @@
 package com.cs4400.service_backend.entity;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.Date;
 
+@Data
 public class Flight {
+
     @ApiModelProperty(value = "flight_num")
-    public int Flight_Num;
+    private int flight_num;
 
     @ApiModelProperty(value = "airline_name")
-    public int Airline_Name;
+    private int airline_name;
 
     @ApiModelProperty(value = "departure_time")
-    public Date Departure_Time;
+    private Date departure_time;
 
     @ApiModelProperty(value = "arrival_time")
-    public Date Arrival_Time;
+    private Date arrival_time;
 
     @ApiModelProperty(value = "flight_date")
-    public Date Flight_Date;
+    private Date flight_date;
 
     @ApiModelProperty(value = "cost")
-    public double Cost;
+    private double cost;
 
     @ApiModelProperty(value = "capacity")
-    public int Capacity;
+    private int capacity;
 
     @ApiModelProperty(value = "from_airport")
-    public String From_Airport;
+    private String from_airport;
 
     @ApiModelProperty(value = "to_airport")
-    public String To_Airport;
+    private String to_airport;
 
     @ApiModelProperty(value = "remaing_seats")
-    public int Remaning_Seats;
+    private int remaining_seats;
 
     @ApiModelProperty(value = "nearest_airport")
-    public int Nearest_Airport;
+    private int nearest_airport;
 
     @ApiModelProperty(value = "nearest_aiprort_distance")
-    public int Nearest_Airport_Distance;
+    private int nearest_airport_distance;
 
 }
