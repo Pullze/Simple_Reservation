@@ -53,5 +53,24 @@ public class UserController {
         }
     }
 
+    /**
+     *
+     * @param owner_email owner's mail
+     * @param owner_first_name dd
+     * @param owner_last_name d
+     * @param password d
+     * @param phone_number d
+     * @return d
+     */
+    @PostMapping(value = "/register_owner")
+    @ApiOperation(value = "regsiter_owner", notes = "Validate login info (unsafe)")
+    public ResponseEntity<String> register_owner(@RequestParam String owner_email,@RequestParam String owner_first_name,@RequestParam String owner_last_name,@RequestParam String password,@RequestParam String phone_number) {
+        if (registerUser.register_owner(owner_email,owner_first_name,owner_last_name,password,phone_number) == 0) {
+            return ResponseEntity.status(HttpStatus.OK).body("Success!");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Input Invalid!");
+        }
+    }
+
 
 }
