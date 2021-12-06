@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class FlightController {
     @Autowired
     private FlightProcess flightProcess;
 
-
+    @PostMapping(value = "/schedule_flight")
     @ApiOperation(value = "schedule flight", notes = "schedule flight")
     public ResponseEntity<FlightInfo> schedule_flight(@RequestParam String flight_num,
                                                       @RequestParam String airline_name,
