@@ -6,7 +6,8 @@ import java.sql.Date;
 import java.sql.Time;
 
 public interface FlightMapper {
-    Flight schedule_flight(String flight_num, String airline_name, String  from_airport , String to_airport,
-                           Time departure_time, Time arrival_time, Date flight_date, int cost, int capacity,
-                           Date current_date);
+    void schedule_flight(String flight_num, String airline_name, String  from_airport , String to_airport,
+                           Time departure_time, Time arrival_time, Date flight_date, int cost, int capacity);
+
+    Flight check_flight(String flight_num, String airline_name);
 }
