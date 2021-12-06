@@ -31,12 +31,12 @@ public class UserController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<String> registerAccount(@RequestParam String email, @RequestParam String passwd) {
-
         if (login.login(email, passwd)) {
             return ResponseEntity.status(HttpStatus.OK).body("Success!");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Input Invalid!");
         }
-
     }
+
+
 }
