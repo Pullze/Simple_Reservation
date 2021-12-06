@@ -7,9 +7,9 @@ import lombok.Data;
 public class Airline {
 
     @ApiModelProperty(value = "name")
-    public String name;
+    private String name;
 
     @ApiModelProperty(value = "rating")
-    public int rating;
+    private int rating;
 
 }

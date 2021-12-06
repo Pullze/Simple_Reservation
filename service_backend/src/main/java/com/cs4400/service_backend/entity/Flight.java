@@ -9,10 +9,10 @@ import java.util.Date;
 public class Flight {
 
     @ApiModelProperty(value = "flight_num")
-    private int flight_num;
+    private String flight_num;
 
     @ApiModelProperty(value = "airline_name")
-    private int airline_name;
+    private String airline_name;
 
     @ApiModelProperty(value = "departure_time")
     private Date departure_time;
@@ -35,13 +35,13 @@ public class Flight {
     @ApiModelProperty(value = "to_airport")
     private String to_airport;
 
-    @ApiModelProperty(value = "remaing_seats")
+    @ApiModelProperty(value = "remaining_seats")
     private int remaining_seats;
 
     @ApiModelProperty(value = "nearest_airport")
     private int nearest_airport;
 
-    @ApiModelProperty(value = "nearest_aiprort_distance")
+    @ApiModelProperty(value = "nearest_airport_distance")
     private int nearest_airport_distance;
 
 }
