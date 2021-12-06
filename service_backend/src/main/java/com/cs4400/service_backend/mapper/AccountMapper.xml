@@ -6,6 +6,6 @@
     </select>
 
     <select id="login" resultType="com.cs4400.service_backend.entity.Account">
-        select * from accounts where Email = #{email} and Pass = #{passwd}
+        select * from accounts where Email = #{email} and Pass = #{passwd};
     </select>
 </mapper>
