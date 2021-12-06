@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd';
@@ -8,10 +8,12 @@ import Login from './pages/Login';
 function App() {
   const { Content } = Layout;
   return (
-    <Content style={{ margin: '24px 24px 0px', paddingBottom: '0px', backgroundColor: 'white' }}>
-      <AccountList></AccountList>
-      <Login/>
-   </Content>
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<Login/>}/>
+        <Route exact path="/hello" element={<AccountList/>}/>
+      </Routes>
+    </Router>
   );
 }
 

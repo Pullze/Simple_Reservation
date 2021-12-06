@@ -3,17 +3,19 @@ package com.cs4400.service_backend.mapper;
 import com.cs4400.service_backend.entity.Account;
 import com.cs4400.service_backend.entity.Owner;
 import com.cs4400.service_backend.entity.Customer;
+import com.cs4400.service_backend.vo.LoginInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface AccountMapper {
 
    List<Account> getAllAccounts();
 
-   Account login(String email, String passwd);
+   LoginInfo login(String email, String passwd);
 
    void register_owner(String owner_email, String owner_first_name, String owner_last_name, String password, String phone_number);
 
