@@ -6,8 +6,11 @@ import lombok.Data;
 @Data
 public class Customer extends Client{
 
-    @ApiModelProperty(value = "cvv")
+    @ApiModelProperty(value = "ccNumber")
     private String ccNumber;
+
+    @ApiModelProperty(value = "cvv")
+    private String cvv;
 
     @ApiModelProperty(value = "Expiration Date")
     private String exp_date;

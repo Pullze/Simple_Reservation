@@ -21,4 +21,23 @@
         from accounts
         where Email = #{email} and Pass = #{passwd};
     </select>
+
+    <select id="check_owner_exist" resultType="com.cs4400.service_backend.entity.Owner">
+        select * from Owners where Email = #{owner_email};
+    </select>
+
+    <select id="check_customer_exist" resultType="com.cs4400.service_backend.entity.Customer">
+        select * from Customer where Email = #{customer_email};
+    </select>
+
+    <insert id="register_owner">
+        {call register_owner(#{owner_email}, #{owner_first_name}, #{owner_last_name}, #{password}, "217-301-2929");}
+    </insert>
+
+    <insert id="register_customer">
+        {call register_customer(#{customer_email}, #{customer_first_name}, #{customer_last_name}, #{password}, #{phone_number}, #{cc_number}, #{cvv}, #{exp_date}, #{location});}
+    </insert>
+
+
+
 </mapper>
