@@ -18,4 +18,7 @@ public class Account {
     @ApiModelProperty(value = "Password")
     public String pass;
 
+    @ApiModelProperty(value = "Is Admin")
+    public boolean admin;
+
 }
