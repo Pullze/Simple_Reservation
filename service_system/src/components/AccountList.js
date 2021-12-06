@@ -57,5 +57,5 @@ export default class AccountList extends React.Component {
             </Row>
         );
     }
-
+    
 }
