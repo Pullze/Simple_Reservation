@@ -5,6 +5,7 @@ import { Form, Input, Button, Row, Col, message, Layout } from 'antd';
 import { UserOutlined, LockOutlined, BlockOutlined } from '@ant-design/icons';
 import './Login.css';
 import { Content } from 'antd/lib/layout/layout';
+import { Link } from 'react-router-dom';
 
 export default class Login extends React.Component {
     
@@ -72,6 +73,9 @@ export default class Login extends React.Component {
                               <p id = "error" style={{ fontWeight: 'bold', color: 'red' }}></p>
                           </Form.Item>
                       </Form>
+                      <Button type="primary" href="/register" onClick={console.log("click")}> 
+                          No account? Register
+                      </Button>
                   </Col>
                 </Row>
               </Content>
