@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cs4400.service_backend.mapper.FlightMapper">
+    <select id = "check_flight" resultType = "Flight">
+        select  * from Flight
+            where Flight_Num = #{flight_num} and Airline_Name = #{airline_name};
+    </select>
+
+
+    <insert id = "schedule_flight">
+    insert into Flight (Flight_Num, Airline_Name, From_Airport, To_Airport, Departure_Time,  Arrival_Time, Flight_Date,
+                        Cost, Capacity)
+    values (#{flight_num}, #{airline_name}, #{from_airport}, #{to_airport}, #{departure_time}, #{arrival_time},
+             #{flight_date}, #{cost}, #{capacity});
+    </insert>
+</mapper>
