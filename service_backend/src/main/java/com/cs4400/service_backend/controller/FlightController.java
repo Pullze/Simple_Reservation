@@ -41,7 +41,7 @@ public class FlightController {
         String message = flightProcess.schedule_flight(flight_num, airline_name, from_airport, to_airport,
                 departure_time, arrival_time, flight_date, cost, capacity, current_date);
 
-        if (message == "schedule succeeded") {
+        if (message.equals("schedule succeeded")) {
             Flight flight = flightProcess.check_flight(flight_num, airline_name);
             return ResponseEntity.status(HttpStatus.OK).body(new FlightInfo(flight, message));
         } else {
