@@ -1,20 +1,24 @@
 package com.cs4400.service_backend.entity;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
+@Data
 public class Review {
+
     @ApiModelProperty(value = "property_name")
-    public String Property_Name;
+    private String property_name;
 
     @ApiModelProperty(value = "owner_email")
-    public String Owner_Email;
+    private String owner_email;
 
     @ApiModelProperty(value = "customer_Email")
-    public String Custoemr_Email;
+    private String customer_Email;
 
     @ApiModelProperty(value = "content")
-    public String Content;
+    private String content;
 
     @ApiModelProperty(value = "score")
-    public int Score;
+    private int score;
+
 }
