@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout, Row, Col } from "antd";
 import "./Home.css";
+import { useHistory } from "react-router";
 
 const links = [
   {
@@ -33,10 +34,14 @@ const links = [
   },
 ];
 
-function Home() {
+function Home(props) {
+  const history = useHistory(props);
+  const historyState = history.location.state
+  console.log(historyState);
   return (
     <Layout>
       <Row className="admin-home-row" justify="space-around" align="middle">
+        <h2>Now logged in as {historyState.email} </h2>
         <Col className="heading" span={24} align="middle">
           Admin Home
         </Col>
