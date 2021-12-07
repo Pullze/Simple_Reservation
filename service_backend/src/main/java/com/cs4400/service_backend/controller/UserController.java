@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +73,29 @@ public class UserController {
     @ApiOperation(value = "regsiter_owner", notes = "Validate login info (unsafe)")
     public ResponseEntity<String> register_owner(@RequestParam String owner_email,@RequestParam String owner_first_name,@RequestParam String owner_last_name,@RequestParam String password,@RequestParam String phone_number) {
         if (registerUser.register_owner(owner_email,owner_first_name,owner_last_name,password,phone_number) == 0) {
+            return ResponseEntity.status(HttpStatus.OK).body("Success!");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Input Invalid!");
+        }
+    }
+
+    /**
+     *
+     * @param customer_email t
+     * @param customer_first_name t
+     * @param customer_last_name t
+     * @param password t
+     * @param phone_number t
+     * @param cc_number t
+     * @param cvv t
+     * @param exp_date t
+     * @param location t
+     * @return
+     */
+    @PostMapping(value = "/register_customer")
+    @ApiOperation(value = "regsiter_customer", notes = "Validate login info (unsafe)")
+    public ResponseEntity<String> register_customer(@RequestParam String customer_email, @RequestParam String customer_first_name, @RequestParam String customer_last_name, @RequestParam String password, @RequestParam String phone_number,@RequestParam String cc_number,@RequestParam String cvv,@RequestParam Date exp_date,@RequestParam String location) {
+        if (registerUser.register_customer(customer_email,customer_first_name,customer_last_name,password,phone_number,cc_number, cvv, exp_date, location) == 0) {
             return ResponseEntity.status(HttpStatus.OK).body("Success!");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Input Invalid!");
