@@ -15,19 +15,19 @@ public class LoginInfo {
     private String last_name;
 
     @ApiModelProperty(value = "is Admin?")
-    private Integer is_admin;
+    private Boolean is_admin;
 
     @ApiModelProperty(value = "is Client?")
-    private Integer is_client;
+    private Boolean is_client;
 
     @ApiModelProperty(value = "is Customer?")
-    private Integer is_customer;
+    private Boolean is_customer;
 
     @ApiModelProperty(value = "is Owner?")
-    private Integer is_owner;
+    private Boolean is_owner;
 
     @ApiModelProperty(value = "is Success?")
-    private boolean success;
+    private Boolean success;
 
     public void setSuccess(boolean b) {
         success = b;

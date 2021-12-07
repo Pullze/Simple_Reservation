@@ -2,19 +2,34 @@ import React from "react";
 import {
   Form,
   Input,
-  Button,
+  InputNumber,
+  DatePicker,
   Select,
+  Button,
   Row,
   Col,
-  message,
   Layout,
   Tabs,
-  InputNumber,
 } from "antd";
 import "./Register.css";
 
-const { Option } = Select;
 const { TabPane } = Tabs;
+const { Option } = Select;
+
+const months = [
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+];
 
 function Register() {
   const [form] = Form.useForm();
@@ -22,12 +37,6 @@ function Register() {
   const onFinish = (values) => {
     console.log("Success:", values);
   };
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      +1
-    </Form.Item>
-  );
 
   //   const validateCardNumber = (cardNum) => {
   //       if (cardNum.length !== 16) {
@@ -91,7 +100,7 @@ function Register() {
           },
         ]}
       >
-        <Input />
+        <Input addonBefore="+1" />
       </Form.Item>,
       <Form.Item
         key="4"
@@ -101,6 +110,10 @@ function Register() {
           {
             required: true,
             message: "Please input your password!",
+          },
+          {
+            min: 8,
+            message: "Password must have at least 8 characters.",
           },
         ]}
         hasFeedback
@@ -137,18 +150,25 @@ function Register() {
 
   return (
     <Layout>
-      <Row style={{ minHeight: "100vh" }} justify="space-around" align="top">
+      <Row
+        style={{ minHeight: "100vh", paddingTop: "10%" }}
+        justify="space-around"
+        align="top"
+      >
+        <Col className="heading" span={24} align="middle">
+          Register Account
+        </Col>
         <Col span={24} align="middle">
-          <Tabs className="tabs" defaultActiveKey="1" type="card" centered>
+          <Tabs defaultActiveKey="1" type="card" centered>
             <TabPane tab="Customer" key="1">
               <Form
-                from={form}
+                form={form}
                 name="register"
                 className="register-form"
                 onFinish={onFinish}
                 scrollToFirstError
               >
-                {basicFormItems().map((item) => item)}
+                {[...basicFormItems()]}
                 <Form.Item
                   name="card-number"
                   label="Card Number"
@@ -174,19 +194,49 @@ function Register() {
                     },
                   ]}
                 >
-                  <Input />
+                  <InputNumber
+                    placeholder="cvv"
+                    type="number"
+                    controls={false}
+                  />
                 </Form.Item>
-                <Form.Item
-                  name="exp"
-                  label="Exp"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your card's expiration date!",
-                    },
-                  ]}
-                >
-                  <Input />
+                <Form.Item label="Expiration Date">
+                  <Input.Group compact>
+                    <Form.Item
+                      noStyle
+                      name={["exp", "month"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your card's expiration month.",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        style={{ width: "30%" }}
+                        placeholder="mm"
+                        controls={false}
+                        type="number"
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      noStyle
+                      name={["exp", "year"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your card's expiration year.",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        style={{ width: "30%" }}
+                        placeholder="yy"
+                        controls={false}
+                        type="number"
+                      />
+                    </Form.Item>
+                  </Input.Group>
                 </Form.Item>
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
@@ -203,7 +253,7 @@ function Register() {
                 onFinish={onFinish}
                 scrollToFirstError
               >
-                {basicFormItems().map((item) => item)}
+                {[...basicFormItems()]}
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Register

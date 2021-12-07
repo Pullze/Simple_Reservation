@@ -7,7 +7,6 @@
             where Flight_Num = #{flight_num} and Airline_Name = #{airline_name};
     </select>
 
-
     <insert id = "schedule_flight">
     insert into Flight (Flight_Num, Airline_Name, From_Airport, To_Airport, Departure_Time,  Arrival_Time, Flight_Date,
                         Cost, Capacity)

@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 @Service
-public class FlightProcessIMpl implements FlightProcess {
+public class FlightProcessImpl implements FlightProcess {
 
     @Resource
     private FlightMapper flightMapper;
