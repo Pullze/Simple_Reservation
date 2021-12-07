@@ -17,6 +17,9 @@ public class Property {
     @ApiModelProperty(value = "Description")
     private String descr;
 
+    @ApiModelProperty(value = "Rating")
+    private Double rating;
+
     @ApiModelProperty(value = "Capacity")
     private Integer capacity;
 

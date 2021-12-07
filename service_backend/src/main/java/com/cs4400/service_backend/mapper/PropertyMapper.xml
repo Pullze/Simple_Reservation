@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cs4400.service_backend.mapper.PropertyMapper">
+    <select id = "viewProperties" resultType = "Property">
+        select
+            p.Property_Name,
+            "owner_email",
+            p.Descr,
+            AVG(r.Score) as rating,
+            p.Capacity,
+            p.Cost,
+            concat(p.Street, ",", p.City, ",", p.State, ",", p.Zip) as address,
+            "amanity"
+        from property as p
+            left join review as r on p.Property_Name = r.Property_Name group by p.Property_Name;
+    </select>
+</mapper>
