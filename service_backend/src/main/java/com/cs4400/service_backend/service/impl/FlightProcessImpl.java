@@ -37,12 +37,12 @@ public class FlightProcessImpl implements FlightProcess {
             return flightInfo;
         }
 
-        if (flightMapper.check_airport(from_airport) != null) {
+        if (flightMapper.check_airport(from_airport) == null) {
             flightInfo.setMessage("Can not departure from an airport that doesn't exist!");
             return flightInfo;
         }
 
-        if (flightMapper.check_airport(to_airport) != null) {
+        if (flightMapper.check_airport(to_airport) == null) {
             flightInfo.setMessage("Can not arrive at an airport that doesn't exist!");
             return flightInfo;
         }
