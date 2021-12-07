@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
 @Api(tags = "User Controller")
 @RestController
@@ -51,7 +50,7 @@ public class UserController {
     @GetMapping(value = "/login")
     @ApiOperation(value = "Validate login info", notes = "Validate login info (unsafe)")
 
-    public LoginInfo registerAccount(@RequestParam(required = false) String email, @RequestParam(required = false) String passwd) {
+    public LoginInfo Login(@RequestParam(required = false) String email, @RequestParam(required = false) String passwd) {
 
         log.info(email);
         log.info(passwd);
