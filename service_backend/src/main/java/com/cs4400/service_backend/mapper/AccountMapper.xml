@@ -10,26 +10,32 @@
         from accounts;
     </select>
 
-    <select id="login" resultType="com.cs4400.service_backend.entity.Account">
-        select * from accounts where Email = #{email} and Pass = #{passwd};
+    <select id="login" resultType="com.cs4400.service_backend.vo.LoginInfo">
+        select Email,
+               First_Name,
+               Last_Name,
+               exists(select * from admins where admins.Email = #{email}) as is_admin,
+               exists(select * from clients where clients.Email = #{email}) as is_client,
+               exists(select * from customer where customer.Email = #{email}) as is_customer,
+               exists(select * from owners where owners.Email = #{email}) as is_owner
+        from accounts
+        where Email = #{email} and Pass = #{passwd};
     </select>
 
     <select id="check_owner_exist" resultType="com.cs4400.service_backend.entity.Owner">
-        select * from Owners where Email = #{owner_email};
+        select * from owners where Email = #{owner_email};
     </select>
 
     <select id="check_customer_exist" resultType="com.cs4400.service_backend.entity.Customer">
-        select * from Customer where Email = #{customer_email};
+        select * from customer where Email = #{customer_email};
     </select>
 
     <insert id="register_owner">
-        {call register_owner(#{owner_email}, #{owner_first_name}, #{owner_last_name}, #{password}, "217-301-2929")}
+        {call register_owner(#{owner_email}, #{owner_first_name}, #{owner_last_name}, #{password}, #{phone_number})}
     </insert>
 
     <insert id="register_customer">
         {call register_customer(#{customer_email}, #{customer_first_name}, #{customer_last_name}, #{password}, #{phone_number}, #{cc_number}, #{cvv}, #{exp_date}, #{location})}
     </insert>
-
-
 
 </mapper>

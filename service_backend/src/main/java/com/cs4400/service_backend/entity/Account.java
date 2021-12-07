@@ -7,18 +7,18 @@ import lombok.Data;
 public class Account {
 
     @ApiModelProperty(value = "Email")
-    public String email;
+    private String email;
 
     @ApiModelProperty(value = "First Name")
-    public String first_Name;
+    private String first_Name;
 
     @ApiModelProperty(value = "Last Name")
-    public String last_Name;
+    private String last_Name;
 
     @ApiModelProperty(value = "Password")
-    public String pass;
+    private String pass;
 
     @ApiModelProperty(value = "Is Admin")
-    public boolean admin;
+    private boolean admin;
 
 }

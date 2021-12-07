@@ -3,6 +3,7 @@ package com.cs4400.service_backend.controller;
 import com.cs4400.service_backend.entity.Account;
 import com.cs4400.service_backend.service.Login;
 import com.cs4400.service_backend.service.RegisterUser;
+import com.cs4400.service_backend.vo.LoginInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "User Controller")
 @RestController
@@ -41,18 +44,22 @@ public class UserController {
      * Validate login info.
      * @param email User's email.
      * @param passwd User's password.
-     * @return Httpstatus indicate success or not.
+     * @return LoginInfo indicate success or not, and the user's type.
      */
     @PostMapping(value = "/login")
     @ApiOperation(value = "Validate login info", notes = "Validate login info (unsafe)")
-    public ResponseEntity<String> registerAccount(@RequestParam String email, @RequestParam String passwd) {
-        if (login.login(email, passwd)) {
-            return ResponseEntity.status(HttpStatus.OK).body("Success!");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Input Invalid!");
-        }
-    }
+//    public ResponseEntity<String> registerAccount(@RequestParam String email, @RequestParam String passwd) {
+//        if (login.login(email, passwd)) {
+//            return ResponseEntity.status(HttpStatus.OK).body("Success!");
+//        } else {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Input Invalid!");
+//        }
+//    }
+    public LoginInfo registerAccount(@RequestParam String email, @RequestParam String passwd) {
 
+        return login.login(email, passwd);
+
+    }
     /**
      *
      * @param owner_email owner's mail
@@ -68,9 +75,33 @@ public class UserController {
         if (registerUser.register_owner(owner_email,owner_first_name,owner_last_name,password,phone_number) == 0) {
             return ResponseEntity.status(HttpStatus.OK).body("Success!");
         } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The owner already exists.");
+        }
+    }
+
+    /**
+     *
+     * @param customer_email t
+     * @param customer_first_name t
+     * @param customer_last_name t
+     * @param password t
+     * @param phone_number t
+     * @param cc_number t
+     * @param cvv t
+     * @param exp_date t
+     * @param location t
+     * @return
+     */
+    @PostMapping(value = "/register_customer")
+    @ApiOperation(value = "regsiter_customer", notes = "Validate login info (unsafe)")
+    public ResponseEntity<String> register_customer(@RequestParam String customer_email, @RequestParam String customer_first_name, @RequestParam String customer_last_name, @RequestParam String password, @RequestParam String phone_number,@RequestParam String cc_number,@RequestParam String cvv,@RequestParam Date exp_date,@RequestParam String location) {
+        if (registerUser.register_customer(customer_email,customer_first_name,customer_last_name,password,phone_number,cc_number, cvv, exp_date, location) == 0) {
+            return ResponseEntity.status(HttpStatus.OK).body("Success!");
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Input Invalid!");
         }
     }
 
 
 }
+

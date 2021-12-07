@@ -1,8 +1,8 @@
 package com.cs4400.service_backend.service.impl;
 
-import com.cs4400.service_backend.entity.Account;
 import com.cs4400.service_backend.mapper.AccountMapper;
 import com.cs4400.service_backend.service.Login;
+import com.cs4400.service_backend.vo.LoginInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,9 +14,19 @@ public class LoginImpl implements Login {
     private AccountMapper accountMapper;
 
     @Override
-    public boolean login(String email, String passwd) {
-        Account result = accountMapper.login(email, passwd);
-        return (result != null);
+    public LoginInfo login(String email, String passwd) {
+
+        LoginInfo result = accountMapper.login(email, passwd);
+
+        if (result == null) {
+            result = new LoginInfo();
+            result.setSuccess(false);
+        } else {
+            result.setSuccess(true);
+        }
+
+        return result;
+
     }
 
 }
