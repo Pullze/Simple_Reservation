@@ -45,7 +45,7 @@ public class FlightController {
 
     @PostMapping(value = "/schedule_flight")
     @ApiOperation(value = "schedule flight", notes = "schedule flight")
-    public ResponseEntity<FlightInfo> schedule_flight( FlightInfo flightInfo) {
+    public ResponseEntity<FlightInfo> schedule_flight(@Valid FlightInfo flightInfo) {
 
 
         FlightInfo scheduleFlight = flightProcess.schedule_flight(flightInfo);

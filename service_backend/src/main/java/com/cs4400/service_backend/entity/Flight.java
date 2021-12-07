@@ -1,25 +1,25 @@
 package com.cs4400.service_backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 
-
-
-
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 
 @Data
 public class Flight {
 
+    @NotNull
     @ApiModelProperty(value = "flight_num")
     private String flight_num;
 
+    @NotNull
     @ApiModelProperty(value = "airline_name")
     private String airline_name;
 
+    @NotNull
     @ApiModelProperty(value = "departure_time")
     private Date departure_time;
 
