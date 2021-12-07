@@ -44,6 +44,16 @@ public class Flight {
     @ApiModelProperty(value = "remaining_seats")
     private int remaining_seats;
 
+    @ApiModelProperty(value = "total_spent")
+    private int total_spent;
+
+    public int getTotal_spent() {
+        return total_spent;
+    }
+
+    public void setTotal_spent(int total_spent) {
+        this.total_spent = total_spent;
+    }
 
     public String getFlight_num() {
         return flight_num;

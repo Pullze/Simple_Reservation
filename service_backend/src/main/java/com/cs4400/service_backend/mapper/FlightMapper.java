@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
 @Mapper
 public interface FlightMapper {
@@ -15,4 +16,6 @@ public interface FlightMapper {
     Flight check_flight(String flight_num, String airline_name);
 
     Airport check_airport(String airport_id);
+
+    List<Flight> view_flight(int minSeats);
 }

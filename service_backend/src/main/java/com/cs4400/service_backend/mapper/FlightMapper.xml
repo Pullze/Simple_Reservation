@@ -18,4 +18,22 @@
             select * from Airport
                 where Airport_Id = #{airport_id};
     </select>
+
+    <select id = "view_flight" resultType= "Flight">
+        select
+        f.Flight_Num,
+        f.Airline_Name,
+        Departure_Time,
+        Arrival_Time,
+		Flight_Date,
+		Cost,
+        From_Airport,
+        To_Airport,
+        Capacity - coalesce(SUM(b.Num_Seats * (1 - b.Was_Cancelled)), 0) as remaining_seats,
+		cost * coalesce(SUM(b.Num_Seats * (1 - 0.8 * b.Was_Cancelled)), 0) total_spent
+		from flight as f left join book as b on
+        b.Airline_Name = f.Airline_Name and b.Flight_Num = f.Flight_Num
+		group by f.Airline_Name , f.Flight_Num
+		having remaining_seats >= #{minSeats};
+    </select>
 </mapper>
