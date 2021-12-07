@@ -16,10 +16,11 @@ public class Flight {
     @ApiModelProperty(value = "airline_name")
     private String airline_name;
 
-   @ApiModelProperty(value = "departure_time")
+    @JsonFormat(pattern = "HH:mm:ss")
+    @ApiModelProperty(value = "departure_time")
     private Time departure_time;
 
- //   @JsonFormat(pattern = "HH:mm:ss")
+     @JsonFormat(pattern = "HH:mm:ss")
     @ApiModelProperty(value = "arrival_time")
     private Time arrival_time;
 
