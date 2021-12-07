@@ -10,7 +10,7 @@
         from accounts;
     </select>
 
-    <select id="check_cc_number_exists" resultType="String">
+    <select id="check_cc_number_exist" resultType="String">
             select CcNumber from Customer where Ccnumber = #{cc_number};
     </select>
 

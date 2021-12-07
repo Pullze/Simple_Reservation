@@ -6,12 +6,13 @@ import lombok.Data;
 
 
 
-import java.io.Serializable;
+
 
 import java.util.Date;
 
+
 @Data
-public class Flight implements Serializable {
+public class Flight {
 
     @ApiModelProperty(value = "flight_num")
     private String flight_num;
