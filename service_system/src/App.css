@@ -40,3 +40,8 @@
 .ant-table-pagination-right {
   justify-content: center !important;
 }
+
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+}
