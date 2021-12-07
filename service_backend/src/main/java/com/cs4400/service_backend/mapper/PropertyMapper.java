@@ -15,4 +15,5 @@ public interface PropertyMapper {
 
    List<Property> viewProperties();
 
+   List<String> checkAmenities(String property_name, String property_owner);
 }
