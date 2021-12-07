@@ -14,4 +14,9 @@
     values (#{flight_num}, #{airline_name}, #{from_airport}, #{to_airport}, #{departure_time}, #{arrival_time},
              #{flight_date}, #{cost}, #{capacity});
     </insert>
+
+    <select id = "check_airport" resultType = "Airport">
+            select * from Airport
+                where Airport_Id = #{airport_id};
+    </select>
 </mapper>

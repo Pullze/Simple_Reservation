@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.sql.Time;
-import java.sql.Date;
+
+
+import java.io.Serializable;
+
+import java.util.Date;
 
 @Data
-public class Flight {
+public class Flight implements Serializable {
 
     @ApiModelProperty(value = "flight_num")
     private String flight_num;
@@ -16,13 +19,11 @@ public class Flight {
     @ApiModelProperty(value = "airline_name")
     private String airline_name;
 
-    @JsonFormat(pattern = "HH:mm:ss")
     @ApiModelProperty(value = "departure_time")
-    private Time departure_time;
+    private Date departure_time;
 
-     @JsonFormat(pattern = "HH:mm:ss")
     @ApiModelProperty(value = "arrival_time")
-    private Time arrival_time;
+    private Date arrival_time;
 
     @ApiModelProperty(value = "flight_date")
     private Date flight_date;
@@ -43,18 +44,6 @@ public class Flight {
     private int remaining_seats;
 
 
-    public Flight(Flight flight) {
-        this.flight_num = flight.flight_num;
-        this.airline_name = flight.airline_name;
-        this.departure_time = flight.departure_time;
-        this.arrival_time = flight.arrival_time;
-        this.flight_date = flight.flight_date;
-        this.cost = flight.cost;
-        this.capacity = flight.capacity;
-        this.from_airport = flight.from_airport;
-        this.to_airport = flight.to_airport;
-    }
-
     public String getFlight_num() {
         return flight_num;
     }
@@ -71,19 +60,19 @@ public class Flight {
         this.airline_name = airline_name;
     }
 
-    public Time getDeparture_time() {
+    public Date getDeparture_time() {
         return departure_time;
     }
 
-    public void setDeparture_time(Time departure_time) {
+    public void setDeparture_time(Date departure_time) {
         this.departure_time = departure_time;
     }
 
-    public Time getArrival_time() {
+    public Date getArrival_time() {
         return arrival_time;
     }
 
-    public void setArrival_time(Time arrival_time) {
+    public void setArrival_time(Date arrival_time) {
         this.arrival_time = arrival_time;
     }
 
@@ -134,5 +123,7 @@ public class Flight {
     public void setRemaining_seats(int remaining_seats) {
         this.remaining_seats = remaining_seats;
     }
+
+
 
 }
