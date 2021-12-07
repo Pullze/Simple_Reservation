@@ -8,16 +8,22 @@ import com.cs4400.service_backend.service.RegisterUser;
 import com.cs4400.service_backend.vo.LoginInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Date;
 import java.util.List;
+import java.util.Map;
+
+
 
 @Api(tags = "User Controller")
 @RestController
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -44,10 +50,10 @@ public class UserController {
      * @param passwd User's password.
      * @return LoginInfo indicate success or not, and the user's type.
      */
-    @PostMapping(value = "/login")
+    @GetMapping(value = "/login")
     @ApiOperation(value = "Validate login info", notes = "Validate login info (unsafe)")
-    public LoginInfo registerAccount(@RequestParam String email, @RequestParam String passwd) {
 
+    public LoginInfo registerAccount(@RequestParam(required = false) String email, @RequestParam(required = false) String passwd) {
         return login.login(email, passwd);
 
     }
