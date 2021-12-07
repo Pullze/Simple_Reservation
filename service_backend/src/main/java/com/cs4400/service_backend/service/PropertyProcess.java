@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface PropertyProcess {
 
-    List<Property> viewProperties();
+    List<Property> viewProperties(Integer high, Integer low);
 
 
-
+    
 
 }

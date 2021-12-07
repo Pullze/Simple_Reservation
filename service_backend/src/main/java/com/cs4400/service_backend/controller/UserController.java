@@ -8,16 +8,18 @@ import com.cs4400.service_backend.service.RegisterUser;
 import com.cs4400.service_backend.vo.LoginInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
 
 
@@ -53,35 +55,43 @@ public class UserController {
     @GetMapping(value = "/login")
     @ApiOperation(value = "Validate login info", notes = "Validate login info (unsafe)")
 
-    public LoginInfo registerAccount(@RequestParam(required = false) String email, @RequestParam(required = false) String passwd) {
+    public LoginInfo login(@RequestParam(required = false) String email, @RequestParam(required = false) String passwd) {
         return login.login(email, passwd);
 
     }
 
+    /**
+     * Register owner.
+     * @param owner the owner object.
+     * @return Response indicate success or not.
+     */
     @PostMapping(value = "/register_owner")
-    @ApiOperation(value = "regsiter_owner", notes = "Validate login info")
-    public ResponseEntity<String> register_owner(@Valid Owner owner) {
+    @ApiOperation(value = "register_owner", notes = "Validate login info")
+    public ResponseEntity<String> register_owner(@RequestBody @Valid Owner owner) {
         String message = registerUser.register_owner(owner);
-        if (message == "Register succeeded!") {
+        if (message.equals("Register succeeded!")) {
             return ResponseEntity.status(HttpStatus.OK).body(message);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
-
     }
 
+    /**
+     * Register customer.
+     * @param customer the customer object.
+     * @return Response indicate success or not.
+     */
     @PostMapping(value = "/register_customer")
-    @ApiOperation(value = "regsiter_customer", notes = "Validate login info")
-    public ResponseEntity<String> register_customer(@Valid Customer customer) {
+    @ApiOperation(value = "register_customer", notes = "Validate login info")
+    public ResponseEntity<String> register_customer(@RequestBody @Valid Customer customer) {
         String message = registerUser.register_customer(customer);
-        if (message == "Register succeeded!") {
+        if (message.equals("Register succeeded!")) {
             return ResponseEntity.status(HttpStatus.OK).body(message);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
 
     }
-
 
 }
 

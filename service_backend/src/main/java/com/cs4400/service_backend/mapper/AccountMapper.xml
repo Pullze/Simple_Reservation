@@ -57,8 +57,6 @@
             (#{email}, #{phone_number});
     </insert>
 
-
-
     <insert id="register_owner">
         insert into Owners (Email) values (#{owner_email});
     </insert>
@@ -67,8 +65,5 @@
         insert into Customer (Email, CcNumber, Cvv, Exp_Date, Location) values
         (#{customer_email}, #{cc_number}, #{cvv}, #{exp_date}, #{location});
     </insert>
-
-
-
 
 </mapper>

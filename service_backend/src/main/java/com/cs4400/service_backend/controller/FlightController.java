@@ -5,6 +5,7 @@ import com.cs4400.service_backend.service.FlightProcess;
 import com.cs4400.service_backend.vo.FlightInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +34,14 @@ public class FlightController {
     }
 
 
-
+    /**
+     * Schedule a single flight.
+     * @param flightInfo flight information.
+     * @return Response indicate success or not.
+     */
     @PostMapping(value = "/schedule_flight")
-    @ApiOperation(value = "schedule flight", notes = "schedule flight")
-    public ResponseEntity<FlightInfo> schedule_flight(@Valid FlightInfo flightInfo) {
+    @ApiOperation(value = "Schedule flight", notes = "schedule a flight")
+    public ResponseEntity<FlightInfo> schedule_flight(@RequestBody @Valid FlightInfo flightInfo) {
 
 
         FlightInfo scheduleFlight = flightProcess.schedule_flight(flightInfo);
