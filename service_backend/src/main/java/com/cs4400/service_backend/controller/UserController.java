@@ -46,13 +46,6 @@ public class UserController {
      */
     @PostMapping(value = "/login")
     @ApiOperation(value = "Validate login info", notes = "Validate login info (unsafe)")
-//    public ResponseEntity<String> registerAccount(@RequestParam String email, @RequestParam String passwd) {
-//        if (login.login(email, passwd)) {
-//            return ResponseEntity.status(HttpStatus.OK).body("Success!");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Input Invalid!");
-//        }
-//    }
     public LoginInfo registerAccount(@RequestParam String email, @RequestParam String passwd) {
 
         return login.login(email, passwd);
