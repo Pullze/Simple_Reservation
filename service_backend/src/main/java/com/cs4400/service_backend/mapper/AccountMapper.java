@@ -25,5 +25,4 @@ public interface AccountMapper {
 
    Customer check_customer_exist(String customer_email);
 
-
 }
