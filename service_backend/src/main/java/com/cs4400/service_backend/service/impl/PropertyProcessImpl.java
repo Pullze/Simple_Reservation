@@ -20,7 +20,15 @@ public class PropertyProcessImpl implements PropertyProcess {
     @Override
     public List<Property> viewProperties(Integer high, Integer low) {
 //        System.out.println(propertyMapper.getAllProperties());
-        return propertyMapper.viewProperties(high, low);
+
+        List<Property> properties = propertyMapper.viewProperties();
+
+        for(Property property: properties) {
+            List<String> amenities = propertyMapper.checkAmenities(property.getProperty_name(), property.getOwner_email(high, low));
+            property.setAmenities(amenities);
+        }
+
+        return properties;
     }
 
 }
