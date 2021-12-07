@@ -10,11 +10,11 @@ import java.util.Date;
 @Data
 public class FlightInfo extends Flight {
 
-
     private String message = null;
 
 
     private Date current_date;
+
 
 
     public String getMessage() {

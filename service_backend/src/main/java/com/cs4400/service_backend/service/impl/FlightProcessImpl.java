@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
 @Service
 public class FlightProcessImpl implements FlightProcess {
@@ -76,5 +77,8 @@ public class FlightProcessImpl implements FlightProcess {
         return flightMapper.check_flight(flight_num, airline_name);
     }
 
-
+    @Override
+    public List<Flight> view_flight(int minSeats) {
+        return flightMapper.view_flight(minSeats);
+    }
 }

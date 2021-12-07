@@ -1,6 +1,7 @@
 package com.cs4400.service_backend.controller;
 
 
+import com.cs4400.service_backend.entity.Flight;
 import com.cs4400.service_backend.service.FlightProcess;
 import com.cs4400.service_backend.vo.FlightInfo;
 import io.swagger.annotations.Api;
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Api (tags = "Flight Controller")
 
@@ -40,7 +42,7 @@ public class FlightController {
      * @return Response indicate success or not.
      */
     @PostMapping(value = "/schedule_flight")
-    @ApiOperation(value = "Schedule flight", notes = "schedule a flight")
+    @ApiOperation(value = "schedule flight", notes = "schedule a flight")
     public ResponseEntity<FlightInfo> schedule_flight(@RequestBody @Valid FlightInfo flightInfo) {
 
 
@@ -53,6 +55,12 @@ public class FlightController {
         }
     }
 
+    @GetMapping(value =  "/view_flight")
+    @ApiOperation(value = "view flight", notes = "view all flights")
+    public List<Flight> view_flight(@RequestParam(required = false) Integer minSeats) {
+        return  flightProcess.view_flight((minSeats != null)? minSeats : 0);
+
+    }
 
 
 }
