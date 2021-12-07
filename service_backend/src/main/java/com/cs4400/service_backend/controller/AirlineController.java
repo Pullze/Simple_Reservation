@@ -17,6 +17,10 @@ public class AirlineController {
     @Autowired
     private AirlineProcess airlineProcess;
 
+    /**
+     * Get all airlines.
+     * @return A list of all airlines.
+     */
     @GetMapping("/airlines")
     @ApiOperation(value = "Get all airlines")
     public List<Airline> getAirlines() {
