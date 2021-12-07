@@ -10,6 +10,10 @@
         from accounts;
     </select>
 
+    <select id="check_cc_number_exists" resultType="String">
+            select CcNumber from Customer where Ccnumber = #{cc_number};
+    </select>
+
     <select id="login" resultType="com.cs4400.service_backend.vo.LoginInfo">
         select Email,
                First_Name,
@@ -22,6 +26,19 @@
         where Email = #{email} and Pass = #{passwd};
     </select>
 
+    <select id = "check_client_exist" resultType="com.cs4400.service_backend.entity.Client">
+            select * from Clients left join Accounts on Clients.Email = Accounts.Email
+            where  Clients.Email = #{email} and First_Name = #{first_name} and Last_Name = #{last_name}
+                    and Pass = #{password} and Phone_Number = #{phone_number};
+    </select>
+
+
+
+    <select id = "check_account_uniqueness" resultType="Client">
+            select Accounts.Email, Phone_number from Accounts left join Clients on Accounts.Email = Clients.Email
+            where Accounts.Email = #{email} or Phone_number = #{phone_number};
+    </select>
+
     <select id="check_owner_exist" resultType="com.cs4400.service_backend.entity.Owner">
         select * from Owners where Email = #{owner_email};
     </select>
@@ -30,13 +47,27 @@
         select * from Customer where Email = #{customer_email};
     </select>
 
+    <insert id  = "register_account">
+        insert into accounts (Email, First_name, Last_name, pass) values
+            (#{email}, #{first_name}, #{last_name}, #{password});
+    </insert>
+
+    <insert id="register_client">
+        insert  into Clients (Email, Phone_Number) values
+            (#{email}, #{phone_number});
+    </insert>
+
+
+
     <insert id="register_owner">
-        {call register_owner(#{owner_email}, #{owner_first_name}, #{owner_last_name}, #{password}, #{phone_number})}
+        insert into Owners (Email) values (#{owner_email});
     </insert>
 
     <insert id="register_customer">
-        {call register_customer(#{customer_email}, #{customer_first_name}, #{customer_last_name}, #{password}, #{phone_number}, #{cc_number}, #{cvv}, #{exp_date}, #{location});}
+        insert into Customer (Email, CcNumber, Cvv, Exp_Date, Location) values
+        (#{customer_email}, #{cc_number}, #{cvv}, #{exp_date}, #{location});
     </insert>
+
 
 
 

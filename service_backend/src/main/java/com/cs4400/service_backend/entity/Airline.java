@@ -12,4 +12,19 @@ public class Airline {
     @ApiModelProperty(value = "rating")
     private int rating;
 
+    public String getName() {
+        return name;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 }

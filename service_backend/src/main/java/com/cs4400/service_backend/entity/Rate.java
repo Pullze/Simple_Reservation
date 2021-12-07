@@ -15,4 +15,5 @@ public class Rate {
     @ApiModelProperty(value = "Score")
     private Integer score;
 
+
 }
