@@ -11,53 +11,51 @@ export default function Login(props) {
 
   const history = useHistory();
 
-  const state = useState({
-    email : "",
-    password : "",
-    who_am_i : ""
-  });
+  const state = useState;
 
+  const [email, setEmail] = state("");
+  const [password, setPass] = state("");
+  const [visible, setIsVisible] = state(false);
+
+  const showModal = () => {
+    setIsVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsVisible(false);
+  };
+
+  function buttRedirect(where) {
+    let myPath = where + "/home"
+    message.success("Successfully logged in.");
+    setTimeout(() =>  history.push({pathname: myPath, state: {
+      email : email,
+      who_am_i: where
+    }}), 500);
+  }
 
   const handleSubmit = () => {
    
     axios.get('/api/login', {
       params: {
-        email : state.email,
-        passwd : state.password
+        email : email,
+        passwd : password
       }
     })
     .then((res) => {
       console.log(state);
       if (res.data.success) {
-        
-        console.log("Successfully signed in.");
-        var path = "/home";
-        
-        console.log(res.data.is_admin)
-        if (res.data.is_admin == true) {
-          path = "/admin" + path;
-          state.who_am_i = "admin";
+        if (res.data.is_admin) {
+          buttRedirect("admin");
         } else if (res.data.is_client && res.data.is_owner) {
-          alert("You are both customer and owner, IDK where to let you go!");
-          //TODO: Add a popup to let user choose
-          //FIX-ME
-        } else if (res.data.is_owner == true) {
-          path = "/owner" + path;
-          state.who_am_i = "owner";
-        } else if (res.data.is_customer == true) {
-          path = "/customer" + path;
-          state.who_am_i = "customer";
-        } else if (res.data.is_client == true) {
-          path = "/client" + path;
-          state.who_am_i = "client";
-        }
-        
-        if (path != "/home") {
-          message.success("Successfully logged in.");
-          setTimeout(() =>  history.push({pathname: path, state: {
-            email : state.email,
-            who_am_i: state.who_am_i
-          }}), 1000);
+          console.log(visible)
+          showModal();
+        } else if (res.data.is_owner) {
+          buttRedirect("owner");
+        } else if (res.data.is_customer) {
+          buttRedirect("customer");
+        } else if (res.data.is_client) {
+          buttRedirect("client");
         }
         
       } else {
@@ -81,6 +79,21 @@ export default function Login(props) {
             justify="space-around"
             align="middle"
           >
+            <Modal
+              visible={visible}
+              title="Alert"
+              footer={[
+              <Button key="back" onClick={()=>handleCancel()}>
+                Cancel
+              </Button>]}
+              onCancel={()=>handleCancel()}
+            >
+          <p>It seems like you are both a customer and a owner, please select which panal you would like to go:</p>
+          <Space>
+            <Button onClick={()=>buttRedirect("owner")}> Owner Portal </Button>
+            <Button onClick={()=>buttRedirect("customer")}> Customer Portal </Button>
+          </Space>
+        </Modal>
             <Col span={24} align="middle">
               <Form
                 name="normal_login"
@@ -114,7 +127,7 @@ export default function Login(props) {
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     placeholder="Username"
                     id="email"
-                    onChange={e => state.email = e.target.value}
+                    onChange={e => setEmail(e.target.value)}
                   />
                 </Form.Item>
                 <Form.Item
@@ -131,7 +144,7 @@ export default function Login(props) {
                     type="password"
                     placeholder="Password"
                     id="password"
-                    onChange={e => state.password = e.target.value}
+                    onChange={e => setPass(e.target.value)}
                   />
                 </Form.Item>
 
@@ -140,7 +153,7 @@ export default function Login(props) {
                     type="primary"
                     htmlType="submit"
                     className="login-form-button"
-                    onClick={handleSubmit}
+                    onClick={() => handleSubmit()}
                   >
                     Log in
                   </Button>
@@ -154,7 +167,6 @@ export default function Login(props) {
               <Button
                 type="primary"
                 href="/register"
-                onClick={console.log("click")}
               >
                 No account? Register
               </Button>

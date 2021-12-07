@@ -1,5 +1,6 @@
 package com.cs4400.service_backend.mapper;
 
+import com.cs4400.service_backend.entity.Airport;
 import com.cs4400.service_backend.entity.Flight;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,4 +13,6 @@ public interface FlightMapper {
                            Time departure_time, Time arrival_time, Date flight_date, double cost, int capacity);
 
     Flight check_flight(String flight_num, String airline_name);
+
+    Airport check_airport(String airport_id);
 }
