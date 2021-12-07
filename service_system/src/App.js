@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import "./App.css";
 import "antd/dist/antd.css";
 import AccountList from "./components/AccountList";
@@ -11,18 +11,18 @@ import RemoveFlights from "./pages/Admin/RemoveFlights";
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route exact path="/" element={<Login />} />
-        <Route exact path="/hello" element={<AccountList />} />
-        <Route exact path="/register" element={<Register />} />
-        <Route exact path="/admin/home" element={<AdminHome />} />
+      <Switch>
+        <Route exact path="/" component={Login} />
+        <Route exact path="/hello" component={AccountList} />
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/admin/home" component={AdminHome } />
         <Route
           exact
           path="/admin/schedule-flight"
-          element={<ScheduleFlight />}
+          component={ScheduleFlight}
         />
-        <Route exact path="/admin/remove-flight" element={<RemoveFlights />} />
-      </Routes>
+        <Route exact path="/admin/remove-flight" component={RemoveFlights} />
+      </Switch>
     </Router>
   );
 }

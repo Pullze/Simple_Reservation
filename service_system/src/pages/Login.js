@@ -1,18 +1,78 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import "../config/config.js";
 import axios from "axios";
-import { Form, Input, Button, Row, Col, message, Layout } from "antd";
+import { Form, Input, Button, Row, Col, message, Layout, Modal, Space } from "antd";
 import { UserOutlined, LockOutlined, BlockOutlined } from "@ant-design/icons";
 import "./Login.css";
+import { useHistory } from 'react-router-dom';
 import { Content } from "antd/lib/layout/layout";
-import { Link } from "react-router-dom";
 
-export default class Login extends React.Component {
-  onFinish = (values) => {
-    console.log("Success:", values);
-  };
+export default function Login(props) {
 
-  render() {
+  const history = useHistory();
+
+  const state = useState({
+    email : "",
+    password : "",
+    who_am_i : ""
+  });
+
+
+  const handleSubmit = () => {
+   
+    axios.get('/api/login', {
+      params: {
+        email : state.email,
+        passwd : state.password
+      }
+    })
+    .then((res) => {
+      console.log(state);
+      if (res.data.success) {
+        
+        console.log("Successfully signed in.");
+        var path = "/home";
+        
+        console.log(res.data.is_admin)
+        if (res.data.is_admin == true) {
+          path = "/admin" + path;
+          state.who_am_i = "admin";
+        } else if (res.data.is_client && res.data.is_owner) {
+          alert("You are both customer and owner, IDK where to let you go!");
+          //TODO: Add a popup to let user choose
+          //FIX-ME
+        } else if (res.data.is_owner == true) {
+          path = "/owner" + path;
+          state.who_am_i = "owner";
+        } else if (res.data.is_customer == true) {
+          path = "/customer" + path;
+          state.who_am_i = "customer";
+        } else if (res.data.is_client == true) {
+          path = "/client" + path;
+          state.who_am_i = "client";
+        }
+        
+        if (path != "/home") {
+          message.success("Successfully logged in.");
+          setTimeout(() =>  history.push({pathname: path, state: {
+            email : state.email,
+            who_am_i: state.who_am_i
+          }}), 1000);
+        }
+        
+      } else {
+        message.error("Login failed! Check your email and password.");
+      }
+     
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+      message.error("Connection Failed");
+    })
+  }
+
     return (
       <Layout>
         <Content>
@@ -28,7 +88,6 @@ export default class Login extends React.Component {
                 initialValues={{
                   remember: true,
                 }}
-                onFinish={this.onFinish}
               >
                 <Form.Item
                   name="User Login"
@@ -38,9 +97,8 @@ export default class Login extends React.Component {
                     },
                   ]}
                 >
-                  <a href="/" style={{ color: "black", fontSize: "36px" }}>
-                    {" "}
-                    Simple Reservation{" "}
+                  <a href="/" style={{ color: "black", fontSize: "34px" }}>
+                    Simple Reservation
                   </a>
                 </Form.Item>
                 <Form.Item
@@ -55,7 +113,8 @@ export default class Login extends React.Component {
                   <Input
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     placeholder="Username"
-                    id="adminEmail"
+                    id="email"
+                    onChange={e => state.email = e.target.value}
                   />
                 </Form.Item>
                 <Form.Item
@@ -71,7 +130,8 @@ export default class Login extends React.Component {
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
                     placeholder="Password"
-                    id="adminPassword"
+                    id="password"
+                    onChange={e => state.password = e.target.value}
                   />
                 </Form.Item>
 
@@ -80,7 +140,7 @@ export default class Login extends React.Component {
                     type="primary"
                     htmlType="submit"
                     className="login-form-button"
-                    onClick={console.log("click")}
+                    onClick={handleSubmit}
                   >
                     Log in
                   </Button>
@@ -103,5 +163,4 @@ export default class Login extends React.Component {
         </Content>
       </Layout>
     );
-  }
 }
