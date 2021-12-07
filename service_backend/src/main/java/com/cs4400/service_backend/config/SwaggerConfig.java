@@ -31,9 +31,10 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         log.info("\n");
+        log.info("==================================");
         log.info("Swagger Started! Url:");
         log.info("http://localhost:8080/doc.html");
-        log.info("\n");
+        log.info("==================================\n");
         return new ApiInfoBuilder()
                 .title("API Documentation")
                 .termsOfServiceUrl("http://localhost:8080/swagger-ui/index.html")

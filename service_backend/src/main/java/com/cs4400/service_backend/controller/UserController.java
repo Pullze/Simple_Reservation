@@ -75,7 +75,7 @@ public class UserController {
         if (registerUser.register_owner(owner_email,owner_first_name,owner_last_name,password,phone_number) == 0) {
             return ResponseEntity.status(HttpStatus.OK).body("Success!");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Input Invalid!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The owner already exists.");
         }
     }
 
