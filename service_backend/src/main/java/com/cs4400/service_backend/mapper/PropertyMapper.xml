@@ -21,7 +21,4 @@
         select Amenity_Name from Amenity where Property_Name = #{property_name} and Property_Owner = #{property_owner};
     </select>
 
-    <select id = "checkAmenities" resultType = "String">
-        select Amenity_Name from Amenity where Property_Name = #{property_name} and Property_Owner = #{property_owner};
-    </select>
 </mapper>
