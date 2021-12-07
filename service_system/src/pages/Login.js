@@ -73,7 +73,7 @@ export default function Login(props) {
 
     return (
       <Layout>
-        <Content>
+        <Content style={{ margin: "24px, 24px, 24px" ,background: "white" }}>
           <Row
             style={{ minHeight: "100vh" }}
             justify="space-around"
