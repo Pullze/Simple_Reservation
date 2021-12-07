@@ -34,7 +34,14 @@ public class PropertyController {
      */
     @GetMapping(value = "/properties")
     @ApiOperation(value = "view Properties", notes = "view properties.")
-    public List<Property> properties(@RequestParam Integer high,@RequestParam Integer low) {
+    public List<Property> properties(@RequestParam(required = false) Integer high,@RequestParam(required = false) Integer low) {
+        if (high == null) {
+            high = Integer.MAX_VALUE;
+        }
+
+        if (low == null) {
+            low = 0;
+        }
         List<Property> result = propertyProcess.viewProperties(high, low);
         System.out.println(result);
         return result;

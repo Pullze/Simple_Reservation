@@ -21,10 +21,10 @@ public class PropertyProcessImpl implements PropertyProcess {
     public List<Property> viewProperties(Integer high, Integer low) {
 //        System.out.println(propertyMapper.getAllProperties());
 
-        List<Property> properties = propertyMapper.viewProperties();
+        List<Property> properties = propertyMapper.viewProperties(high, low);
 
         for(Property property: properties) {
-            List<String> amenities = propertyMapper.checkAmenities(property.getProperty_name(), property.getOwner_email(high, low));
+            List<String> amenities = propertyMapper.checkAmenities(property.getProperty_name(), property.getOwner_email());
             property.setAmenities(amenities);
         }
 

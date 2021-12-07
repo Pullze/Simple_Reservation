@@ -11,6 +11,6 @@ public interface PropertyProcess {
     List<Property> viewProperties(Integer high, Integer low);
 
 
-
+    
 
 }
