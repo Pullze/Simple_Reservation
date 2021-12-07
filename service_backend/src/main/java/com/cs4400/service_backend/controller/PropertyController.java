@@ -33,13 +33,15 @@ public class PropertyController {
     private PropertyProcess propertyProcess;
 
     /**
-     * Get all accounts from the database.
-     * @return A list of Accounts.
+     *
+     * @param high h
+     * @param low l
+     * @return
      */
     @GetMapping(value = "/properties")
-    @ApiOperation(value = "Get all Properties", notes = "Get all properties.")
-    public List<Property> properties() {
-        List<Property> result = propertyProcess.viewProperties();
+    @ApiOperation(value = "view Properties", notes = "view properties.")
+    public List<Property> properties(@RequestParam Integer high,@RequestParam Integer low) {
+        List<Property> result = propertyProcess.viewProperties(high, low);
         System.out.println(result);
         return result;
     }

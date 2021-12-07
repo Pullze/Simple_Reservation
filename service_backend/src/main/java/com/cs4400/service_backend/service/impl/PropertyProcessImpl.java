@@ -18,10 +18,9 @@ public class PropertyProcessImpl implements PropertyProcess {
     private PropertyMapper propertyMapper;
 
     @Override
-    public List<Property> viewProperties() {
-
+    public List<Property> viewProperties(Integer high, Integer low) {
 //        System.out.println(propertyMapper.getAllProperties());
-        return propertyMapper.viewProperties();
+        return propertyMapper.viewProperties(high, low);
     }
 
 }
