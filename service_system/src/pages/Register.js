@@ -1,17 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import "../config/config.js";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Layout,
-  Tabs,
-  Space,
-  message,
-} from "antd";
+import { Form, Input, Button, Row, Col, Layout, Tabs, message } from "antd";
 import axios from "axios";
 import "./Register.css";
 
@@ -39,7 +29,7 @@ const validators = {
   }),
   confirm_password: ({ getFieldValue }) => ({
     validator(_, value) {
-      if (!value || getFieldValue("password") === value) {
+      if (!value || getFieldValue("pass") === value) {
         return Promise.resolve();
       }
       return Promise.reject(
@@ -111,13 +101,7 @@ function Register() {
   const registerCustomer = (values) => {
     console.log("Success:", values);
     const customer = {
-      email: values["email"],
-      first_name: values["first-name"],
-      last_name: values["last-name"],
-      pass: values["password"],
-      phone_number: values["phone"],
-      ccNumber: values["card-number"],
-      cvv: values["cvv"],
+      ...values,
       exp_date: `20${values["exp"].year}-${values["exp"].month}-01`,
       location: "", // FIXME
     };
@@ -146,13 +130,7 @@ function Register() {
 
   const registerOwner = (values) => {
     console.log("Success:", values);
-    const owner = {
-      email: values["email"],
-      first_name: values["first-name"],
-      last_name: values["last-name"],
-      pass: values["password"],
-      phone_number: values["phone"],
-    };
+    const owner = values;
     const formData = new FormData();
     formData.append(
       "jsonValue",
@@ -180,7 +158,7 @@ function Register() {
     return [
       <Form.Item
         key="0"
-        name="first-name"
+        name="first_name"
         label="First Name"
         rules={[
           {
@@ -193,7 +171,7 @@ function Register() {
       </Form.Item>,
       <Form.Item
         key="1"
-        name="last-name"
+        name="last_name"
         label="Last Name"
         rules={[
           {
@@ -223,7 +201,7 @@ function Register() {
       </Form.Item>,
       <Form.Item
         key="3"
-        name="phone"
+        name="phone_number"
         label="Phone Number"
         rules={[
           {
@@ -237,7 +215,7 @@ function Register() {
       </Form.Item>,
       <Form.Item
         key="4"
-        name="password"
+        name="pass"
         label="Password"
         rules={[
           {
@@ -290,7 +268,7 @@ function Register() {
               >
                 {[...basicFormItems()]}
                 <Form.Item
-                  name="card-number"
+                  name="ccNumber"
                   label="Card Number"
                   rules={[
                     {
