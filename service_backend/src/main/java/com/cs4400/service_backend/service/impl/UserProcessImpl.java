@@ -4,15 +4,20 @@ import com.cs4400.service_backend.entity.Account;
 import com.cs4400.service_backend.entity.Customer;
 import com.cs4400.service_backend.entity.Owner;
 import com.cs4400.service_backend.mapper.AccountMapper;
-import com.cs4400.service_backend.service.RegisterUser;
+import com.cs4400.service_backend.service.UserProcess;
+import com.cs4400.service_backend.vo.CustomerInfo;
+import com.cs4400.service_backend.vo.OwnerInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
+@Slf4j
 @Service
-public class RegisterUserImpl implements RegisterUser {
+public class UserProcessImpl implements UserProcess {
 
     @Resource
     private AccountMapper accountMapper;
@@ -88,6 +93,26 @@ public class RegisterUserImpl implements RegisterUser {
               return  "The email or the phone_number already exists!";
         }
 
+    }
+
+    @Override
+    public List<CustomerInfo> getCustomerInfo() {
+        return accountMapper.get_customer_info();
+    }
+
+    @Override
+    public List<OwnerInfo> getOwnerInfo() {
+        return accountMapper.get_owner_info();
+    }
+
+    @Override
+    public Integer processDate(String currentDate) {
+        try {
+            return accountMapper.process_date(Date.valueOf(currentDate));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
 }

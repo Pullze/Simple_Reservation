@@ -44,17 +44,17 @@ export default function Login(props) {
     })
     .then((res) => {
       console.log(state);
-      if (res.data.success) {
-        if (res.data.is_admin) {
+      if (res.data.data.success) {
+        if (res.data.data.is_admin) {
           buttRedirect("admin");
-        } else if (res.data.is_client && res.data.is_owner) {
+        } else if (res.data.data.is_client && res.data.data.is_owner) {
           console.log(visible)
           showModal();
-        } else if (res.data.is_owner) {
+        } else if (res.data.data.is_owner) {
           buttRedirect("owner");
-        } else if (res.data.is_customer) {
+        } else if (res.data.data.is_customer) {
           buttRedirect("customer");
-        } else if (res.data.is_client) {
+        } else if (res.data.data.is_client) {
           buttRedirect("client");
         }
         
@@ -164,11 +164,14 @@ export default function Login(props) {
                   ></p>
                 </Form.Item>
               </Form>
+              <p style={{ display: "inline", marginRight: "10px" }}>
+                No account?
+              </p>
               <Button
                 type="primary"
                 href="/register"
               >
-                No account? Register
+               Register
               </Button>
             </Col>
           </Row>

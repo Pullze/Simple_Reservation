@@ -1,37 +1,40 @@
 import React, { useState } from "react";
 import { Layout, Row, Col, Button } from "antd";
-import "./Home.css";
 import { useHistory } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 
 const links = [
   {
-    label: "Schedule Flight",
-    path: "/admin/schedule-flight",
+    label: "Book Flight",
+    path: "/customer/book-flight",
   },
   {
-    label: "Remove Flight",
-    path: "/admin/remove-flight",
+    label: "Cancel Flights",
+    path: "/customer/cancel-flight",
   },
   {
-    label: "Process Data",
-    path: "/admin/process-data",
+    label: "View Properties",
+    path: "/customer/view-properties",
   },
   {
-    label: "View Airports",
-    path: "/admin/view-airports",
+    label: "Reserve Property",
+    path: "/customer/reserve-property",
   },
   {
-    label: "View Airlines",
-    path: "/admin/view-airlines",
+    label: "Cancel Reservation",
+    path: "/customer/cancel-reservation",
   },
   {
-    label: "View Customers",
-    path: "/admin/view-customers",
+    label: "Review Property",
+    path: "/customer/review-property",
   },
   {
-    label: "View Owners",
-    path: "/admin/view-owners",
+    label: "View Reservation",
+    path: "/customer/view-reservation",
+  },
+  {
+    label: "Rate Owner",
+    path: "/customer/rate-owner",
   },
 ];
 
@@ -47,7 +50,7 @@ function Home(props) {
             <h2>Now logged in as {historyState.email} </h2>
           </Col>
           <Col className="heading" span={24} align="middle">
-            Admin Home
+            Customer Home
           </Col>
           {links.map((link, i) => (
             <Col className="item" key={i}  xxl={12} xl={12} md={12} sm={24} xs={24} align="middle">
@@ -60,7 +63,7 @@ function Home(props) {
             <Button type="default" danger href={"/"} style={{ minWidth: "150px", minHeight: "100%" }}> 
               Logout
             </Button>
-        </Col>
+          </Col>
         </Row>
       </Content>
     </Layout>

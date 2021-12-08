@@ -4,7 +4,9 @@ import com.cs4400.service_backend.entity.Account;
 import com.cs4400.service_backend.entity.Client;
 import com.cs4400.service_backend.entity.Owner;
 import com.cs4400.service_backend.entity.Customer;
+import com.cs4400.service_backend.vo.CustomerInfo;
 import com.cs4400.service_backend.vo.LoginInfo;
+import com.cs4400.service_backend.vo.OwnerInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.Date;
@@ -36,5 +38,11 @@ public interface AccountMapper {
 
    // check if email and phone_number are both unique
    Client check_account_uniqueness(String email, String phone_number);
+
+   List<CustomerInfo> get_customer_info();
+
+   List<OwnerInfo> get_owner_info();
+
+   Integer process_date(Date currentDate);
 
 }
