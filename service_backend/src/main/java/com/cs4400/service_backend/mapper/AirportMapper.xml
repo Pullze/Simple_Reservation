@@ -25,4 +25,8 @@
                  on Airport_ID = To_Airport
         group by Airport_ID;
     </select>
+
+    <select id="get_time_zones" resultType="String">
+        select distinct Time_Zone from airport;
+    </select>
 </mapper>

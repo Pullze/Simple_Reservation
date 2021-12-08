@@ -41,7 +41,7 @@ function ScheduleFlight() {
   const [flight, setFlight] = useState({ isScheduled: false });
 
   useEffect(() => {
-    axios.get("/api/airlines").then((res) => setAirlines(res.data));
+    axios.get("/api/airlines").then((res) => setAirlines(res.data.data));
   }, []);
 
   const scheduleFlight = (values) => {
