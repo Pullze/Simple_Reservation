@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cs4400.service_backend.mapper.PropertyMapper">
+    <select id = "viewProperties" resultType = "Property">
+        select
+            p.Property_Name,
+            p.Owner_Email,
+            p.Descr,
+            AVG(r.Score) as rating,
+            p.Capacity,
+            p.Cost,
+            concat(p.Street, ',', p.City, '，', p.State, '，', p.Zip) as address
+        from property as p
+                 left join review as r on p.Property_Name = r.Property_Name
+        where p.Capacity >= #{low} and p.Capacity &lt;= #{high}
+        group by p.Property_Name;
+    </select>
+
+    <select id = "checkAmenities" resultType = "String">
+        select Amenity_Name from Amenity where Property_Name = #{property_name} and Property_Owner = #{property_owner};
+    </select>
+
+    <select id = "viewAvailableProperties" resultType = "Property">
+        select p.Property_Name, p.Owner_Email, ifnull(p.capacity - reserved_seats, p.capacity) as capacity
+        from property as p
+            left join (select Property_name, Owner_Email, sum(Num_Guests) as reserved_Seats
+                        from reserve where Was_Cancelled = 0 and Start_Date >= #{start} and End_Date &lt;= #{end}
+                        group by Property_name, Owner_Email) as r
+            on p.Property_Name = r.Property_Name and p.Owner_Email = r.Owner_Email;
+    </select>
+
+    <insert id="reserveProperty">
+        insert into Reserve
+            (Property_Name, Owner_Email, Customer, Start_Date, End_Date, Num_Guests, Was_Cancelled)
+            values (#{propertyName}, #{ownerEmail}, #{customerEmail}, #{startDate}, #{endDate}, #{numGuests}, 0);
+    </insert>
+
+</mapper>

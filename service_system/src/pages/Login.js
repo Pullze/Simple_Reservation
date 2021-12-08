@@ -17,84 +17,105 @@ import "./Login.css";
 import { useHistory } from "react-router-dom";
 import { Content } from "antd/lib/layout/layout";
 
-export default function Login(props) {
+export default function Login() {
   const history = useHistory();
 
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-    who_am_i: "",
-  });
+  const state = useState;
+
+  const [email, setEmail] = state("");
+  const [password, setPass] = state("");
+  const [visible, setIsVisible] = state(false);
+
+  const showModal = () => {
+    setIsVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsVisible(false);
+  };
+
+  function buttRedirect(where) {
+    let myPath = where + "/home";
+    message.success("Successfully logged in.");
+    setTimeout(
+      () =>
+        history.push({
+          pathname: myPath,
+          state: {
+            email: email,
+            who_am_i: where,
+          },
+        }),
+      500
+    );
+  }
 
   const handleSubmit = () => {
     axios
       .get("/api/login", {
         params: {
-          email: user.email,
-          passwd: user.password,
+          email: email,
+          passwd: password,
         },
       })
       .then((res) => {
-        console.log(user);
-        if (res.data.success) {
-          console.log("Successfully signed in.");
-          var path = "/home";
-
-          console.log(res.data.is_admin);
-          if (res.data.is_admin === true) {
-            path = "/admin" + path;
-            setUser((current) => ({ ...current, who_am_i: "admin" }));
-          } else if (res.data.is_client && res.data.is_owner) {
-            alert("You are both customer and owner, IDK where to let you go!");
-            //TODO: Add a popup to let user choose
-            //FIX-ME
-          } else if (res.data.is_owner === true) {
-            path = "/owner" + path;
-            setUser((current) => ({ ...current, who_am_i: "owner" }));
-          } else if (res.data.is_customer === true) {
-            path = "/customer" + path;
-            setUser((current) => ({ ...current, who_am_i: "customer" }));
-          } else if (res.data.is_client === true) {
-            path = "/client" + path;
-            setUser((current) => ({ ...current, who_am_i: "client" }));
-          }
-
-          if (path !== "/home") {
-            message.success("Successfully logged in.");
-            setTimeout(
-              () =>
-                history.push({
-                  pathname: path,
-                  state: {
-                    email: user.email,
-                    who_am_i: user.who_am_i,
-                  },
-                }),
-              1000
-            );
+        console.log(res);
+        if (res.data.code === 200) {
+          if (res.data.data.is_admin) {
+            buttRedirect("admin");
+          } else if (res.data.data.is_client && res.data.data.is_owner) {
+            console.log(visible);
+            showModal();
+          } else if (res.data.data.is_owner) {
+            buttRedirect("owner");
+          } else if (res.data.data.is_customer) {
+            buttRedirect("customer");
+          } else if (res.data.data.is_client) {
+            buttRedirect("client");
           }
         } else {
-          message.error(
-            "Login failed! Make sure you've entered the correct email and password."
-          );
+          const { code, message } = res.data;
+          console.log(code, message);
+          message.error(message);
         }
       })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        message.error("Connection Failed");
+      .catch((err) => {
+        console.error(err);
       });
   };
-
   return (
     <Layout>
-      <Content>
+      <Content style={{ margin: "24px, 24px, 24px", background: "white" }}>
         <Row
           style={{ minHeight: "100vh" }}
           justify="space-around"
           align="middle"
         >
+          <Modal
+            visible={visible}
+            title="Alert"
+            footer={[
+              <Button key="back" onClick={() => handleCancel()}>
+                Cancel
+              </Button>,
+            ]}
+            onCancel={() => handleCancel()}
+          >
+            <p>
+              It seems like you are both a customer and a owner, please select
+              which panal you would like to go:
+            </p>
+            <Space>
+              <Button onClick={() => buttRedirect("owner")}>
+                {" "}
+                Owner Portal{" "}
+              </Button>
+              <Button onClick={() => buttRedirect("customer")}>
+                {" "}
+                Customer Portal{" "}
+              </Button>
+            </Space>
+          </Modal>
           <Col span={24} align="middle">
             <Form
               name="normal_login"
@@ -128,12 +149,7 @@ export default function Login(props) {
                   prefix={<UserOutlined className="site-form-item-icon" />}
                   placeholder="Username"
                   id="email"
-                  onChange={(e) =>
-                    setUser((current) => ({
-                      ...current,
-                      email: e.target.value,
-                    }))
-                  }
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Form.Item>
               <Form.Item
@@ -150,12 +166,7 @@ export default function Login(props) {
                   type="password"
                   placeholder="Password"
                   id="password"
-                  onChange={(e) =>
-                    setUser((current) => ({
-                      ...current,
-                      password: e.target.value,
-                    }))
-                  }
+                  onChange={(e) => setPass(e.target.value)}
                 />
               </Form.Item>
 
@@ -164,7 +175,7 @@ export default function Login(props) {
                   type="primary"
                   htmlType="submit"
                   className="login-form-button"
-                  onClick={handleSubmit}
+                  onClick={() => handleSubmit()}
                 >
                   Log in
                 </Button>
@@ -172,12 +183,11 @@ export default function Login(props) {
                 <p id="error" style={{ fontWeight: "bold", color: "red" }}></p>
               </Form.Item>
             </Form>
-            <Button
-              type="primary"
-              href="/register"
-              onClick={console.log("click")}
-            >
-              No account? Register
+            <p style={{ display: "inline", marginRight: "10px" }}>
+              No account?
+            </p>
+            <Button type="primary" href="/register">
+              Register
             </Button>
           </Col>
         </Row>

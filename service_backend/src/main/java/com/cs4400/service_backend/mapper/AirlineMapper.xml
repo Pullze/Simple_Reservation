@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cs4400.service_backend.mapper.AirlineMapper">
+   <select id="get_all_airline" resultType="com.cs4400.service_backend.entity.Airline">
+       select * from airline order by Airline_Name;
+   </select>
+
+    <select id="get_airline_info" resultType="com.cs4400.service_backend.vo.AirlineInfo">
+        select
+            a.Airline_Name as name,
+            Rating as rating,
+            count(Flight_Num) as total_flights,
+            min(cost) as minimum_flight_cost
+        from airline as a left join Flight as f
+            on a.Airline_Name = f.Airline_Name
+        group by a.Airline_Name;
+    </select>
+</mapper>
