@@ -13,5 +13,5 @@ public interface FlightProcess {
 
     List<Flight> view_flight(int minSeats);
 
-    BookInfo book_flight(String flight_num, String airline_name, String customer_email, int num_seats);
+    BookInfo book_flight(String flight_num, String airline_name, String customer_email, String flight_date, int num_seats);
 }

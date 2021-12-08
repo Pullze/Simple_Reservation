@@ -17,15 +17,20 @@ public interface FlightMapper {
 
     void update_book (String flight_num, String airline_name, String customer_email, int num_seats);
 
-    Integer total_cost (String flight_num, String airline_name, int num_seats);
+    void book_new_flight(String flight_num, String airline_name, String customer_email, int num_seats);
+
+    // retrieve book information including the cost of new booked setas and total cost.
+    BookInfo check_bookIfo (String flight_num, String airline_name, String customer_email, int seats_booked);
 
     Flight check_flight(String flight_num, String airline_name);
 
-    Integer check_seats(String flight_num, String airline_name);
+    Integer check_flight_seats(String flight_num, String airline_name);
 
-    Book check_if_booked(String flight_num, String airline_name, String customer_email);
+    Book check_if_booked_flight(String flight_num, String airline_name, String customer_email);
 
     Book check_book_cancelled(String flight_num, String airline_name, String customer_email);
+
+    Book check_book_by_date (String customer_email, Date flight_fate);
 
 
 
