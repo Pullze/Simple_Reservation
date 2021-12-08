@@ -43,4 +43,6 @@ public interface AccountMapper {
 
    List<OwnerInfo> get_owner_info();
 
+   Integer process_date(Date currentDate);
+
 }

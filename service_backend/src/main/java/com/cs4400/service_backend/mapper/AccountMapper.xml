@@ -92,4 +92,14 @@
              left join review as rev on p.Property_Name = rev.Property_Name
         group by o.Email;
     </select>
+
+    <update id="process_date">
+        update Customer left join
+            (Flight as f left join Airport on To_Airport = Airport_ID
+            right join Book as b
+            on b.Flight_Num = f.Flight_Num and b.Airline_Name = f. Airline_Name and Was_Cancelled = 0)
+        on Email = Customer
+            set Location = State
+        where Flight_Date = #{currentDate};
+    </update>
 </mapper>

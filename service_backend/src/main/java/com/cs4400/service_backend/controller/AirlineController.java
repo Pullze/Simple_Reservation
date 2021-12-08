@@ -35,7 +35,7 @@ public class AirlineController {
      * @return a list of all AirlineInfo.
      */
     @GetMapping("/get_airlines")
-    @ApiOperation(value = "Get all airlines for admin view")
+    @ApiOperation(value = "Get all airlines (admin)")
     public List<AirlineInfo> getAirlineInfo() {
 
         return airlineProcess.getAirlineInfo();

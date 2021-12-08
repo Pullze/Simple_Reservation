@@ -18,7 +18,7 @@ public class AirportController {
     private AirportProcess airportProcess;
 
     @GetMapping(value = "/view_airport")
-    @ApiOperation(value = "Get all airports for admin view")
+    @ApiOperation(value = "Get all airports (admin)")
     public List<AirportInfo> getAirportInfo() {
 
         return airportProcess.getAirportInfo();

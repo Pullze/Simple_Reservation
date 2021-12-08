@@ -6,6 +6,7 @@ import com.cs4400.service_backend.entity.Owner;
 import com.cs4400.service_backend.vo.CustomerInfo;
 import com.cs4400.service_backend.vo.OwnerInfo;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface UserProcess {
@@ -19,5 +20,7 @@ public interface UserProcess {
     List<CustomerInfo> getCustomerInfo();
 
     List<OwnerInfo> getOwnerInfo();
+
+    Integer processDate(String currentDate);
 
 }

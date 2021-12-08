@@ -3,10 +3,10 @@ package com.cs4400.service_backend.controller;
 import com.cs4400.service_backend.entity.Account;
 import com.cs4400.service_backend.entity.Customer;
 import com.cs4400.service_backend.entity.Owner;
+import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.Login;
 import com.cs4400.service_backend.service.UserProcess;
 import com.cs4400.service_backend.vo.CustomerInfo;
-import com.cs4400.service_backend.vo.LoginInfo;
 import com.cs4400.service_backend.vo.OwnerInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,9 +55,9 @@ public class UserController {
     @GetMapping(value = "/login")
     @ApiOperation(value = "Validate login info", notes = "Validate login info (unsafe)")
 
-    public LoginInfo login(@RequestParam(required = false) String email, @RequestParam(required = false) String passwd) {
+    public Response<?> login(@RequestParam(required = false) String email, @RequestParam(required = false) String passwd) {
 
-        return login.login(email, passwd);
+        return new Response<>(HttpStatus.OK.value(), "", login.login(email, passwd));
 
     }
 
@@ -102,10 +102,11 @@ public class UserController {
      * @return a list of all CustomerInfo.
      */
     @GetMapping(value = "/view_customer")
-    @ApiOperation(value = "Get all customers for admin view", notes = "Get all customers")
-    public List<CustomerInfo> getCustomersInfo() {
+    @ApiOperation(value = "Get all customers (admin)", notes = "Get all customers")
+    public Response<?> getCustomersInfo() {
 
-        return userProcess.getCustomerInfo();
+        List<CustomerInfo> result = userProcess.getCustomerInfo();
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
 
     }
 
@@ -114,10 +115,32 @@ public class UserController {
      * @return a list of all OwnerInfo.
      */
     @GetMapping(value = "/view_owner")
-    @ApiOperation(value = "Get all owners for admin view", notes = "Get all owners")
-    public List<OwnerInfo> getOwnerInfo() {
+    @ApiOperation(value = "Get all owners (admin)", notes = "Get all owners")
+    public Response<?> getOwnerInfo() {
 
-        return userProcess.getOwnerInfo();
+        List<OwnerInfo> result = userProcess.getOwnerInfo();
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+
+    }
+
+    /**
+     * Admin process date.
+     * @param currentDate current date.
+     * @return response indicate success or not, and #datas affected.
+     */
+    @GetMapping(value = "/process_date")
+    @ApiOperation(value = "Admin process date", notes = "Admin process date")
+    public Response<?> processDate(@RequestParam String currentDate) {
+
+        int response = userProcess.processDate(currentDate);
+
+        if (response >= 0) { //Success
+            String msg = String.format("Success! There are %d changes to the database.", response);
+            return new Response<>(HttpStatus.OK.value(), msg);
+        } else {
+            String msg = String.format("Query Failed, Check your input format. Error status %d", response);
+            return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
+        }
 
     }
 

@@ -7,12 +7,15 @@ import com.cs4400.service_backend.mapper.AccountMapper;
 import com.cs4400.service_backend.service.UserProcess;
 import com.cs4400.service_backend.vo.CustomerInfo;
 import com.cs4400.service_backend.vo.OwnerInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserProcessImpl implements UserProcess {
 
@@ -100,6 +103,16 @@ public class UserProcessImpl implements UserProcess {
     @Override
     public List<OwnerInfo> getOwnerInfo() {
         return accountMapper.get_owner_info();
+    }
+
+    @Override
+    public Integer processDate(String currentDate) {
+        try {
+            return accountMapper.process_date(Date.valueOf(currentDate));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
 }
