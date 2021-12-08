@@ -13,7 +13,7 @@ public class FlightInfo extends Flight {
     private String message = null;
 
 
-    private Date current_date;
+    private String current_date;
 
 
 
@@ -25,11 +25,11 @@ public class FlightInfo extends Flight {
         this.message = message;
     }
 
-    public Date getCurrent_date() {
+    public String getCurrent_date() {
         return current_date;
     }
 
-    public void setCurrent_date(Date current_date) {
+    public void setCurrent_date(String current_date) {
         this.current_date = current_date;
     }
 }
