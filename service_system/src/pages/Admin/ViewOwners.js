@@ -78,10 +78,10 @@ export default function ViewOwners(props) {
                                 <h1>View Owners</h1>
                             </Col>
                             <Col span={24} align="middle">
-                                <span>
+                                <p>
                                     Name:
                                     <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"}/>
-                                </span>
+                                </p>
                             </Col>
                             <Col>
                                 <Table dataSource={owners} columns={columns}/>

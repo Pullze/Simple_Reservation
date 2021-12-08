@@ -15,8 +15,8 @@ const links = [
     path: "/admin/remove-flight",
   },
   {
-    label: "Process Data",
-    path: "/admin/process-data",
+    label: "Process Date",
+    path: "/admin/process-date",
   },
   {
     label: "View Airports",

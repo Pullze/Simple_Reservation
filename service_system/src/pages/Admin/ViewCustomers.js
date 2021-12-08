@@ -85,10 +85,10 @@ export default function ViewCustomers(props) {
                             <h1>View Customers</h1>
                         </Col>
                         <Col span={24} align="middle">
-                            <span>
+                            <p>
                                 Name:
                                 <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"}/>
-                            </span>
+                            </p>
                         </Col>
                         <Col>
                             <Table dataSource={customers} columns={columns}/>
