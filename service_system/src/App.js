@@ -8,6 +8,7 @@ import AdminHome from "./pages/Admin/Home";
 import ScheduleFlight from "./pages/Admin/ScheduleFlight";
 import RemoveFlights from "./pages/Admin/RemoveFlights";
 import CustomerHome from "./pages/Customer/Home";
+import ReserveProperty from "./pages/Customer/ReserveProperty";
 import OwnerHome from "./pages/Owner/Home";
 
 function App() {
@@ -21,6 +22,11 @@ function App() {
         <Route exact path="/admin/schedule-flight" component={ScheduleFlight} />
         <Route exact path="/admin/remove-flight" component={RemoveFlights} />
         <Route exact path="/customer/home" component={CustomerHome} />
+        <Route
+          exact
+          path="/customer/reserve-property"
+          component={ReserveProperty}
+        />
         <Route exact path="/owner/home" component={OwnerHome} />
       </Switch>
     </Router>
