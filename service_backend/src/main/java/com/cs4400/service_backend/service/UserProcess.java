@@ -19,4 +19,5 @@ public interface UserProcess {
     List<CustomerInfo> getCustomerInfo();
 
     List<OwnerInfo> getOwnerInfo();
+
 }

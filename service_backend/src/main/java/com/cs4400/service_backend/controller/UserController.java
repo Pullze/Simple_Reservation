@@ -99,18 +99,22 @@ public class UserController {
 
     /**
      * Get all customers. (Admin)
-     * @return a list of all Customers.
+     * @return a list of all CustomerInfo.
      */
-    @GetMapping(value = "/get_customer")
-    @ApiOperation(value = "Get all customers", notes = "Get all customers")
+    @GetMapping(value = "/view_customer")
+    @ApiOperation(value = "Get all customers for admin view", notes = "Get all customers")
     public List<CustomerInfo> getCustomersInfo() {
 
         return userProcess.getCustomerInfo();
 
     }
 
-    @GetMapping(value = "/get_owner")
-    @ApiOperation(value = "Get all owners", notes = "Get all owners")
+    /**
+     * Get all owners. (Admin)
+     * @return a list of all OwnerInfo.
+     */
+    @GetMapping(value = "/view_owner")
+    @ApiOperation(value = "Get all owners for admin view", notes = "Get all owners")
     public List<OwnerInfo> getOwnerInfo() {
 
         return userProcess.getOwnerInfo();

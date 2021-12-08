@@ -42,4 +42,5 @@ public interface AccountMapper {
    List<CustomerInfo> get_customer_info();
 
    List<OwnerInfo> get_owner_info();
+
 }
