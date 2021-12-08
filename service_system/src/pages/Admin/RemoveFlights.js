@@ -46,7 +46,7 @@ function RemoveFlights() {
   const [airlines, setAirlines] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/airlines").then((res) => setAirlines(res.data));
+    axios.get("/api/airlines").then((res) => setAirlines(res.data.data));
   }, []);
 
   const onFinish = (values) => {
