@@ -13,6 +13,7 @@ import ViewOwners from "./pages/Admin/ViewOwners";
 import ViewCustomers from "./pages/Admin/ViewCustomers";
 import ViewAirports from "./pages/Admin/ViewAirport";
 import ProcessDate from "./pages/Admin/ProcessDate";
+import ViewAirlines from "./pages/Admin/ViewAirlines";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route exact path="/admin/view-owner" component={ViewOwners}/>
         <Route exact path="/admin/view-customer" component={ViewCustomers}/>
         <Route exact path="/admin/view-airport" component={ViewAirports}/>
+        <Route exact path="/admin/view-airline" component={ViewAirlines}/>
         <Route exact path="/admin/process-date" component={ProcessDate}/>
         <Route exact path="/customer/home" component={CustomerHome} />
         <Route exact path="/owner/home" component={OwnerHome} />

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Button, Table, Input } from "antd";
+import { Layout, Row, Col, Button, Table, Input, Select } from "antd";
 import { useHistory, useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 
-export default function ViewCustomers(props) {
+export default function ViewAirlines(props) {
     const location = useLocation();
     console.log(location.state);
 
     const state = useState;
 
-    const [customers, setCustomers] = state([]);
+    const [airlines, setAirlines] = state([]);
     const [name, setName] = state("");
 
     const columns = [
@@ -20,47 +20,39 @@ export default function ViewCustomers(props) {
             key: 'name',
         },
         {
-            title: 'Average Rating',
-            dataIndex: 'average_rating',
-            key: 'average_rating',
+            title: 'Rating',
+            dataIndex: 'rating',
+            key: 'rating',
             sorter: {
-                compare: (a, b) => a.average_rating - b.average_rating,
+                compare: (a, b) => a.rating - b.rating,
                 multiple: 1
             },
         },
         {
-            title: 'Loaction',
-            dataIndex: 'location',
-            key: 'location',
-        },
-        {
-            title: 'Is Owner',
-            dataIndex: 'is_owner',
-            key: 'is_owner',
-            render: is_owner => (
-                <> {is_owner && "Yes"} {!is_owner && "No"}</>
-            ),
+            title: 'Total Flights',
+            dataIndex: 'total_flights',
+            key: 'total_flights',
             sorter: {
-                compare: (a, b) => a.is_owner - b.is_owner,
+                compare: (a, b) => a.total_flights - b.total_flights,
                 multiple: 1
             },
         },
         {
-            title: 'Total Seats Purchased',
-            dataIndex: 'total_seats_purchased',
-            key: 'total_seats_purchased',
+            title: 'Minimum Flight Cost',
+            dataIndex: 'minimum_flight_cost',
+            key: 'minimum_flight_cost',
             sorter: {
-                compare: (a, b) => a.total_seats_purchased - b.total_seats_purchased,
+                compare: (a, b) => a.minimum_flight_cost - b.minimum_flight_cost,
                 multiple: 1
             },
         },
     ]
 
-    function getCustomers()  {
-        axios.get('/api/view_customer')
+    function getAirlines()  {
+        axios.get('/api/view_airline')
             .then((res) => {
                 console.log(res.data);
-                setCustomers(res.data.data);
+                setAirlines(res.data.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -68,10 +60,9 @@ export default function ViewCustomers(props) {
         );
             
     }
-
     useEffect(
         () => {
-            getCustomers();
+            getAirlines();
         }, []
     )
 
@@ -83,16 +74,16 @@ export default function ViewCustomers(props) {
                     <Row justify="center" align="middle" gutter={[24, 24]} >
                         <Col span={24} align="middle">
                             <h2>Now logged in as {location.state.email}</h2>
-                            <h1>View Customers</h1>
+                            <h1>View Airports</h1>
                         </Col>
                         <Col span={24} align="middle">
-                            <p>
+                            <span>
                                 Name:
                                 <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"} onChange={(e) => setName(e.target.value)}/>
-                            </p>
+                            </span>
                         </Col>
                         <Col>
-                            <Table dataSource={customers} columns={columns}/>
+                            <Table dataSource={airlines} columns={columns}/>
                         </Col>
                     </Row>
                 </Col>

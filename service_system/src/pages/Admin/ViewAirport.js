@@ -13,6 +13,8 @@ export default function ViewAirports(props) {
 
     const [airports, setAirports] = state([]);
     const [timzones, setTimeZones] = state([]);
+    const [id, setId] = state("");
+    const [time, setTime] = state("");
 
     const columns = [
         {
@@ -86,6 +88,7 @@ export default function ViewAirports(props) {
     }
 
     const handleChange = (value) => {
+        setTime(value);
         console.log(`selected ${value}`);
     }
 
@@ -109,7 +112,7 @@ export default function ViewAirports(props) {
                         <Col span={12} align="left">
                             <span>
                                 ID:
-                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"ID"}/>
+                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"ID"} onChange={(e) => setId(e.target.value)}/>
                             </span>
                         </Col>
                         <Col span={12} align="left">

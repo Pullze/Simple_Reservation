@@ -12,6 +12,7 @@ export default function ViewOwners(props) {
     const state = useState;
 
     const [owners, setOwners] = state([]);
+    const [name, setName] = state("");
 
     const columns = [
         {
@@ -80,7 +81,7 @@ export default function ViewOwners(props) {
                             <Col span={24} align="middle">
                                 <p>
                                     Name:
-                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"}/>
+                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"} onChange={(e) => setName(e.target.value)}/>
                                 </p>
                             </Col>
                             <Col>
