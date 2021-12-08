@@ -20,35 +20,5 @@ public class Customer extends Client{
     @ApiModelProperty(value = "Location")
     private String location;
 
-    public String getCcNumber() {
-        return ccNumber;
-    }
-
-    public void setCcNumber(String ccNumber) {
-        this.ccNumber = ccNumber;
-    }
-
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
-    }
-
-    public Date getExp_date() {
-        return exp_date;
-    }
-
-    public void setExp_date(Date exp_date) {
-        this.exp_date = exp_date;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
+  
 }

@@ -47,94 +47,28 @@ public class Flight {
     @ApiModelProperty(value = "total_spent")
     private int total_spent;
 
-    public int getTotal_spent() {
-        return total_spent;
-    }
-
-    public void setTotal_spent(int total_spent) {
+    public Flight(@NotNull String flight_num, @NotNull String airline_name, @NotNull Date departure_time, Date arrival_time, Date flight_date, double cost, int capacity, String from_airport, String to_airport, int remaining_seats, int total_spent) {
+        this.flight_num = flight_num;
+        this.airline_name = airline_name;
+        this.departure_time = departure_time;
+        this.arrival_time = arrival_time;
+        this.flight_date = flight_date;
+        this.cost = cost;
+        this.capacity = capacity;
+        this.from_airport = from_airport;
+        this.to_airport = to_airport;
+        this.remaining_seats = remaining_seats;
         this.total_spent = total_spent;
     }
 
-    public String getFlight_num() {
-        return flight_num;
+    public Flight(Flight flight) {
+        this (flight.flight_num, flight.airline_name, flight.departure_time, flight.arrival_time,
+                flight.flight_date, flight.cost, flight.capacity, flight.from_airport, flight.to_airport,
+                flight.remaining_seats, flight.total_spent);
+
     }
 
-    public void setFlight_num(String flight_num) {
-        this.flight_num = flight_num;
-    }
-
-    public String getAirline_name() {
-        return airline_name;
-    }
-
-    public void setAirline_name(String airline_name) {
-        this.airline_name = airline_name;
-    }
-
-    public Date getDeparture_time() {
-        return departure_time;
-    }
-
-    public void setDeparture_time(Date departure_time) {
-        this.departure_time = departure_time;
-    }
-
-    public Date getArrival_time() {
-        return arrival_time;
-    }
-
-    public void setArrival_time(Date arrival_time) {
-        this.arrival_time = arrival_time;
-    }
-
-    public Date getFlight_date() {
-        return flight_date;
-    }
-
-    public void setFlight_date(Date flight_date) {
-        this.flight_date = flight_date;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public String getFrom_airport() {
-        return from_airport;
-    }
-
-    public void setFrom_airport(String from_airport) {
-        this.from_airport = from_airport;
-    }
-
-    public String getTo_airport() {
-        return to_airport;
-    }
-
-    public void setTo_airport(String to_airport) {
-        this.to_airport = to_airport;
-    }
-
-    public int getRemaining_seats() {
-        return remaining_seats;
-    }
-
-    public void setRemaining_seats(int remaining_seats) {
-        this.remaining_seats = remaining_seats;
-    }
-
+    public Flight(){};
 
 
 }
