@@ -36,4 +36,33 @@
 		group by f.Airline_Name , f.Flight_Num
 		having remaining_seats >= #{minSeats};
     </select>
+
+
+    <select id = "check_book_cancelled" resultType="Book">
+        select * from Book
+        where Flight_Num = #{flight_num} and Airline_Name = %{airline_name} and Customer = customer_email and Was_Cancelled = 1;
+    </select>
+
+    <select id = "check_if_booked" resultType="Book">
+        select * from Book
+        where Flight_Num = #{flight_num} and Airline_Name = %{airline_name} and Customer = customer_email and Was_Cancelled = 0;
+    </select>
+
+    <select id = "check_seats" resultType = "Integer">
+        select Capacity - coalesce(sum(b.Num_seats), 0) as remaining_seats
+        from Book as b right join Flight as f on
+		b.Flight_Num = f.Flight_Num and b.Airline_Name = f.Airline_Name
+		where Flight_Num = #{flight_num} and Airline_Name = %{airline_name} and Was_Cancelled = 0
+		group by Flight_Num;
+    </select>
+
+    <update id = "update_book">
+        update Book set Num_Seats = Num_seats + #{num_seats} where Customer = #{customer_email} and Flight_Num = #{flight_num}  and Airline_Name = #{airline_name};
+    </update>
+
+    <select id = "total_cost" resultType = "Integer">
+        select Cost * #{num_seats} from Flight where Flight_Num = #{flight_num} and Airline_Name = #{airline_name};
+    </select>
+
+
 </mapper>

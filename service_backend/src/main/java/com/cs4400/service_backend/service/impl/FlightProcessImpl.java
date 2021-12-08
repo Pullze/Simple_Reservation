@@ -4,6 +4,7 @@ import com.cs4400.service_backend.entity.Airport;
 import com.cs4400.service_backend.entity.Flight;
 import com.cs4400.service_backend.mapper.FlightMapper;
 import com.cs4400.service_backend.service.FlightProcess;
+import com.cs4400.service_backend.vo.BookInfo;
 import com.cs4400.service_backend.vo.FlightInfo;
 import org.springframework.stereotype.Service;
 
@@ -72,13 +73,30 @@ public class FlightProcessImpl implements FlightProcess {
 
     }
 
-    @Override
-    public Flight check_flight(String flight_num, String airline_name) {
-        return flightMapper.check_flight(flight_num, airline_name);
-    }
 
     @Override
     public List<Flight> view_flight(int minSeats) {
         return flightMapper.view_flight(minSeats);
+    }
+
+    @Override
+    public BookInfo book_flight(String flight_num, String airline_name, String customer_email, int num_seats) {
+        if (flightMapper.check_book_cancelled(flight_num, airline_name, customer_email) != null) {
+            return new BookInfo("Already cancelled a book on this flight!");
+        }
+
+        if (flightMapper.check_if_booked(flight_num, airline_name, customer_email) != null) {
+            if (flightMapper.check_seats(flight_num, airline_name) < num_seats) {
+                return new BookInfo("No sufficient seats to book!");
+            } else{
+                flightMapper.update_book(flight_num, airline_name, customer_email, num_seats);
+                int total_cost = (int)flightMapper.total_cost(flight_num,airline_name,num_seats);
+                Flight flight = flightMapper.check_flight(flight_num, airline_name);
+            }
+
+        }
+
+        return null;
+
     }
 }

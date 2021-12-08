@@ -29,7 +29,4 @@ public class LoginInfo {
     @ApiModelProperty(value = "is Success?")
     private Boolean success;
 
-    public void setSuccess(boolean b) {
-        success = b;
-    }
 }
