@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -67,7 +64,7 @@ public class UserController {
      */
     @PostMapping(value = "/register_owner")
     @ApiOperation(value = "register_owner", notes = "Validate login info")
-    public ResponseEntity<String> register_owner(@RequestBody @Valid Owner owner) {
+    public ResponseEntity<String> register_owner(@RequestPart("jsonValue") @Valid Owner owner) {
         String message = registerUser.register_owner(owner);
         if (message.equals("Register succeeded!")) {
             return ResponseEntity.status(HttpStatus.OK).body(message);
@@ -83,7 +80,7 @@ public class UserController {
      */
     @PostMapping(value = "/register_customer")
     @ApiOperation(value = "register_customer", notes = "Validate login info")
-    public ResponseEntity<String> register_customer(@RequestBody @Valid Customer customer) {
+    public ResponseEntity<String> register_customer(@RequestPart("jsonValue") @Valid Customer customer) {
         String message = registerUser.register_customer(customer);
         if (message.equals("Register succeeded!")) {
             return ResponseEntity.status(HttpStatus.OK).body(message);
