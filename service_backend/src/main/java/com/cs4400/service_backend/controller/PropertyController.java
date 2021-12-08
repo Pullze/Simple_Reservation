@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
 import java.util.List;
 
 @Api(tags = "Property Controller")
@@ -47,7 +48,35 @@ public class PropertyController {
         return result;
     }
 
+    /**
+     * view Available properties
+     * @param start start date in the filter
+     * @param end end date in the filter
+     * @return list of available properties.
+     */
+    @GetMapping(value = "/availableProperties")
+    @ApiOperation(value = "available Properties", notes = "available Properties")
+    public List<Property> availableProperties(@RequestParam Date start, @RequestParam Date end) {
+        List<Property> result = propertyProcess.viewAvailableProperties(start, end);
+        System.out.println(result);
+        return result;
+    }
 
-
+    /**
+     * reserve a property
+     * @param propertyName property's name
+     * @param ownerEmail owner's email
+     * @param customerEmail customer's email
+     * @param startDate start date
+     * @param endDate end date
+     * @param numGuests number of guests
+     * @return result
+     */
+    @GetMapping(value = "/reserveProperty")
+    @ApiOperation(value = "reserve Property", notes = "reserve Property")
+    public String reserveProperty(@RequestParam String propertyName, @RequestParam String ownerEmail, @RequestParam String customerEmail, @RequestParam Date startDate, @RequestParam Date endDate, @RequestParam Integer numGuests) {
+        String result = propertyProcess.reserveProperty(propertyName, ownerEmail, customerEmail, startDate, endDate, numGuests);
+        return result;
+    }
 }
 

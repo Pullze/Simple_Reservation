@@ -22,13 +22,31 @@ public class PropertyProcessImpl implements PropertyProcess {
 //        System.out.println(propertyMapper.getAllProperties());
 
         List<Property> properties = propertyMapper.viewProperties(high, low);
-
         for(Property property: properties) {
             List<String> amenities = propertyMapper.checkAmenities(property.getProperty_name(), property.getOwner_email());
             property.setAmenities(amenities);
         }
-
         return properties;
     }
+
+    @Override
+    public List<Property> viewAvailableProperties(Date start, Date end) {
+//        System.out.println(propertyMapper.getAllProperties());
+
+        List<Property> properties = propertyMapper.viewAvailableProperties(start, end);
+        return properties;
+    }
+
+    @Override
+    public String reserveProperty(String propertyName, String ownerEmail, String customerEmail, Date startDate, Date endDate, Integer numGuests) {
+        if (startDate.compareTo(endDate) > 0) {
+            return "the end date has to after start date";
+        }
+
+        propertyMapper.reserveProperty(propertyName, ownerEmail, customerEmail, startDate, endDate,numGuests);
+        return "reserved Successfuly";
+
+    }
+
 
 }

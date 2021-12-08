@@ -15,6 +15,9 @@ public interface PropertyMapper {
 
    List<Property> viewProperties(Integer high, Integer low);
 
-
    List<String> checkAmenities(String property_name, String property_owner);
+
+   List<Property> viewAvailableProperties(Date start, Date end);
+
+   void reserveProperty(String propertyName, String ownerEmail, String customerEmail, Date startDate, Date endDate, Integer numGuests);
 }
