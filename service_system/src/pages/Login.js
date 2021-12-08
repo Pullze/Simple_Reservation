@@ -164,11 +164,14 @@ export default function Login(props) {
                   ></p>
                 </Form.Item>
               </Form>
+              <p style={{ display: "inline", marginRight: "10px" }}>
+                No account?
+              </p>
               <Button
                 type="primary"
                 href="/register"
               >
-                No account? Register
+               Register
               </Button>
             </Col>
           </Row>
