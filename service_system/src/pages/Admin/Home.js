@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Layout, Row, Col } from "antd";
+import { Layout, Row, Col, Button } from "antd";
 import "./Home.css";
 import { useHistory } from "react-router";
+import { Content } from "antd/lib/layout/layout";
 
 const links = [
   {
@@ -40,17 +41,23 @@ function Home(props) {
   console.log(historyState);
   return (
     <Layout>
-      <Row className="admin-home-row" justify="space-around" align="middle">
-        <h2>Now logged in as {historyState.email} </h2>
-        <Col className="heading" span={24} align="middle">
-          Admin Home
-        </Col>
-        {links.map((link, i) => (
-          <Col className="item" key={i} md={12} sm={24} xs={24} align="middle">
-            <a href={link.path}>{link.label}</a>
+      <Content style={{ margin: '24px 24px 24px', background: "white"}}>
+        <Row className="admin-home-row" justify="space-around" align="middle" gutter={[24, 24]}>
+          <Col span={24} align="middle">
+            <h2>Now logged in as {historyState.email} </h2>
           </Col>
-        ))}
-      </Row>
+          <Col className="heading" span={24} align="middle">
+            Admin Home
+          </Col>
+          {links.map((link, i) => (
+            <Col className="item" key={i}  xxl={12} xl={12} md={12} sm={24} xs={24} align="middle">
+              <Button type="default" href={link.path} style={{ minWidth: "150px", minHeight: "100%" }}> 
+                {link.label}
+              </Button>
+            </Col>
+          ))}
+        </Row>
+      </Content>
     </Layout>
   );
 }

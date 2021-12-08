@@ -7,9 +7,24 @@ import lombok.Data;
 public class Airline {
 
     @ApiModelProperty(value = "name")
-    private String name;
+    private String airline_name;
 
     @ApiModelProperty(value = "rating")
     private int rating;
 
+    public String getName() {
+        return airline_name;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setName(String name) {
+        this.airline_name= name;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 }
