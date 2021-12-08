@@ -9,8 +9,8 @@ import java.util.List;
 public interface PropertyProcess {
 
     List<Property> viewProperties(Integer high, Integer low);
-
-
+    List<Property> viewAvailableProperties(Date start, Date end);
+    String reserveProperty(String propertyEmail, String ownerEmail, String customerEmail, Date startDate, Date endDate, Integer numGuests);
     
 
 }
