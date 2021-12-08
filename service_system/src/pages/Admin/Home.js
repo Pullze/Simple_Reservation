@@ -56,6 +56,11 @@ function Home(props) {
               </Button>
             </Col>
           ))}
+          <Col span={24} align="middle">
+            <Button type="default" danger href={"/"} style={{ minWidth: "150px", minHeight: "100%" }}> 
+              Logout
+            </Button>
+        </Col>
         </Row>
       </Content>
     </Layout>

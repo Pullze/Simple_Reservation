@@ -32,8 +32,6 @@
                     and Pass = #{password} and Phone_Number = #{phone_number};
     </select>
 
-
-
     <select id = "check_account_uniqueness" resultType="Client">
             select Accounts.Email, Phone_number from Accounts left join Clients on Accounts.Email = Clients.Email
             where Accounts.Email = #{email} or Phone_number = #{phone_number};
@@ -66,4 +64,42 @@
         (#{customer_email}, #{cc_number}, #{cvv}, #{exp_date}, #{location});
     </insert>
 
+    <select id="get_customer_info" resultType="com.cs4400.service_backend.vo.CustomerInfo">
+        select
+            concat(acc.First_Name, space(1), acc.Last_Name) as name,
+            avg(rate.Score) as average_rating,
+            cus.Location as location,
+            case when o.Email is null then 0 else 1 end as is_owner,
+            coalesce(sum(b.Num_Seats), 0) as total_seats_purchased
+        from customer as cus
+             left join owners_rate_customers as rate on rate.Customer = cus.Email
+             left join accounts as acc on acc.Email = cus.Email
+             left join book as b on b.Customer = cus.Email
+             left join owners as o on o.Email = cus.Email
+        group by cus.Email;
+    </select>
+
+    <select id="get_owner_info" resultType="com.cs4400.service_backend.vo.OwnerInfo">
+        select
+            concat(acc.First_Name, space(1), acc.Last_Name) as name,
+            avg(rate.Score) as average_rating,
+            count(distinct p.Property_Name) as number_of_properties_owned,
+            avg(rev.Score) as average_property_rating
+        from owners as o
+             left join customers_rate_owners as rate on o.Email = rate.Owner_Email
+             left join accounts as acc on acc.Email = o.Email
+             left join property as p on o.Email = p.Owner_Email
+             left join review as rev on p.Property_Name = rev.Property_Name
+        group by o.Email;
+    </select>
+
+    <update id="process_date">
+        update Customer left join
+            (Flight as f left join Airport on To_Airport = Airport_ID
+            right join Book as b
+            on b.Flight_Num = f.Flight_Num and b.Airline_Name = f. Airline_Name and Was_Cancelled = 0)
+        on Email = Customer
+            set Location = State
+        where Flight_Date = #{currentDate};
+    </update>
 </mapper>

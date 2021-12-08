@@ -3,12 +3,13 @@ package com.cs4400.service_backend.controller;
 import com.cs4400.service_backend.entity.Account;
 import com.cs4400.service_backend.entity.Customer;
 import com.cs4400.service_backend.entity.Owner;
+import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.Login;
-import com.cs4400.service_backend.service.RegisterUser;
-import com.cs4400.service_backend.vo.LoginInfo;
+import com.cs4400.service_backend.service.UserProcess;
+import com.cs4400.service_backend.vo.CustomerInfo;
+import com.cs4400.service_backend.vo.OwnerInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private RegisterUser registerUser;
+    private UserProcess userProcess;
 
     @Autowired
     private Login login;
@@ -36,11 +37,13 @@ public class UserController {
      * @return A list of Accounts.
      */
     @GetMapping(value = "/hello")
-    @ApiOperation(value = "Get all Accounts", notes = "Get all accounts.")
+    @ApiOperation(value = "Get all accounts", notes = "Get all accounts.")
     public List<Account> demo() {
-        List<Account> result = registerUser.getAllAccounts();
+
+        List<Account> result = userProcess.getAllAccounts();
         System.out.println(result);
         return result;
+
     }
 
     /**
@@ -52,8 +55,9 @@ public class UserController {
     @GetMapping(value = "/login")
     @ApiOperation(value = "Validate login info", notes = "Validate login info (unsafe)")
 
-    public LoginInfo login(@RequestParam(required = false) String email, @RequestParam(required = false) String passwd) {
-        return login.login(email, passwd);
+    public Response<?> login(@RequestParam(required = false) String email, @RequestParam(required = false) String passwd) {
+
+        return new Response<>(HttpStatus.OK.value(), "", login.login(email, passwd));
 
     }
 
@@ -63,14 +67,16 @@ public class UserController {
      * @return Response indicate success or not.
      */
     @PostMapping(value = "/register_owner")
-    @ApiOperation(value = "register_owner", notes = "Validate login info")
+    @ApiOperation(value = "Register owner", notes = "Register a new owner")
     public ResponseEntity<String> register_owner(@RequestPart("jsonValue") @Valid Owner owner) {
-        String message = registerUser.register_owner(owner);
+
+        String message = userProcess.register_owner(owner);
         if (message.equals("Register succeeded!")) {
             return ResponseEntity.status(HttpStatus.OK).body(message);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
+
     }
 
     /**
@@ -79,13 +85,61 @@ public class UserController {
      * @return Response indicate success or not.
      */
     @PostMapping(value = "/register_customer")
-    @ApiOperation(value = "register_customer", notes = "Validate login info")
+    @ApiOperation(value = "Register customer", notes = "Register a new customer")
     public ResponseEntity<String> register_customer(@RequestPart("jsonValue") @Valid Customer customer) {
-        String message = registerUser.register_customer(customer);
+
+        String message = userProcess.register_customer(customer);
         if (message.equals("Register succeeded!")) {
             return ResponseEntity.status(HttpStatus.OK).body(message);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        }
+
+    }
+
+    /**
+     * Get all customers. (Admin)
+     * @return a list of all CustomerInfo.
+     */
+    @GetMapping(value = "/view_customer")
+    @ApiOperation(value = "Get all customers (admin)", notes = "Get all customers")
+    public Response<?> getCustomersInfo() {
+
+        List<CustomerInfo> result = userProcess.getCustomerInfo();
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+
+    }
+
+    /**
+     * Get all owners. (Admin)
+     * @return a list of all OwnerInfo.
+     */
+    @GetMapping(value = "/view_owner")
+    @ApiOperation(value = "Get all owners (admin)", notes = "Get all owners")
+    public Response<?> getOwnerInfo() {
+
+        List<OwnerInfo> result = userProcess.getOwnerInfo();
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+
+    }
+
+    /**
+     * Admin process date.
+     * @param currentDate current date.
+     * @return response indicate success or not, and #datas affected.
+     */
+    @GetMapping(value = "/process_date")
+    @ApiOperation(value = "Admin process date", notes = "Admin process date")
+    public Response<?> processDate(@RequestParam String currentDate) {
+
+        int response = userProcess.processDate(currentDate);
+
+        if (response >= 0) { //Success
+            String msg = String.format("Success! There are %d changes to the database.", response);
+            return new Response<>(HttpStatus.OK.value(), msg);
+        } else {
+            String msg = String.format("Query Failed, Check your input format. Error status %d", response);
+            return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
         }
 
     }

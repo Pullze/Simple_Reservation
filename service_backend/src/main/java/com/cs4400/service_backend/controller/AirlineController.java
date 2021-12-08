@@ -2,6 +2,7 @@ package com.cs4400.service_backend.controller;
 
 import com.cs4400.service_backend.entity.Airline;
 import com.cs4400.service_backend.service.AirlineProcess;
+import com.cs4400.service_backend.vo.AirlineInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,18 @@ public class AirlineController {
     public List<Airline> getAirlines() {
 
         return airlineProcess.getAllAirline();
+
+    }
+
+    /**
+     * Get all airlines. (Admin)
+     * @return a list of all AirlineInfo.
+     */
+    @GetMapping("/get_airlines")
+    @ApiOperation(value = "Get all airlines (admin)")
+    public List<AirlineInfo> getAirlineInfo() {
+
+        return airlineProcess.getAirlineInfo();
 
     }
 
