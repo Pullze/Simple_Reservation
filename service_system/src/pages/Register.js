@@ -1,48 +1,180 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router";
+import "../config/config.js";
 import {
   Form,
   Input,
-  InputNumber,
-  DatePicker,
-  Select,
   Button,
   Row,
   Col,
   Layout,
   Tabs,
+  Space,
+  message,
 } from "antd";
+import axios from "axios";
 import "./Register.css";
 
 const { TabPane } = Tabs;
-const { Option } = Select;
 
-const months = [
-  "01",
-  "02",
-  "03",
-  "04",
-  "05",
-  "06",
-  "07",
-  "08",
-  "09",
-  "10",
-  "11",
-  "12",
-];
+const today = new Date();
+
+// Input field value validators
+const validators = {
+  phone: () => ({
+    validator(_, value) {
+      if (
+        !value ||
+        (value.length === 12 &&
+          !isNaN(value.slice(0, 3)) &&
+          value.charAt(3) === "-" &&
+          !isNaN(value.slice(4, 7)) &&
+          value.charAt(7) === "-" &&
+          !isNaN(value.slice(8, 13)))
+      ) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error("Please enter a valid phone number."));
+    },
+  }),
+  confirm_password: ({ getFieldValue }) => ({
+    validator(_, value) {
+      if (!value || getFieldValue("password") === value) {
+        return Promise.resolve();
+      }
+      return Promise.reject(
+        new Error("The two passwords that you entered do not match!")
+      );
+    },
+  }),
+  card_number: () => ({
+    validator(_, value) {
+      if (
+        !value ||
+        (value.length === 19 &&
+          !isNaN(value.slice(0, 4)) &&
+          value.charAt(4) === " " &&
+          !isNaN(value.slice(5, 9)) &&
+          value.charAt(9) === " " &&
+          !isNaN(value.slice(10, 14)) &&
+          value.charAt(14) === " " &&
+          !isNaN(value.slice(15, 19)))
+      ) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error("Please enter a valid card number."));
+    },
+  }),
+  cvv: () => ({
+    validator(_, value) {
+      if (!value || (!isNaN(value) && value.length === 3)) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error("Please enter a valid CVV."));
+    },
+  }),
+  expiration_month: () => ({
+    validator(_, value) {
+      if (
+        !value ||
+        (value.length === 2 && parseInt(value) >= 1 && parseInt(value) <= 12)
+      ) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error("Please enter a valid month."));
+    },
+  }),
+  expiration_year: () => ({
+    validator(_, value) {
+      if (
+        !value ||
+        (value.length === 2 && parseInt("20" + value) >= today.getFullYear())
+      ) {
+        return Promise.resolve();
+      } else if (
+        value.length === 2 &&
+        !isNaN(value) &&
+        parseInt("20" + value) < today.getFullYear()
+      ) {
+        return Promise.reject(new Error("This card has already expired."));
+      } else {
+        return Promise.reject(new Error("Please enter a valid year."));
+      }
+    },
+  }),
+};
 
 function Register() {
+  const history = useHistory();
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
+  const registerCustomer = (values) => {
     console.log("Success:", values);
+    const customer = {
+      email: values["email"],
+      first_name: values["first-name"],
+      last_name: values["last-name"],
+      pass: values["password"],
+      phone_number: values["phone"],
+      ccNumber: values["card-number"],
+      cvv: values["cvv"],
+      exp_date: `20${values["exp"].year}-${values["exp"].month}-01`,
+      location: "", // FIXME
+    };
+    const formData = new FormData();
+    formData.append(
+      "jsonValue",
+      new Blob([JSON.stringify(customer)], { type: "application/json" })
+    );
+    axios
+      .post("/api/register_customer", formData)
+      .then((res) => {
+        message.success("Successfully registered!");
+        setTimeout(
+          () =>
+            history.push({
+              pathname: "/customer/home",
+              state: {
+                email: values["email"],
+              },
+            }),
+          1000
+        );
+      })
+      .catch((err) => message.error(err.response.data));
   };
 
-  //   const validateCardNumber = (cardNum) => {
-  //       if (cardNum.length !== 16) {
-
-  //       }
-  //   }
+  const registerOwner = (values) => {
+    console.log("Success:", values);
+    const owner = {
+      email: values["email"],
+      first_name: values["first-name"],
+      last_name: values["last-name"],
+      pass: values["password"],
+      phone_number: values["phone"],
+    };
+    const formData = new FormData();
+    formData.append(
+      "jsonValue",
+      new Blob([JSON.stringify(owner)], { type: "application/json" })
+    );
+    axios
+      .post("/api/register_owner", formData)
+      .then((res) => {
+        message.success("Successfully registered!");
+        setTimeout(
+          () =>
+            history.push({
+              pathname: "/owner/home",
+              state: {
+                email: values["email"],
+              },
+            }),
+          1000
+        );
+      })
+      .catch((err) => message.error(err.response.data));
+  };
 
   const basicFormItems = () => {
     return [
@@ -98,9 +230,10 @@ function Register() {
             required: true,
             message: "Please input your phone number!",
           },
+          validators.phone,
         ]}
       >
-        <Input addonBefore="+1" />
+        <Input addonBefore="+1" placeholder="xxx-xxx-xxxx" />
       </Form.Item>,
       <Form.Item
         key="4"
@@ -110,10 +243,6 @@ function Register() {
           {
             required: true,
             message: "Please input your password!",
-          },
-          {
-            min: 8,
-            message: "Password must have at least 8 characters.",
           },
         ]}
         hasFeedback
@@ -131,16 +260,7 @@ function Register() {
             required: true,
             message: "Please confirm your password!",
           },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue("password") === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(
-                new Error("The two passwords that you entered do not match!")
-              );
-            },
-          }),
+          validators.confirm_password,
         ]}
       >
         <Input.Password />
@@ -152,11 +272,11 @@ function Register() {
     <Layout>
       <Row
         style={{ minHeight: "100vh", paddingTop: "10%" }}
-        justify="space-around"
+        justify="center"
         align="top"
       >
-        <Col className="heading" span={24} align="middle">
-          Register Account
+        <Col span={24} align="middle" style={{ width: "100%" }}>
+          <h1 className="heading">Register Account</h1>
         </Col>
         <Col span={24} align="middle">
           <Tabs defaultActiveKey="1" type="card" centered>
@@ -165,7 +285,7 @@ function Register() {
                 form={form}
                 name="register"
                 className="register-form"
-                onFinish={onFinish}
+                onFinish={registerCustomer}
                 scrollToFirstError
               >
                 {[...basicFormItems()]}
@@ -177,12 +297,10 @@ function Register() {
                       required: true,
                       message: "Please input your card number!",
                     },
-                    {
-                      max: 16,
-                    },
+                    validators.card_number,
                   ]}
                 >
-                  <Input />
+                  <Input placeholder="xxxx xxxx xxxx xxxx" />
                 </Form.Item>
                 <Form.Item
                   name="cvv"
@@ -192,13 +310,10 @@ function Register() {
                       required: true,
                       message: "Please input your card's CVV!",
                     },
+                    validators.cvv,
                   ]}
                 >
-                  <InputNumber
-                    placeholder="cvv"
-                    type="number"
-                    controls={false}
-                  />
+                  <Input placeholder="cvv" />
                 </Form.Item>
                 <Form.Item label="Expiration Date">
                   <Input.Group compact>
@@ -210,14 +325,10 @@ function Register() {
                           required: true,
                           message: "Please enter your card's expiration month.",
                         },
+                        validators.expiration_month,
                       ]}
                     >
-                      <InputNumber
-                        style={{ width: "30%" }}
-                        placeholder="mm"
-                        controls={false}
-                        type="number"
-                      />
+                      <Input style={{ width: "30%" }} placeholder="mm" />
                     </Form.Item>
                     <Form.Item
                       noStyle
@@ -227,14 +338,10 @@ function Register() {
                           required: true,
                           message: "Please enter your card's expiration year.",
                         },
+                        validators.expiration_year,
                       ]}
                     >
-                      <InputNumber
-                        style={{ width: "30%" }}
-                        placeholder="yy"
-                        controls={false}
-                        type="number"
-                      />
+                      <Input style={{ width: "30%" }} placeholder="yy" />
                     </Form.Item>
                   </Input.Group>
                 </Form.Item>
@@ -250,7 +357,7 @@ function Register() {
                 from={form}
                 name="register"
                 className="register-form"
-                onFinish={onFinish}
+                onFinish={registerOwner}
                 scrollToFirstError
               >
                 {[...basicFormItems()]}
