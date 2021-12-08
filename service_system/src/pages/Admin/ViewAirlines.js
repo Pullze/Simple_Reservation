@@ -74,7 +74,7 @@ export default function ViewAirlines(props) {
                     <Row justify="center" align="middle" gutter={[24, 24]} >
                         <Col span={24} align="middle">
                             <h2>Now logged in as {location.state.email}</h2>
-                            <h1>View Airports</h1>
+                            <h1>View Airlines</h1>
                         </Col>
                         <Col span={24} align="middle">
                             <span>

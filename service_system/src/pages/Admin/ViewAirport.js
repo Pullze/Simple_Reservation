@@ -109,13 +109,13 @@ export default function ViewAirports(props) {
                             <h2>Now logged in as {location.state.email}</h2>
                             <h1>View Airports</h1>
                         </Col>
-                        <Col span={12} align="left">
+                        <Col span={12} align="middle">
                             <span>
                                 ID:
                                 <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"ID"} onChange={(e) => setId(e.target.value)}/>
                             </span>
                         </Col>
-                        <Col span={12} align="left">
+                        <Col span={12} align="middle">
                             <span>
                                 Time Zone:
                                 <Select style={{ maxWidth: "300px", marginLeft: "8px", width: "100%" }} onChange={handleChange}>
