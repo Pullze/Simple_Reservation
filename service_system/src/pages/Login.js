@@ -17,7 +17,7 @@ import "./Login.css";
 import { useHistory } from "react-router-dom";
 import { Content } from "antd/lib/layout/layout";
 
-export default function Login(props) {
+export default function Login() {
   const history = useHistory();
 
   const [user, setUser] = useState({
@@ -170,12 +170,15 @@ export default function Login(props) {
                 <p id="error" style={{ fontWeight: "bold", color: "red" }}></p>
               </Form.Item>
             </Form>
+            <p style={{ display: "inline", marginRight: "10px" }}>
+              No account?
+            </p>
             <Button
               type="primary"
               href="/register"
               onClick={console.log("click")}
             >
-              No account? Register
+              Register
             </Button>
           </Col>
         </Row>
