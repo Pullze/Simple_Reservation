@@ -11,6 +11,7 @@ import CustomerHome from "./pages/Customer/Home";
 import OwnerHome from "./pages/Owner/Home";
 import ViewOwners from "./pages/Admin/ViewOwners";
 import ViewCustomers from "./pages/Admin/ViewCustomers";
+import ViewAirports from "./pages/Admin/ViewAirport";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route exact path="/admin/remove-flight" component={RemoveFlights} />
         <Route exact path="/admin/view-owner" component={ViewOwners}/>
         <Route exact path="/admin/view-customer" component={ViewCustomers}/>
+        <Route exact path="/admin/view-airport" component={ViewAirports}/>
         <Route exact path="/customer/home" component={CustomerHome} />
         <Route exact path="/owner/home" component={OwnerHome} />
       </Switch>
