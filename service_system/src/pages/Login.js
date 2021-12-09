@@ -63,7 +63,7 @@ export default function Login() {
         if (res.data.code === 200) {
           if (res.data.data.is_admin) {
             buttRedirect("admin");
-          } else if (res.data.data.is_client && res.data.data.is_owner) {
+          } else if (res.data.data.is_customer && res.data.data.is_owner) {
             console.log(visible);
             showModal();
           } else if (res.data.data.is_owner) {
