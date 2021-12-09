@@ -21,13 +21,27 @@
         select Amenity_Name from Amenity where Property_Name = #{property_name} and Property_Owner = #{property_owner};
     </select>
 
+<!--check constraints: available seats > 0 -->
     <select id = "viewAvailableProperties" resultType = "Property">
         select p.Property_Name, p.Owner_Email, ifnull(p.capacity - reserved_seats, p.capacity) as capacity
         from property as p
             left join (select Property_name, Owner_Email, sum(Num_Guests) as reserved_Seats
                         from reserve where Was_Cancelled = 0 and Start_Date >= #{start} and End_Date &lt;= #{end}
                         group by Property_name, Owner_Email) as r
-            on p.Property_Name = r.Property_Name and p.Owner_Email = r.Owner_Email;
+            on p.Property_Name = r.Property_Name and p.Owner_Email = r.Owner_Email
+        where ifnull(r.reserved_seats, 0) &lt; p.capacity;
+    </select>
+
+<!--    check the propertyName, ownerEmail, Customer unique in the system -->
+    <select id = "checkReserveExist" resultType = "Reserve">
+        select * from reserve
+            where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail} and Customer = #{customer};
+    </select>
+
+    <!--    check the property reserve overlap with previous reserve for other properties -->
+    <select id = "checkReserveCondition" resultType = "Reserve">
+        select * from reserve
+        where Customer = #{customerEmail};
     </select>
 
     <insert id="reserveProperty">
