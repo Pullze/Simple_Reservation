@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { Layout, Row, Col, Table, Button, message } from "antd";
+import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 
 function CancelProperty() {
@@ -35,7 +36,6 @@ function CancelProperty() {
   const rowSelection = {
     selectedRowKeys,
     onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys),
-    getCheckboxProps: (record) => ({ disabled: record.isCancelled }),
   };
 
   const handleCancel = () => {
@@ -43,16 +43,20 @@ function CancelProperty() {
       message.error("Please select a reservation.");
     } else {
       const reservation = reservations[selectedRowKeys[0]];
-      const formData = new FormData();
+      const formData = new FormData(); //FIXME
       formData.append(
         "jsonValue",
         new Blob([JSON.stringify(reservation)], { type: "application/json" })
       );
       axios.post("/api/cancel-reservation", formData).then((res) => {
         if (res.data.code === 200) {
-          message.success("Reservation cancellation successful!");
-          reservation.isCancelled = true;
-          setSelectedRowKeys([]);
+          message.success("Success!");
+          setTimeout(() => {
+            setReservations(
+              reservations.filter(({ key }) => key !== selectedRowKeys[0])
+            );
+            setSelectedRowKeys([]);
+          }, 1000);
         } else {
           message.error(res.data.message);
         }
@@ -68,7 +72,6 @@ function CancelProperty() {
           res.data.data.map((item, i) => ({
             ...item,
             key: i,
-            isCancelled: false,
           }))
         )
       )
@@ -77,41 +80,51 @@ function CancelProperty() {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Row justify="center" align="middle" gutter={[0, 8]}>
-        <Col span={24} align="middle">
-          <h2>Logged in as {location.state.email}</h2>
-          <h1>Cancel Property Reservation</h1>
-        </Col>
-        <Col align="middle">
-          <Table
-            dataSource={reservations}
-            columns={columns}
-            rowSelection={{ type: "radio", ...rowSelection }}
-            pagination={{ pageSize: "5", hideOnSinglePage: true }}
-          ></Table>
-        </Col>
-        <Col span={24}>
-          <Row justify="center" gutter={16}>
-            <Col>
-              <Button>
-                <Link
-                  to={{
-                    pathname: "/customer/home",
-                    state: { email: location.state.email },
-                  }}
-                >
-                  Back
-                </Link>
-              </Button>
-            </Col>
-            <Col>
-              <Button type="primary" onClick={handleCancel}>
-                Cancel Reservation
-              </Button>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+      <Content style={{ margin: "24px 24px 24px", background: "white" }}>
+        <Row
+          justify="center"
+          align="middle"
+          style={{ margin: "24px 24px 24px" }}
+        >
+          <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+            <Row justify="center" align="middle" gutter={[24, 24]}>
+              <Col span={24} align="middle">
+                <h2>Now logged in as {location.state.email}</h2>
+                <h1 className="heading">Cancel Property Reservation</h1>
+              </Col>
+              <Col span={24}>
+                <Table
+                  dataSource={reservations}
+                  columns={columns}
+                  rowSelection={{ type: "radio", ...rowSelection }}
+                  pagination={{ pageSize: "5", hideOnSinglePage: true }}
+                ></Table>
+              </Col>
+              <Col span={24}>
+                <Row justify="center" gutter={16}>
+                  <Col>
+                    <Button>
+                      <Link
+                        to={{
+                          pathname: "/customer/home",
+                          state: { email: location.state.email },
+                        }}
+                      >
+                        Back
+                      </Link>
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button type="primary" onClick={handleCancel}>
+                      Cancel
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Content>
     </Layout>
   );
 }

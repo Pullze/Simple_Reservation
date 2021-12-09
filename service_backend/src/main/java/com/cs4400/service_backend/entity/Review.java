@@ -13,7 +13,7 @@ public class Review {
     private String owner_email;
 
     @ApiModelProperty(value = "customer_Email")
-    private String customer_Email;
+    private String customer_email;
 
     @ApiModelProperty(value = "content")
     private String content;

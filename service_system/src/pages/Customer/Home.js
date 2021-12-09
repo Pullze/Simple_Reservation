@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { Layout, Row, Col, Button } from "antd";
-// import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
@@ -31,8 +30,8 @@ const links = [
     path: "/customer/review-property",
   },
   {
-    label: "View Reservation",
-    path: "/customer/view-reservation",
+    label: "View Reservations",
+    path: "/customer/view-reservations",
   },
   {
     label: "Rate Owner",
@@ -44,7 +43,7 @@ function Home() {
   const location = useLocation();
   return (
     <Layout>
-      <Content style={{ margin: "24px 24px 24px", background: "white" }}>
+      <Content style={{ margin: "24px", background: "white" }}>
         <Row
           className="admin-home-row"
           justify="space-around"

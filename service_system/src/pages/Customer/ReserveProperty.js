@@ -10,8 +10,11 @@ import {
   DatePicker,
   Button,
   Table,
+  Modal,
+  Descriptions,
   message,
 } from "antd";
+import { Content } from "antd/lib/layout/layout";
 import moment from "moment";
 import axios from "axios";
 import "./EditableTable.css";
@@ -43,21 +46,6 @@ const columns = [
     title: "Number of Guests",
     dataIndex: "num_guests",
     editable: true,
-  },
-];
-
-const reservationColumns = [
-  {
-    title: "Booked Property Name",
-    dataIndex: "property_name",
-  },
-  {
-    title: "Number of Guests",
-    dataIndex: "num_guests",
-  },
-  {
-    title: "Amount Spent",
-    dataIndex: "total_cost",
   },
 ];
 
@@ -137,7 +125,6 @@ function ReserveProperty() {
   const [dates, setDates] = useState(null);
   const [properties, setProperties] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [reservation, setReservation] = useState(null);
 
   useEffect(() => {
     if (dates) {
@@ -164,9 +151,16 @@ function ReserveProperty() {
     if (selectedRowKeys.length === 0) {
       message.error("Please select a property.");
     } else {
-      const { property_name, owner_email, capacity, cost } =
-        properties[selectedRowKeys[0]];
-      const num_guests = +properties[selectedRowKeys[0]].num_guests;
+      const property = properties[selectedRowKeys[0]];
+      const { property_name, owner_email, capacity, cost } = property;
+
+      let num_guests = property.num_guests;
+
+      if (isNaN(num_guests)) {
+        return message.error("Please enter an integer value.");
+      }
+
+      num_guests = +num_guests;
 
       if (num_guests <= 0) {
         message.error("Number of guests must be greater than 0.");
@@ -192,16 +186,34 @@ function ReserveProperty() {
           .post("/api/reserve-property", formData)
           .then((res) => {
             if (res.data.code === 200) {
-              setReservation([
-                {
-                  ...res.data.data,
-                  total_cost: res.data.data.num_guests * cost,
-                },
-              ]);
-              properties[selectedRowKeys[0]].capacity -=
-                res.data.data.num_guests;
-              properties[selectedRowKeys[0]].num_guests = 0;
-              setProperties([...properties]);
+              message.success("Success!");
+              setTimeout(() => {
+                const reservation = res.data.data;
+                reservation.total_cost = reservation.num_guests * cost;
+                Modal.success({
+                  title: "You have successfully reserved a property.",
+                  content: (
+                    <div style={{ margin: "40px 0", marginRight: "30px" }}>
+                      <h2>Reservation Information</h2>
+                      <Descriptions size="default" column={1} bordered>
+                        <Descriptions.Item label="Booked Property Name">
+                          {reservation.property_name}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Number of Guests">
+                          {reservation.num_guests}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Amount Spent">
+                          {reservation.total_cost}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </div>
+                  ),
+                });
+                property.capacity -= reservation.num_guests;
+                property.num_guests = 0;
+                setProperties(properties.filter((item) => item.capacity > 0));
+                setSelectedRowKeys([]);
+              }, 1000);
             } else {
               message.error(res.data.message);
             }
@@ -214,7 +226,6 @@ function ReserveProperty() {
   const rowSelection = {
     selectedRowKeys,
     onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys),
-    getCheckboxProps: (record) => ({ disabled: record.capacity === 0 }),
   };
 
   const handleSave = (row) => {
@@ -243,88 +254,80 @@ function ReserveProperty() {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Row justify="center" align="middle" gutter={[0, 8]}>
-        <Col span={24}>
-          <Row justify="center">
-            <Col span={24} align="middle">
-              <h2>Now logged in as {location.state.email} </h2>
-            </Col>
-            <Col span={24} align="middle">
-              <h1 className="heading">Reserve Property</h1>
-            </Col>
-          </Row>
-        </Col>
-        <Form form={form} name="reserve-property" scrollToFirstError>
-          <Col span={24}>
-            <Row justify="center">
-              <Col span={14} align="left">
-                <Form.Item name="dates" label="Dates">
-                  <RangePicker
-                    disabledDate={(d) =>
-                      !d || d.format(dateFormat) <= today.format(dateFormat)
-                    }
-                    onChange={(d) => setDates(d)}
-                  />
-                </Form.Item>
+      <Content style={{ margin: "24px 24px 24px", background: "white" }}>
+        <Row
+          justify="center"
+          align="middle"
+          style={{ margin: "24px 24px 24px" }}
+        >
+          <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+            <Row justify="center" align="middle" gutter={[24, 24]}>
+              <Col span={24} align="middle">
+                <h2>Now logged in as {location.state.email}</h2>
+                <h1 className="heading">Reserve Property</h1>
               </Col>
-              <Col span={10} align="right">
-                <Form.Item name="current_date" label="Current Date">
-                  <DatePicker defaultValue={today} disabled />
-                </Form.Item>
+
+              <Col span={24}>
+                <Form form={form} name="reserve-property" scrollToFirstError>
+                  <Row justify="center" gutter={8}>
+                    <Col span={14} align="left">
+                      <Form.Item name="dates" label="Dates">
+                        <RangePicker
+                          disabledDate={(d) =>
+                            !d ||
+                            d.format(dateFormat) <= today.format(dateFormat)
+                          }
+                          onChange={(d) => setDates(d)}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={10} align="right">
+                      <Form.Item name="current_date" label="Current Date">
+                        <DatePicker defaultValue={today} disabled />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
               </Col>
-            </Row>
-          </Col>
-        </Form>
 
-        <Col span={24}>
-          <Row justify="center" style={{ padding: "0 20%" }}>
-            <Col span={24}>
-              <Table
-                components={{ body: { row: EditableRow, cell: EditableCell } }}
-                rowClassName={() => "editable-row"}
-                rowSelection={{ type: "radio", ...rowSelection }}
-                dataSource={properties}
-                columns={propertyColumns}
-                pagination={{ pageSize: "5", hideOnSinglePage: true }}
-              />
-            </Col>
-          </Row>
-        </Col>
-
-        {reservation && (
-          <Col span={24}>
-            <Row justify="center">
-              <Table
-                dataSource={reservation}
-                columns={reservationColumns}
-                pagination={false}
-              ></Table>
-            </Row>
-          </Col>
-        )}
-
-        <Col span={24}>
-          <Row justify="center" style={{ padding: "0 40%" }}>
-            <Col span={12} align="middle">
-              <Button>
-                <Link
-                  to={{
-                    pathname: "/customer/home",
-                    state: { email: location.state.email },
+              <Col span={24}>
+                <Table
+                  components={{
+                    body: { row: EditableRow, cell: EditableCell },
                   }}
-                >
-                  Back
-                </Link>
-              </Button>
-            </Col>
-            <Col span={12} align="middle">
-              <Button type="primary" onClick={handleReserve}>
-                Reserve
-              </Button>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+                  rowClassName={() => "editable-row"}
+                  rowSelection={{ type: "radio", ...rowSelection }}
+                  dataSource={properties}
+                  columns={propertyColumns}
+                  pagination={{ pageSize: "5", hideOnSinglePage: true }}
+                />
+              </Col>
+
+              <Col span={24}>
+                <Row justify="center" gutter={16}>
+                  <Col align="middle">
+                    <Button>
+                      <Link
+                        to={{
+                          pathname: "/customer/home",
+                          state: { email: location.state.email },
+                        }}
+                      >
+                        Back
+                      </Link>
+                    </Button>
+                  </Col>
+                  <Col align="middle">
+                    <Button type="primary" onClick={handleReserve}>
+                      Reserve
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Content>
     </Layout>
   );
 }

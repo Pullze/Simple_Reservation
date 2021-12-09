@@ -11,7 +11,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -37,7 +41,7 @@ public class PropertyController {
      */
     @GetMapping(value = "/properties")
     @ApiOperation(value = "view Properties", notes = "view properties.")
-    public List<Property> properties(@RequestParam(required = false) Integer high,@RequestParam(required = false) Integer low) {
+    public Response<?> properties(@RequestParam(required = false) Integer high,@RequestParam(required = false) Integer low) {
         if (high == null) {
             high = Integer.MAX_VALUE;
         }
@@ -47,7 +51,9 @@ public class PropertyController {
         }
         List<Property> result = propertyProcess.viewProperties(high, low);
         System.out.println(result);
-        return result;
+
+        Response<?> response = new Response<>(HttpStatus.OK.value(), "", result);
+        return response;
     }
 
     /**
@@ -77,9 +83,9 @@ public class PropertyController {
         response.setData(reserve);
         response.setMessage(message);
         if (message.equals("Reserved succeeded!")) {
-            response.setCode(200);
+            response.setCode(HttpStatus.OK.value());
         } else {
-            response.setCode(400);
+            response.setCode(HttpStatus.BAD_REQUEST.value());
         }
         return response;
     }

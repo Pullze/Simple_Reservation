@@ -4,23 +4,33 @@ import "antd/dist/antd.css";
 import AccountList from "./components/AccountList";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+
 import AdminHome from "./pages/Admin/Home";
 import ScheduleFlight from "./pages/Admin/ScheduleFlight";
 import RemoveFlights from "./pages/Admin/RemoveFlights";
-import CustomerHome from "./pages/Customer/Home";
-import BookFlight from "./pages/Customer/BookFlight";
-import CancelFlight from "./pages/Customer/CancelFlight";
-import ReserveProperty from "./pages/Customer/ReserveProperty";
-import CancelProperty from "./pages/Customer/CancelProperty";
-import ReviewProperty from "./pages/Customer/ReviewProperty";
-import CustomerRateOwner from "./pages/Customer/RateOwner";
-import OwnerHome from "./pages/Owner/Home";
 import ViewOwners from "./pages/Admin/ViewOwners";
 import ViewCustomers from "./pages/Admin/ViewCustomers";
 import ViewAirports from "./pages/Admin/ViewAirport";
 import ProcessDate from "./pages/Admin/ProcessDate";
 import ViewAirlines from "./pages/Admin/ViewAirlines";
 import ViewFlights from "./pages/Admin/ViewFlight";
+
+import CustomerHome from "./pages/Customer/Home";
+import BookFlight from "./pages/Customer/BookFlight";
+import CancelFlight from "./pages/Customer/CancelFlight";
+import ViewProperties from "./pages/Customer/ViewProperties";
+import ReserveProperty from "./pages/Customer/ReserveProperty";
+import ViewReservations from "./pages/Customer/ViewReservations";
+import CancelProperty from "./pages/Customer/CancelProperty";
+import ReviewProperty from "./pages/Customer/ReviewProperty";
+import CustomerRateOwner from "./pages/Customer/RateOwner";
+
+import OwnerHome from "./pages/Owner/Home";
+import ViewOwners from "./pages/Admin/ViewOwners";
+import ViewCustomers from "./pages/Admin/ViewCustomers";
+import ViewAirports from "./pages/Admin/ViewAirport";
+import ProcessDate from "./pages/Admin/ProcessDate";
+import ViewAirlines from "./pages/Admin/ViewAirlines";
 
 function App() {
   return (
@@ -55,6 +65,16 @@ function App() {
           exact
           path="/customer/review-property"
           component={ReviewProperty}
+        />
+        <Route
+          exact
+          path="/customer/view-properties"
+          component={ViewProperties}
+        />
+        <Route
+          exact
+          path="/customer/view-reservations"
+          component={ViewReservations}
         />
         <Route
           exact
