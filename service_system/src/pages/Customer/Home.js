@@ -1,60 +1,61 @@
 import React, { useState } from "react";
 import { Layout, Row, Col, Button } from "antd";
-import "./Home.css";
-import { useHistory, useLocation } from "react-router";
+import { useHistory } from "react-router";
 import { Content } from "antd/lib/layout/layout";
-import { Link } from "react-router-dom";
 
 const links = [
   {
-    label: "Schedule Flight",
-    path: "/admin/schedule-flight",
+    label: "Book Flight",
+    path: "/customer/book-flight",
   },
   {
-    label: "Remove Flight",
-    path: "/admin/remove-flight",
+    label: "Cancel Flights",
+    path: "/customer/cancel-flight",
   },
   {
-    label: "Process Date",
-    path: "/admin/process-date",
+    label: "View Properties",
+    path: "/customer/view-properties",
   },
   {
-    label: "View Airports",
-    path: "/admin/view-airport",
+    label: "Reserve Property",
+    path: "/customer/reserve-property",
   },
   {
-    label: "View Airlines",
-    path: "/admin/view-airline",
+    label: "Cancel Reservation",
+    path: "/customer/cancel-reservation",
   },
   {
-    label: "View Customers",
-    path: "/admin/view-customer",
+    label: "Review Property",
+    path: "/customer/review-property",
   },
   {
-    label: "View Owners",
-    path: "/admin/view-owner",
+    label: "View Reservation",
+    path: "/customer/view-reservation",
+  },
+  {
+    label: "Rate Owner",
+    path: "/customer/rate-owner",
   },
 ];
 
 function Home(props) {
-  const location = useLocation();
-  console.log(location);
+  const history = useHistory(props);
+  const historyState = history.location.state
+  console.log(historyState);
   return (
     <Layout>
       <Content style={{ margin: '24px 24px 24px', background: "white"}}>
         <Row className="admin-home-row" justify="space-around" align="middle" gutter={[24, 24]}>
           <Col span={24} align="middle">
-            <h2>Now logged in as {location.state.email} </h2>
+            <h2>Now logged in as {historyState.email} </h2>
           </Col>
           <Col className="heading" span={24} align="middle">
-            Admin Home
+            Customer Home
           </Col>
           {links.map((link, i) => (
             <Col className="item" key={i}  xxl={12} xl={12} md={12} sm={24} xs={24} align="middle">
               <Button type="default" href={link.path} style={{ minWidth: "150px", minHeight: "100%" }}> 
-                <Link to={{pathname: link.path, state: {email : location.state.email}}}>
-                  {link.label}
-                </Link>
+                {link.label}
               </Button>
             </Col>
           ))}
@@ -62,7 +63,7 @@ function Home(props) {
             <Button type="default" danger href={"/"} style={{ minWidth: "150px", minHeight: "100%" }}> 
               Logout
             </Button>
-        </Col>
+          </Col>
         </Row>
       </Content>
     </Layout>

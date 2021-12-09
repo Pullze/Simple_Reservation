@@ -19,55 +19,48 @@ public class FlightProcessImpl implements FlightProcess {
     private FlightMapper flightMapper;
 
     @Override
-    public FlightInfo schedule_flight(FlightInfo flightInfo) {
+    public String schedule_flight(FlightInfo flightInfo) {
 
         String flight_num = flightInfo.getFlight_num();
         String airline_name = flightInfo.getAirline_name();
         String from_airport = flightInfo.getFrom_airport();
         String to_airport = flightInfo.getTo_airport();
-        Time departure_time = new Time(flightInfo.getDeparture_time().getTime());
-        Time arrival_time = new Time(flightInfo.getArrival_time().getTime());
-        Date flight_date = new Date(flightInfo.getFlight_date().getTime());
+        String departure_time = flightInfo.getDeparture_time();
+        String arrival_time = flightInfo.getArrival_time();
+        String flight_date = flightInfo.getFlight_date();
         double cost = flightInfo.getCost();
         int capacity = flightInfo.getCapacity();
-        Date current_date = new Date(flightInfo.getCurrent_date().getTime());
+        String current_date = flightInfo.getCurrent_date();
 
 
         if (flight_date.compareTo(current_date) <= 0) {
-            flightInfo.setMessage("Can not schedule a flight not in a future date!");
-            return flightInfo;
+            return "Can not schedule a flight not in a future date!";
         }
 
         if (flightMapper.check_airport(from_airport) == null) {
-            flightInfo.setMessage("Can not departure from an airport that doesn't exist!");
-            return flightInfo;
+           return "Can not departure from an airport that doesn't exist!";
         }
 
         if (flightMapper.check_airport(to_airport) == null) {
-            flightInfo.setMessage("Can not arrive at an airport that doesn't exist!");
-            return flightInfo;
+           return "Can not arrive at an airport that doesn't exist!";
         }
 
         if (to_airport.equals(from_airport)) {
-            flightInfo.setMessage("Can not schedule a flight from and to the same airport!");
-            return flightInfo;
+           return "Can not schedule a flight from and to the same airport!";
         }
 
         if (arrival_time.compareTo(departure_time) <= 0) {
-            flightInfo.setMessage("arrival time is before departure time!");
-            return flightInfo;
+           return "arrival time is before departure time!";
         }
 
 
 
         if ( flightMapper.check_flight(flight_num, airline_name) != null) {
-            flightInfo.setMessage( "The combination of the flight number and the airline name already exists!");
-            return flightInfo;
+           return  "The combination of the flight number and the airline name already exists!";
         } else {
             flightMapper.schedule_flight(flight_num, airline_name, from_airport , to_airport,
                     departure_time, arrival_time, flight_date, cost, capacity);
-            flightInfo.setMessage("schedule succeeded!");
-            return flightInfo;
+           return "Schedule succeeded!";
         }
 
     }

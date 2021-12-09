@@ -21,13 +21,13 @@ public class Flight {
 
     @NotNull
     @ApiModelProperty(value = "departure_time")
-    private Date departure_time;
+    private String departure_time;
 
     @ApiModelProperty(value = "arrival_time")
-    private Date arrival_time;
+    private String arrival_time;
 
     @ApiModelProperty(value = "flight_date")
-    private Date flight_date;
+    private String flight_date;
 
     @ApiModelProperty(value = "cost")
     private double cost;
@@ -71,27 +71,27 @@ public class Flight {
         this.airline_name = airline_name;
     }
 
-    public Date getDeparture_time() {
+    public String getDeparture_time() {
         return departure_time;
     }
 
-    public void setDeparture_time(Date departure_time) {
+    public void setDeparture_time(String departure_time) {
         this.departure_time = departure_time;
     }
 
-    public Date getArrival_time() {
+    public String getArrival_time() {
         return arrival_time;
     }
 
-    public void setArrival_time(Date arrival_time) {
+    public void setArrival_time(String arrival_time) {
         this.arrival_time = arrival_time;
     }
 
-    public Date getFlight_date() {
+    public String getFlight_date() {
         return flight_date;
     }
 
-    public void setFlight_date(Date flight_date) {
+    public void setFlight_date(String flight_date) {
         this.flight_date = flight_date;
     }
 

@@ -3,7 +3,7 @@ package com.cs4400.service_backend.controller;
 import com.cs4400.service_backend.entity.Property;
 import com.cs4400.service_backend.service.Login;
 import com.cs4400.service_backend.service.PropertyProcess;
-import com.cs4400.service_backend.service.RegisterUser;
+import com.cs4400.service_backend.service.UserProcess;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 public class PropertyController {
 
     @Autowired
-    private RegisterUser registerUser;
+    private UserProcess userProcess;
 
     @Autowired
     private Login login;

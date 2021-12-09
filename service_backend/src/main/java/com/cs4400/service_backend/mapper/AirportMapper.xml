@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cs4400.service_backend.mapper.AirportMapper">
+    <select id="get_airport_info" resultType="com.cs4400.service_backend.vo.AirportInfo">
+        select
+           Airport_Id as airport_id,
+           Airport_Name as airport_name,
+           Time_Zone as time_zone,
+           count(Flight_Num) as total_arriving_flights,
+           departing_flights as total_departing_flights,
+           avg_departing as avg_departing_flight_cost
+        from
+             (
+                 select
+                        Airport_ID,
+                        Airport_Name,
+                        Time_Zone,
+                        count(Flight_Num) as departing_flights,
+                        avg(cost) as avg_departing
+                 from airport left join Flight
+                     on Airport_Id = FROM_Airport
+                 group by Airport_ID
+             )
+                 as departing left join Flight
+                 on Airport_ID = To_Airport
+        group by Airport_ID;
+    </select>
+
+    <select id="get_time_zones" resultType="String">
+        select distinct Time_Zone from airport;
+    </select>
+</mapper>
