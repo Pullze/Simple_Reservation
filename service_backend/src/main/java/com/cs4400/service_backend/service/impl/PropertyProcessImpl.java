@@ -3,6 +3,7 @@ package com.cs4400.service_backend.service.impl;
 import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.mapper.PropertyMapper;
 import com.cs4400.service_backend.entity.Property;
+import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.service.PropertyProcess;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,16 @@ public class PropertyProcessImpl implements PropertyProcess {
 
         if (startDate.compareTo(endDate) > 0) {
             return "the end date has to after start date";
+        }
+
+        Reserve existedReserve = propertyMapper.checkReserveExist(propertyName, ownerEmail, customerEmail);
+        if (existedReserve != null) {
+            return "Reserve failed. You already reserve the " + propertyName + " from " + existedReserve.getStart_date() + " to " + existedReserve.getEnd_date() +". No multiple reserve for the same item.";
+        }
+
+        List<Reserve> overlapReserve = propertyMapper.checkReserveCondition(customerEmail, startDate, endDate);
+        if (overlapReserve != null && overlapReserve.size() != 0) {
+            return "Reserve failed. Your reserve has a time conflict with at least one of your other reserves. Please reserve only one property for the same day.";
         }
 
         propertyMapper.reserveProperty(propertyName, ownerEmail, customerEmail, startDate, endDate,numGuests);

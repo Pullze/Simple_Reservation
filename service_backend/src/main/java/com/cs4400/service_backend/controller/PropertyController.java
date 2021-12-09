@@ -8,6 +8,7 @@ import com.cs4400.service_backend.service.PropertyProcess;
 import com.cs4400.service_backend.service.UserProcess;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,14 +75,11 @@ public class PropertyController {
      */
     @PostMapping(value = "/reserve-property")
     @ApiOperation(value = "reserve Property", notes = "reserve Property")
-    public Response<Reserve> reserveProperty(@RequestPart("jsonValue") @Valid Reserve reserve) {
-
+    public Response<Reserve> reserveProperty(@RequestBody @Valid Reserve reserve) {
         String message = propertyProcess.reserveProperty(reserve);
-
         Response<Reserve> response = new Response<>();
         response.setData(reserve);
         response.setMessage(message);
-
         if (message.equals("Reserved succeeded!")) {
             response.setCode(200);
         } else {

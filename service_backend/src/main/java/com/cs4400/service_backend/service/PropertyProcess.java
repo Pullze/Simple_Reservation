@@ -10,6 +10,4 @@ public interface PropertyProcess {
     List<Property> viewProperties(Integer high, Integer low);
     List<Property> viewAvailableProperties(String start, String end);
     String reserveProperty(Reserve reserve);
-    
-
 }
