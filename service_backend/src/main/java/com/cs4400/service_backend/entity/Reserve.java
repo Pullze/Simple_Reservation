@@ -18,10 +18,10 @@ public class Reserve {
     private String customer;
 
     @ApiModelProperty(value = "Start Date")
-    private Date start_date;
+    private String start_date;
 
     @ApiModelProperty(value = "End Date")
-    private Date end_date;
+    private String end_date;
 
     @ApiModelProperty(value = "Number of Guests")
     private Integer num_guests;
@@ -29,4 +29,17 @@ public class Reserve {
     @ApiModelProperty(value = "Was Cancelled")
     private Integer was_cancelled;
 
+    public String getProperty_name() { return property_name; }
+
+    public String getOwner_email() { return owner_email; }
+
+    public String getCustomer() { return customer; }
+
+    public String getStart_date() { return start_date; }
+
+    public String getEnd_date() { return end_date; }
+
+    public Integer getNum_guests() { return num_guests; }
+
+    public Integer getWas_cancelled() { return was_cancelled; }
 }
