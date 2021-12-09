@@ -52,4 +52,11 @@
             values (#{propertyName}, #{ownerEmail}, #{customerEmail}, #{startDate}, #{endDate}, #{numGuests}, 0);
     </insert>
 
+
+    <select id = "viewCustomerFutureReservations" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
+        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ',', p.City, ',', p.State, ',', p.Zip) as address
+        from reserve as r, property as p
+        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date > CURDATE() and r.Customer = #{customerEmail};
+    </select>
+
 </mapper>

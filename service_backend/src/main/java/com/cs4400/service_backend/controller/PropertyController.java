@@ -6,6 +6,7 @@ import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.Login;
 import com.cs4400.service_backend.service.PropertyProcess;
 import com.cs4400.service_backend.service.UserProcess;
+import com.cs4400.service_backend.vo.ReserveInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -89,6 +90,19 @@ public class PropertyController {
             response.setCode(HttpStatus.BAD_REQUEST.value());
         }
         return response;
+    }
+
+    /**
+     *
+     * @param customerEmail customer's email
+     * @return
+     */
+    @GetMapping(value = "/customer-future-reservations")
+    @ApiOperation(value ="customer future reservations", notes = "customer future reservations")
+    public List<ReserveInfo> viewCustomerFutureReservations(@RequestParam String customerEmail) {
+        List<ReserveInfo> result = propertyProcess.viewCustomerFutureReservations(customerEmail);
+        System.out.println(result);
+        return result;
     }
 }
 

@@ -29,4 +29,10 @@
     <select id="get_time_zones" resultType="String">
         select distinct Time_Zone from airport;
     </select>
+
+    <select id = "check_airport" resultType = "Airport">
+        select * from Airport
+        where Airport_Id = #{airport_id};
+    </select>
+
 </mapper>

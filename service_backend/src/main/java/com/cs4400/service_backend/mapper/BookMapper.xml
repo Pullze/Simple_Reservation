@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cs4400.service_backend.mapper.BookMapper">
+    <select id = "check_book_cancelled" resultType="Book">
+        select * from Book
+        where Flight_Num = #{flight_num} and Airline_Name = #{airline_name} and Customer = #{customer_email} and Was_Cancelled = 1;
+    </select>
+
+    <select id = "check_if_booked_flight" resultType="Book">
+        select * from Book
+        where Flight_Num = #{flight_num} and Airline_Name = #{airline_name} and Customer = #{customer_email} and Was_Cancelled = 0;
+    </select>
+
+
+
+    <select id = "check_book_by_date" resultType = "Book">
+        select Customer from Book natural join Flight where Customer = #{customer_email} and Flight_Date = #{flight_date};
+    </select>
+
+    <update id = "update_book">
+        update Book set Num_Seats = Num_seats + #{book_seats} where Customer = #{customer_email} and Flight_Num = #{flight_num}  and Airline_Name = #{airline_name};
+    </update>
+
+
+    <select id = "check_bookInfo" resultType = "BookInfo">
+        select Customer, Flight_Num, Airline_Name, Flight_Date, Num_Seats, #{book_seats} as book_seats, Cost * #{book_seats} as book_cost, Cost * Num_Seats as total_cost
+        from Book natural join Flight where Customer = #{customer_email} and Flight_Num = #{flight_num} and Airline_Name = #{airline_name};
+    </select>
+
+
+    <insert id = "book_new_flight" >
+        insert into Book(Customer, Flight_Num, Airline_Name, Num_Seats, Was_Cancelled)
+        values (#{customer_email}, #{flight_num}, #{airline_name}, #{book_seats}, 0);
+    </insert>
+
+</mapper>

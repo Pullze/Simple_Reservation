@@ -63,7 +63,7 @@ export default function ViewAirlines(props) {
     setName(value);
     setFiltered(
       airlines.filter((airline) =>
-        airline.name.toLowerCase().includes(value.toLowerCase())
+        airline.name.toLowerCase().startsWith(value.toLowerCase())
       )
     );
     console.log(filtered);

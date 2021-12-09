@@ -26,6 +26,11 @@ public class Response<T> {
         this.message = message;
     }
 
+    public Response(String message, T data) {
+        this.message = message;
+        this.data = data;
+    }
+
     public Response() { }
 
 

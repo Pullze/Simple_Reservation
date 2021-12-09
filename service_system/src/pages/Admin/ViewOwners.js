@@ -65,7 +65,7 @@ export default function ViewOwners(props) {
     const inputFilter = (value) => {
         setName(value);
         setFiltered(owners
-            .filter(owner => owner.name.toLowerCase().includes(value.toLowerCase()))
+            .filter(owner => owner.name.toLowerCase().startsWith(value.toLowerCase()))
         );
         console.log(filtered);
     }

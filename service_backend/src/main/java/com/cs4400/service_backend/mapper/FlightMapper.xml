@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.cs4400.service_backend.mapper.FlightMapper">
-    <select id = "check_flight" resultType = "Flight">
+    <select id = "check_flight" resultType = "FlightInfo">
         select  * from Flight
             where Flight_Num = #{flight_num} and Airline_Name = #{airline_name};
     </select>
@@ -14,10 +14,7 @@
              #{flight_date}, #{cost}, #{capacity});
     </insert>
 
-    <select id = "check_airport" resultType = "Airport">
-            select * from Airport
-                where Airport_Id = #{airport_id};
-    </select>
+
 
     <select id = "view_flight" resultType= "Flight">
         select
@@ -30,10 +27,22 @@
         From_Airport,
         To_Airport,
         Capacity - coalesce(SUM(b.Num_Seats * (1 - b.Was_Cancelled)), 0) as remaining_seats,
-		cost * coalesce(SUM(b.Num_Seats * (1 - 0.8 * b.Was_Cancelled)), 0) total_spent
+		cost * coalesce(SUM(b.Num_Seats * (1 - 0.8 * b.Was_Cancelled)), 0) as total_spent
 		from flight as f left join book as b on
         b.Airline_Name = f.Airline_Name and b.Flight_Num = f.Flight_Num
 		group by f.Airline_Name , f.Flight_Num
 		having remaining_seats >= #{minSeats};
     </select>
+
+
+    <select id = "check_flight_seats" resultType = "Integer">
+        select Capacity - coalesce(sum(b.Num_seats), 0) as remaining_seats
+        from Book as b right join Flight as f on
+            b.Flight_Num = f.Flight_Num and b.Airline_Name = f.Airline_Name
+        where f.Flight_Num = #{flight_num} and f.Airline_Name = #{airline_name} and Was_Cancelled = 0
+        group by f.Flight_Num;
+    </select>
+
+
+
 </mapper>

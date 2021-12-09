@@ -72,7 +72,7 @@ export default function ViewCustomers(props) {
     const inputFilter = (value) => {
         setName(value);
         setFiltered(customers
-            .filter(customer => customer.name.toLowerCase().includes(value.toLowerCase()))
+            .filter(customer => customer.name.toLowerCase().startsWith(value.toLowerCase()))
         );
         console.log(filtered);
     }
