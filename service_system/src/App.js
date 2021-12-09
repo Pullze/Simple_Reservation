@@ -17,10 +17,11 @@ import ViewAirlines from "./pages/Admin/ViewAirlines";
 import CustomerHome from "./pages/Customer/Home";
 import BookFlight from "./pages/Customer/BookFlight";
 import CancelFlight from "./pages/Customer/CancelFlight";
+import ViewProperties from "./pages/Customer/ViewProperties";
 import ReserveProperty from "./pages/Customer/ReserveProperty";
+import ViewReservations from "./pages/Customer/ViewReservations";
 import CancelProperty from "./pages/Customer/CancelProperty";
 import ReviewProperty from "./pages/Customer/ReviewProperty";
-import ViewProperties from "./pages/Customer/ViewProperties";
 import CustomerRateOwner from "./pages/Customer/RateOwner";
 
 import OwnerHome from "./pages/Owner/Home";
@@ -35,11 +36,11 @@ function App() {
         <Route exact path="/admin/home" component={AdminHome} />
         <Route exact path="/admin/schedule-flight" component={ScheduleFlight} />
         <Route exact path="/admin/remove-flight" component={RemoveFlights} />
-        <Route exact path="/admin/view-owner" component={ViewOwners}/>
-        <Route exact path="/admin/view-customer" component={ViewCustomers}/>
-        <Route exact path="/admin/view-airport" component={ViewAirports}/>
-        <Route exact path="/admin/view-airline" component={ViewAirlines}/>
-        <Route exact path="/admin/process-date" component={ProcessDate}/>
+        <Route exact path="/admin/view-owner" component={ViewOwners} />
+        <Route exact path="/admin/view-customer" component={ViewCustomers} />
+        <Route exact path="/admin/view-airport" component={ViewAirports} />
+        <Route exact path="/admin/view-airline" component={ViewAirlines} />
+        <Route exact path="/admin/process-date" component={ProcessDate} />
         <Route exact path="/customer/home" component={CustomerHome} />
         <Route exact path="/customer/book-flight" component={BookFlight} />
         <Route exact path="/customer/cancel-flight" component={CancelFlight} />
@@ -62,6 +63,11 @@ function App() {
           exact
           path="/customer/view-properties"
           component={ViewProperties}
+        />
+        <Route
+          exact
+          path="/customer/view-reservations"
+          component={ViewReservations}
         />
         <Route
           exact
