@@ -33,10 +33,10 @@
     </select>
 
     <select id = "check_flight_seats" resultType = "Integer">
-        select Capacity - coalesce(sum(b.Num_seats), 0) as remaining_seats
+        select Capacity - coalesce(sum(b.Num_seats),0) as remaining_seats
         from Book as b right join Flight as f on
-            b.Flight_Num = f.Flight_Num and b.Airline_Name = f.Airline_Name
-        where f.Flight_Num = #{flight_num} and f.Airline_Name = #{airline_name} and Was_Cancelled = 0
+            b.Flight_Num = f.Flight_Num and b.Airline_Name = f.Airline_Name and Was_Cancelled = 0
+        where f.Flight_Num = #{flight_num} and f.Airline_Name = #{airline_name}
         group by f.Flight_Num;
     </select>
 
