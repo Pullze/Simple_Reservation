@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Button, Table, Input, Select } from "antd";
-import { useHistory, useLocation } from "react-router";
+import { Layout, Row, Col, Table, Input, Select } from "antd";
+import { useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
 
 export default function ViewAirports(props) {
     const location = useLocation();

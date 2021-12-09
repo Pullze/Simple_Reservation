@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../config/config.js';
 import axios from 'axios';
 import { Table, Row, Col } from 'antd';

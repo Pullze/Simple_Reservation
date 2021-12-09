@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Button, Table, Input, Select } from "antd";
+import { Layout, Row, Col, Table, Input } from "antd";
 import { useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";

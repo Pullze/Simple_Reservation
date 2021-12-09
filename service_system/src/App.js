@@ -26,11 +26,8 @@ import ReviewProperty from "./pages/Customer/ReviewProperty";
 import CustomerRateOwner from "./pages/Customer/RateOwner";
 
 import OwnerHome from "./pages/Owner/Home";
-import ViewOwners from "./pages/Admin/ViewOwners";
-import ViewCustomers from "./pages/Admin/ViewCustomers";
-import ViewAirports from "./pages/Admin/ViewAirport";
-import ProcessDate from "./pages/Admin/ProcessDate";
-import ViewAirlines from "./pages/Admin/ViewAirlines";
+
+
 
 function App() {
   return (

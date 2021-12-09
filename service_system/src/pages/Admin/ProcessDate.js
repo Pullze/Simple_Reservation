@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Button, Table, Input, Modal } from "antd";
+import React, { useState } from "react";
+import { Layout, Row, Col, Button, Input, Modal } from "antd";
 import { useHistory, useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
