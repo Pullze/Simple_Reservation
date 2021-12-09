@@ -15,6 +15,7 @@ public class Book {
     @ApiModelProperty(value = "Airline Name")
     private String airline_name;
 
+    //total seats booked
     @ApiModelProperty(value = "Number of Seats")
     private Integer num_seats;
 
@@ -24,7 +25,5 @@ public class Book {
     @ApiModelProperty(value = "Total Cost")
     private Double total_cost;
 
-    @ApiModelProperty(value = "Cancellation Fee")
-    private Double cancellation_fee;
 
 }

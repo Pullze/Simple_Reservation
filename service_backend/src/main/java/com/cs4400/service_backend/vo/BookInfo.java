@@ -9,11 +9,16 @@ import lombok.Data;
 public class BookInfo extends Book {
 
 
-    @ApiModelProperty(value = "seats_booked")
-    private int seats_booked;
 
     @ApiModelProperty(value = "book_cost")
     private int book_cost;
+
+    @ApiModelProperty(value = "flight_date")
+    private String flight_date;
+
+    // the number of seats to book
+    @ApiModelProperty(value = "book_seats")
+    private int book_seats;
 
     @ApiModelProperty(value = "book_message")
     private String book_message;

@@ -2,9 +2,9 @@ package com.cs4400.service_backend.service.impl;
 
 import com.cs4400.service_backend.entity.Flight;
 import com.cs4400.service_backend.mapper.AirlineMapper;
+import com.cs4400.service_backend.mapper.AirportMapper;
 import com.cs4400.service_backend.mapper.FlightMapper;
 import com.cs4400.service_backend.service.FlightProcess;
-import com.cs4400.service_backend.vo.BookInfo;
 import com.cs4400.service_backend.vo.FlightInfo;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,9 @@ public class FlightProcessImpl implements FlightProcess {
 
     @Resource
     private AirlineMapper airlineMapper;
+
+    @Resource
+    private AirportMapper airportMapper;
 
     @Override
     public FlightInfo schedule_flight(FlightInfo flightInfo) {
@@ -46,12 +49,12 @@ public class FlightProcessImpl implements FlightProcess {
             return returnFlightInfo;
         }
 
-        if (flightMapper.check_airport(from_airport) == null) {
+        if (airportMapper.check_airport(from_airport) == null) {
             returnFlightInfo.setMessage("Can not departure from an airport that doesn't exist!");
            return returnFlightInfo;
         }
 
-        if (flightMapper.check_airport(to_airport) == null) {
+        if (airportMapper.check_airport(to_airport) == null) {
             returnFlightInfo.setMessage("Can not arrive at an airport that doesn't exist!");
             return returnFlightInfo;
         }
@@ -82,34 +85,5 @@ public class FlightProcessImpl implements FlightProcess {
         return flightMapper.view_flight(minSeats);
     }
 
-    @Override
-    public BookInfo book_flight(String flight_num, String airline_name, String customer_email, String flight_date, int num_seats) {
-        if (flightMapper.check_book_cancelled(flight_num, airline_name, customer_email) != null) {
-            return new BookInfo("Already cancelled a book on this flight!");
-        }
 
-        if (flightMapper.check_if_booked_flight(flight_num, airline_name, customer_email) != null) {
-            if ( flightMapper.check_flight_seats(flight_num, airline_name) < num_seats) {
-                return new BookInfo("No sufficient seats to book!");
-            } else{
-                flightMapper.update_book(flight_num, airline_name, customer_email, num_seats);
-               BookInfo bookInfo = flightMapper.check_bookIfo(flight_num, airline_name, customer_email, num_seats);
-                 bookInfo.setBook_message("Succeeded updating booking on this flight!");
-                return bookInfo;
-              //  return null;
-            }
-        } else if (flightMapper.check_book_by_date(customer_email, flight_date) != null) {
-            return new BookInfo("Already booked a flight on this date");
-        } else if (flightMapper.check_flight_seats(flight_num, airline_name) < num_seats) {
-            return new BookInfo("No sufficient seats to book!");
-        } else {
-            flightMapper.book_new_flight(flight_num, airline_name, customer_email, num_seats);
-             BookInfo bookInfo = flightMapper.check_bookIfo(flight_num, airline_name, customer_email, num_seats);
-            bookInfo.setBook_message("Succeeded booking this flight");
-             return bookInfo;
-          //  return null;
-        }
-
-
-    }
 }

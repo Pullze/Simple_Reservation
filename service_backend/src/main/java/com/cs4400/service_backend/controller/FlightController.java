@@ -25,13 +25,6 @@ public class FlightController {
     @Autowired
     private FlightProcess flightProcess;
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        dateFormat.setLenient(false);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
-    }
-
 
     /**
      * Schedule a single flight.
