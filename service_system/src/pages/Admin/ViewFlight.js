@@ -124,28 +124,28 @@ export default function ViewFlights(props) {
 
     return(
         <Layout style={{minHeight : "100vh"}}>
-        <Content style={{ margin: '24px 24px 24px', background: "white"}}>
-            <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
-                <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
-                    <Row justify="center" align="middle" gutter={[24, 24]} >
-                        <Col span={24} align="middle">
-                            <h2>Now logged in as {location.state.email}</h2>
-                            <h1>View Flights</h1>
-                        </Col>
-                        <Col span={24} align="middle">
-                            <span>
-                                Avaliable Seats:
-                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"#"} onChange={(e) => inputFilter(e.target.value)}/>
-                            </span>
-                        </Col>
-                        <Col>
-                            <Table dataSource={filtered} columns={columns}/>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </Content>
-    </Layout>
+            <Content style={{ margin: '24px 24px 24px', background: "white"}}>
+                <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
+                    <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+                        <Row justify="center" align="middle" gutter={[24, 24]} >
+                            <Col span={24} align="middle">
+                                <h2>Now logged in as {location.state.email}</h2>
+                                <h1>View Flights</h1>
+                            </Col>
+                            <Col span={24} align="middle">
+                                <span>
+                                    Avaliable Seats:
+                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"#"} onChange={(e) => inputFilter(e.target.value)}/>
+                                </span>
+                            </Col>
+                            <Col>
+                                <Table dataSource={filtered} columns={columns}/>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+            </Content>
+        </Layout>
     );
 
 }
