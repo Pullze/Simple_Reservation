@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router";
 import {
   Layout,
   Row,
@@ -36,6 +37,7 @@ const fieldLabel = {
 };
 
 function ScheduleFlight() {
+  const location = useLocation();
   const [form] = Form.useForm();
   const [airlines, setAirlines] = useState([]);
   const [flight, setFlight] = useState({ isScheduled: false });
@@ -224,6 +226,9 @@ function ScheduleFlight() {
   return (
     <Layout>
       <Row style={{ minHeight: "100vh" }} align="middle">
+        <Col span={24} align="middle">
+          <h2>Now logged in as {location.state.email}</h2>
+        </Col>
         <Col span={24} align="middle">
           <h1 className="heading">Schedule Flight</h1>
         </Col>
