@@ -3,6 +3,8 @@ import { Layout, Row, Col, Button, Table, Input, Select } from "antd";
 import { useHistory, useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
+import Highlighter from 'react-highlight-words';
+import { SearchOutlined } from '@ant-design/icons';
 
 export default function ViewAirports(props) {
     const location = useLocation();
@@ -15,12 +17,26 @@ export default function ViewAirports(props) {
     const [timzones, setTimeZones] = state([]);
     const [id, setId] = state("");
     const [time, setTime] = state("");
-
+    
+    const getColumnSearchProps = () => ({
+    
+        onFilter: (value, record) =>
+          record.toString().toLowerCase().includes(value.toLowerCase()),
+        render: text =>
+            <Highlighter
+                highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                searchWords={[id]}
+                autoEscape
+                textToHighlight={text ? text.toString() : ''}
+            />
+    });
+    
     const columns = [
         {
             title: 'ID',
             dataIndex: 'airport_id',
             key: 'airport_id',
+            ...getColumnSearchProps(),
         },
         {
             title: 'Airport Name',
@@ -59,7 +75,7 @@ export default function ViewAirports(props) {
                 multiple: 1
             },
         },
-    ]
+    ];
 
     function getAirports()  {
         axios.get('/api/view_airport')
@@ -98,43 +114,44 @@ export default function ViewAirports(props) {
             getTimeZones();
         }, []
     )
-
+   
     return(
+        
         <Layout style={{minHeight : "100vh"}}>
-        <Content style={{ margin: '24px 24px 24px', background: "white"}}>
-            <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
-                <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
-                    <Row justify="center" align="middle" gutter={[24, 24]} >
-                        <Col span={24} align="middle">
-                            <h2>Now logged in as {location.state.email}</h2>
-                            <h1>View Airports</h1>
-                        </Col>
-                        <Col span={12} align="middle">
-                            <span>
-                                ID:
-                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"ID"} onChange={(e) => setId(e.target.value)}/>
-                            </span>
-                        </Col>
-                        <Col span={12} align="middle">
-                            <span>
-                                Time Zone:
-                                <Select style={{ maxWidth: "300px", marginLeft: "8px", width: "100%" }} onChange={handleChange}>
-                                    {   
-                                        timzones.map((value) => (
-                                            <Option value={value}> {value} </Option>
-                                        ))
-                                    }
-                                </Select>
-                            </span>
-                        </Col>
-                        <Col>
-                            <Table dataSource={airports} columns={columns}/>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </Content>
-    </Layout>
+            <Content style={{ margin: '24px 24px 24px', background: "white"}}>
+                <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
+                    <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+                        <Row justify="center" align="middle" gutter={[24, 24]} >
+                            <Col span={24} align="middle">
+                                <h2>Now logged in as {location.state.email}</h2>
+                                <h1>View Airports</h1>
+                            </Col>
+                            <Col span={12} align="middle">
+                                <span>
+                                    ID:
+                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"ID"} onChange={(e) => {setId(e.target.value)}} />
+                                </span>
+                            </Col>
+                            <Col span={12} align="middle">
+                                <span>
+                                    Time Zone:
+                                    <Select style={{ maxWidth: "300px", marginLeft: "8px", width: "100%" }} onChange={handleChange}>
+                                        {   
+                                            timzones.map((value) => (
+                                                <Option value={value}> {value} </Option>
+                                            ))
+                                        }
+                                    </Select>
+                                </span>
+                            </Col>
+                            <Col>
+                                <Table dataSource={airports} columns={columns}/>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+            </Content>
+        </Layout>
     );
 
 }
