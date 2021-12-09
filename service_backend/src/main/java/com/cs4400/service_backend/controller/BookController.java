@@ -32,8 +32,8 @@ public class BookController {
         response.setData(returnBookInfo);
         response.setMessage(returnBookInfo.getBook_message());
 
-        if (response.getMessage().equals("Successfully updated booking on this flight!") ||
-            response.getMessage().equals("Successfully booked this flight!"))  {
+        if (response.getMessage().equals("You have successfully updated booking on this flight.") ||
+            response.getMessage().equals("You have successfully booked this flight."))  {
             response.setCode(200);
         } else {
             response.setCode(400);

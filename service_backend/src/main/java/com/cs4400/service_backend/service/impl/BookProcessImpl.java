@@ -43,7 +43,7 @@ public class BookProcessImpl implements BookProcess {
             } else {
                 bookMapper.update_book(flight_num, airline_name, customer_email, book_seats);
                 BookInfo returnBookInfo = bookMapper.check_bookInfo(flight_num, airline_name, customer_email, book_seats);
-                returnBookInfo.setBook_message("Successfully updated booking on this flight!");
+                returnBookInfo.setBook_message("You have successfully updated booking on this flight.");
                 return returnBookInfo;
             }
         } else if (bookMapper.check_book_by_date(customer_email, flight_date) != null) {
@@ -53,7 +53,7 @@ public class BookProcessImpl implements BookProcess {
         } else {
             bookMapper.book_new_flight(flight_num, airline_name, customer_email, book_seats);
             BookInfo returnBookInfo = bookMapper.check_bookInfo(flight_num, airline_name, customer_email, book_seats);
-            returnBookInfo.setBook_message("Successfully booked this flight!");
+            returnBookInfo.setBook_message("You have successfully booked this flight.");
             return returnBookInfo;
         }
 
