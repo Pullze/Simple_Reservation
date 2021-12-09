@@ -75,7 +75,7 @@ public class PropertyController {
      */
     @PostMapping(value = "/reserve-property")
     @ApiOperation(value = "reserve Property", notes = "reserve Property")
-    public Response<Reserve> reserveProperty(@RequestBody @Valid Reserve reserve) {
+    public Response<Reserve> reserveProperty(@RequestPart("jsonValue") @Valid Reserve reserve) {
         String message = propertyProcess.reserveProperty(reserve);
         Response<Reserve> response = new Response<>();
         response.setData(reserve);
