@@ -75,7 +75,7 @@ function RemoveFlights() {
                           onFinish={onFinish}
                           scrollToFirstError
                         >
-                          <Row justify="center" align="middle" gutter={[24, 24]} >
+                          <Row justify="center" align="middle" gutter={[36, 36]} >
                             <Col span={12} align="middle">
                               <Form.Item
                                 name="dates"
@@ -112,7 +112,7 @@ function RemoveFlights() {
                               <FlightList />
                             </Col>
                             <Col span={24} align="middle">
-                              <Space>
+                              <Space size="large">
                                 {buttons.map((button, i) => (
                                   <Form.Item>
                                     <Button type={button.type} htmlType={button.htmlType}>
