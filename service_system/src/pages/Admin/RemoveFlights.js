@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router";
+import { Link } from "react-router-dom";
 import {
   Layout,
   Row,
@@ -19,48 +21,47 @@ import { useLocation } from "react-router";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-const today = new Date();
-
-const buttons = [
-  {
-    label: "Back",
-    type: "default",
-    htmlType: "button",
-  },
-  {
-    label: "Reset",
-    type: "default",
-    htmlType: "reset",
-  },
-  {
-    label: "Filter",
-    type: "default",
-    htmlType: "button",
-  },
-  {
-    label: "Remove",
-    type: "primary",
-    htmlType: "submit",
-  },
-];
+const today = moment();
+const dateFormat = "YYYY-MM-DD";
 
 function RemoveFlights() {
+  const location = useLocation();
   const [form] = Form.useForm();
   const [airlines, setAirlines] = useState([]);
-  const location = useLocation();
+  const [selectedFlight, setSelectedFlight] = useState(null);
 
   useEffect(() => {
     axios.get("/api/airlines").then((res) => setAirlines(res.data.data));
   }, []);
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const handleReset = () => {};
+  const handleRemove = () => {
+    if (selectedFlight) {
+      console.log(selectedFlight);
+    }
   };
+
+  const buttons = [
+    {
+      label: "Reset",
+      type: "default",
+      onClick: handleReset,
+    },
+    {
+      label: "Filter",
+      type: "default",
+    },
+    {
+      label: "Remove",
+      type: "primary",
+      onClick: handleRemove,
+    },
+  ];
 
   return (
     <Layout style={{minHeight : "100vh"}}>
       <Content style={{ margin: '24px 24px 24px', background: "white"}}>
-            <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
+            <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}>
                 <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
                     <Row justify="center" align="middle" gutter={[24, 24]} >
                       <Col span={24} align="middle">
@@ -82,11 +83,16 @@ function RemoveFlights() {
                                 label="Dates"
                                 rules={[{ required: true, message: "Please enter dates." }]}
                               >
-                                <RangePicker style={{width: "100%"}}/>
+                                <RangePicker
+                                    disabledDate={(d) =>
+                                        !d || d.format(dateFormat) <= today.format(dateFormat)
+                                    }
+                                    style={{width: "100%"}}
+                                />
                               </Form.Item>
                             </Col>
                             <Col span={12} align="middle">
-                              <Form.Item name="airline" label="Airline">
+                              <Form.Item name="airline_name" label="Airline">
                                 <Select style={{width: "100%"}}>
                                   {airlines.map((airline, i) => (
                                     <Option value={airline.name}>{airline.name}</Option>
@@ -95,7 +101,7 @@ function RemoveFlights() {
                               </Form.Item>
                             </Col>
                             <Col span={12} align="middle">
-                              <Form.Item name="current-date" label="Current Date">
+                              <Form.Item name="current_date" label="Current Date">
                                 <DatePicker
                                   defaultValue={moment(today, "YYYY-MM-DD")}
                                   disabled
@@ -104,7 +110,7 @@ function RemoveFlights() {
                               </Form.Item>
                             </Col>
                             <Col span={12} align="middle">
-                              <Form.Item name="flight-num" label="Flight Number">
+                              <Form.Item name="flight_num" label="Flight Number">
                                 <Input style={{width: "100%"}}/>
                               </Form.Item>
                             </Col>
@@ -113,9 +119,19 @@ function RemoveFlights() {
                             </Col>
                             <Col span={24} align="middle">
                               <Space size="large">
+                                <Button>
+                                  <Link
+                                      to={{
+                                        pathname: "/admin/home",
+                                        state: { email: location.state.email },
+                                      }}
+                                  >
+                                    Back
+                                  </Link>
+                                </Button>
                                 {buttons.map((button, i) => (
                                   <Form.Item>
-                                    <Button type={button.type} htmlType={button.htmlType}>
+                                    <Button type={button.type} onClick={button.onClick}>
                                       {button.label}
                                     </Button>
                                   </Form.Item>

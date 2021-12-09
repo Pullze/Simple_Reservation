@@ -39,10 +39,10 @@ const fieldLabel = {
 };
 
 function ScheduleFlight() {
+  const location = useLocation();
   const [form] = Form.useForm();
   const [airlines, setAirlines] = useState([]);
   const [flight, setFlight] = useState({ isScheduled: false });
-  const location = useLocation();
 
   useEffect(() => {
     axios.get("/api/airlines").then((res) => setAirlines(res.data.data));
@@ -230,7 +230,7 @@ function ScheduleFlight() {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content style={{ margin: '24px 24px 24px', background: "white"}}>
-        <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
+        <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}>
           <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
               <Row justify="center" align="middle" gutter={[24, 24]} >
                 <Col span={24} align="middle">
@@ -247,7 +247,7 @@ function ScheduleFlight() {
                     onFinish={scheduleFlight}
                     scrollToFirstError
                   >
-                    <Row gutter={[36, 36]}> 
+                    <Row gutter={[36, 36]}>
                     {formItems.map((formItem, i) => (
                       <Col span={12}>
                         <Form.Item
