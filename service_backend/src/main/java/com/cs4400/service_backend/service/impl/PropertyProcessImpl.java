@@ -5,6 +5,7 @@ import com.cs4400.service_backend.mapper.PropertyMapper;
 import com.cs4400.service_backend.entity.Property;
 import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.service.PropertyProcess;
+import com.cs4400.service_backend.vo.ReserveInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -63,6 +64,13 @@ public class PropertyProcessImpl implements PropertyProcess {
         propertyMapper.reserveProperty(propertyName, ownerEmail, customerEmail, startDate, endDate,numGuests);
         return "Reserved succeeded!";
 
+    }
+
+    @Override
+    public List<ReserveInfo> viewCustomerFutureReservations(String customerEmail) {
+        System.out.println(propertyMapper.viewCustomerFutureReservations(customerEmail));
+
+        return propertyMapper.viewCustomerFutureReservations(customerEmail);
     }
 
 
