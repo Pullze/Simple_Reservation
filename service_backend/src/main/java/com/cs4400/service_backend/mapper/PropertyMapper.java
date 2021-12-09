@@ -1,10 +1,7 @@
 package com.cs4400.service_backend.mapper;
 
-import com.cs4400.service_backend.entity.Account;
-import com.cs4400.service_backend.entity.Customer;
-import com.cs4400.service_backend.entity.Owner;
-import com.cs4400.service_backend.entity.Property;
-import com.cs4400.service_backend.vo.LoginInfo;
+import com.cs4400.service_backend.entity.*;
+import com.cs4400.service_backend.vo.ReserveInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.Date;
@@ -17,7 +14,13 @@ public interface PropertyMapper {
 
    List<String> checkAmenities(String property_name, String property_owner);
 
-   List<Property> viewAvailableProperties(Date start, Date end);
+   List<Property> viewAvailableProperties(String start, String end);
 
-   void reserveProperty(String propertyName, String ownerEmail, String customerEmail, Date startDate, Date endDate, Integer numGuests);
+   Reserve checkReserveExist(String propertyName, String ownerEmail, String customerEmail);
+
+   List<Reserve> checkReserveCondition(String customerEmail, String startDate, String endDate);
+
+   void reserveProperty(String propertyName, String ownerEmail, String customerEmail, String startDate, String endDate, Integer numGuests);
+
+   List<ReserveInfo> viewCustomerFutureReservations(String customerEmail);
 }

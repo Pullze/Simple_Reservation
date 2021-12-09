@@ -11,9 +11,12 @@ import {
   TimePicker,
   Button,
   message,
+  Space,
 } from "antd";
 import moment from "moment";
 import axios from "axios";
+import { Content } from "antd/lib/layout/layout";
+import { useLocation } from "react-router";
 
 const { Option } = Select;
 
@@ -36,12 +39,13 @@ const fieldLabel = {
 };
 
 function ScheduleFlight() {
+  const location = useLocation();
   const [form] = Form.useForm();
   const [airlines, setAirlines] = useState([]);
   const [flight, setFlight] = useState({ isScheduled: false });
 
   useEffect(() => {
-    axios.get("/api/airlines").then((res) => setAirlines(res.data));
+    axios.get("/api/airlines").then((res) => setAirlines(res.data.data));
   }, []);
 
   const scheduleFlight = (values) => {
@@ -85,7 +89,7 @@ function ScheduleFlight() {
     {
       name: "flight_num",
       rules: [{ required: true, message: "Please enter the flight number." }],
-      input: <InputNumber type="number" controls={false} />,
+      input: <InputNumber type="number" controls={false} style={{width: "100%"}} />,
     },
     {
       name: "airline_name",
@@ -93,7 +97,7 @@ function ScheduleFlight() {
       input: (
         <Select>
           {airlines.map((airline, i) => (
-            <Option key={i} value={airline.name}>
+            <Option key={i} value={airline.name} style={{width: "100%"}}>
               {airline.name}
             </Option>
           ))}
@@ -103,7 +107,7 @@ function ScheduleFlight() {
     {
       name: "from_airport",
       rules: [{ required: true, message: "Please enter the from airport ID." }],
-      input: <Input />,
+      input: <Input style={{width: "100%"}}/>,
     },
     {
       name: "to_airport",
@@ -120,17 +124,17 @@ function ScheduleFlight() {
           },
         }),
       ],
-      input: <Input />,
+      input: <Input style={{width: "100%"}}/>,
     },
     {
       name: "departure_time",
       rules: [{ required: true, message: "Please enter the departure time." }],
-      input: <TimePicker />,
+      input: <TimePicker style={{width: "100%"}}/>,
     },
     {
       name: "arrival_time",
       rules: [{ required: true, message: "Please enter the arrival time." }],
-      input: <TimePicker />,
+      input: <TimePicker style={{width: "100%"}}/>,
     },
     {
       name: "flight_date",
@@ -140,6 +144,7 @@ function ScheduleFlight() {
           disabledDate={(d) =>
             !d || d.format(dateFormat) <= today.format(dateFormat)
           }
+          style={{width: "100%"}}
         />
       ),
     },
@@ -164,6 +169,7 @@ function ScheduleFlight() {
           addonAfter="per person"
           type="number"
           controls={false}
+          style={{width: "100%"}}
         />
       ),
     },
@@ -183,12 +189,12 @@ function ScheduleFlight() {
           },
         }),
       ],
-      input: <InputNumber type="number" controls={false} />,
+      input: <InputNumber type="number" controls={false} style={{width: "100%"}}/>,
     },
     {
       name: "current_date",
       rules: [],
-      input: <DatePicker defaultValue={today} disabled />,
+      input: <DatePicker defaultValue={today} disabled style={{width: "100%"}}/>,
     },
   ];
 
@@ -222,49 +228,60 @@ function ScheduleFlight() {
   }
 
   return (
-    <Layout>
-      <Row style={{ minHeight: "100vh" }} align="middle">
-        <Col span={24} align="middle">
-          <h1 className="heading">Schedule Flight</h1>
-        </Col>
-        <Col span={24} align="middle">
-          <Form
-            style={{ maxWidth: "300px" }}
-            form={form}
-            name="schedule-flight"
-            onFinish={scheduleFlight}
-            scrollToFirstError
-          >
-            {formItems.map((formItem, i) => (
-              <Form.Item
-                key={i}
-                name={formItem.name}
-                label={fieldLabel[formItem.name]}
-                dependencies={
-                  formItem.name === "to_airport" ? ["from_airport"] : []
-                }
-                rules={formItem.rules}
-              >
-                {formItem.input}
-              </Form.Item>
-            ))}
-            <Row>
-              <Col span={12}>
-                <Form.Item>
-                  <Button htmlType="reset">Cancel</Button>
-                </Form.Item>
+    <Layout style={{ minHeight: "100vh" }}>
+      <Content style={{ margin: '24px 24px 24px', background: "white"}}>
+        <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}>
+          <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+              <Row justify="center" align="middle" gutter={[24, 24]} >
+                <Col span={24} align="middle">
+                    <h2>Now logged in as {location.state.email}</h2>
+                </Col>
+                <Col span={24} align="middle">
+                    <h1>Schedule Flights</h1>
+                </Col>
+                <Col span={24} align="middle">
+                  <Form
+                    style={{ maxWidth: "100%" }}
+                    form={form}
+                    name="schedule-flight"
+                    onFinish={scheduleFlight}
+                    scrollToFirstError
+                  >
+                    <Row gutter={[36, 36]}>
+                    {formItems.map((formItem, i) => (
+                      <Col span={12}>
+                        <Form.Item
+                          key={i}
+                          name={formItem.name}
+                          label={fieldLabel[formItem.name]}
+                          dependencies={
+                            formItem.name === "to_airport" ? ["from_airport"] : []
+                          }
+                          rules={formItem.rules}
+                        >
+                          {formItem.input}
+                        </Form.Item>
+                      </Col>
+                    ))}
+                      <Col span={24} align="middle">
+                        <Space size="large">
+                          <Form.Item>
+                            <Button htmlType="reset">Cancel</Button>
+                          </Form.Item>
+                          <Form.Item>
+                            <Button type="primary" htmlType="submit">
+                              Schedule
+                            </Button>
+                          </Form.Item>
+                        </Space>
+                      </Col>
+                    </Row>
+                  </Form>
+                </Col>
+                </Row>
               </Col>
-              <Col span={12}>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Schedule
-                  </Button>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
+          </Row>
+      </Content>
     </Layout>
   );
 }

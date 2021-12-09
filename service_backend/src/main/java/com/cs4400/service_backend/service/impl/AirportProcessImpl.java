@@ -19,4 +19,9 @@ public class AirportProcessImpl implements AirportProcess {
         return airportMapper.get_airport_info();
     }
 
+    @Override
+    public List<String> getTimeZones() {
+        return airportMapper.get_time_zones();
+    }
+
 }

@@ -6,6 +6,7 @@ import axios from "axios";
 import "./Register.css";
 
 const { TabPane } = Tabs;
+const { Content } = Layout;
 
 const today = new Date();
 
@@ -247,108 +248,110 @@ function Register() {
   };
 
   return (
-    <Layout>
-      <Row
-        style={{ minHeight: "100vh", paddingTop: "10%" }}
-        justify="center"
-        align="top"
-      >
-        <Col span={24} align="middle" style={{ width: "100%" }}>
-          <h1 className="heading">Register Account</h1>
-        </Col>
-        <Col span={24} align="middle">
-          <Tabs defaultActiveKey="1" type="card" centered>
-            <TabPane tab="Customer" key="1">
-              <Form
-                form={form}
-                name="register"
-                className="register-form"
-                onFinish={registerCustomer}
-                scrollToFirstError
-              >
-                {[...basicFormItems()]}
-                <Form.Item
-                  name="ccNumber"
-                  label="Card Number"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your card number!",
-                    },
-                    validators.card_number,
-                  ]}
-                >
-                  <Input placeholder="xxxx xxxx xxxx xxxx" />
-                </Form.Item>
-                <Form.Item
-                  name="cvv"
-                  label="CVV"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your card's CVV!",
-                    },
-                    validators.cvv,
-                  ]}
-                >
-                  <Input placeholder="cvv" />
-                </Form.Item>
-                <Form.Item label="Expiration Date">
-                  <Input.Group compact>
-                    <Form.Item
-                      noStyle
-                      name={["exp", "month"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your card's expiration month.",
-                        },
-                        validators.expiration_month,
-                      ]}
+    <Layout style={{ minHeight: "100vh" }}>
+      <Content style={{ margin: '24px 24px 24px', background: "white"}}>
+        <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
+          <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+            <Row justify="center" align="middle" gutter={[24, 24]} >
+              <Col span={24} align="middle">
+                <h1 className="heading">Register Account</h1>
+              </Col>
+              <Col span={24} align="middle">
+                <Tabs defaultActiveKey="1" type="card" centered>
+                  <TabPane tab="Customer" key="1" >
+                    <Form
+                      form={form}
+                      name="register"
+                      className="register-form"
+                      onFinish={registerCustomer}
+                      scrollToFirstError
                     >
-                      <Input style={{ width: "30%" }} placeholder="mm" />
-                    </Form.Item>
-                    <Form.Item
-                      noStyle
-                      name={["exp", "year"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your card's expiration year.",
-                        },
-                        validators.expiration_year,
-                      ]}
+                      {[...basicFormItems()]}
+                      <Form.Item
+                        name="ccNumber"
+                        label="Card Number"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your card number!",
+                          },
+                          validators.card_number,
+                        ]}
+                      >
+                        <Input placeholder="xxxx xxxx xxxx xxxx" />
+                      </Form.Item>
+                      <Form.Item
+                        name="cvv"
+                        label="CVV"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your card's CVV!",
+                          },
+                          validators.cvv,
+                        ]}
+                      >
+                        <Input placeholder="cvv" />
+                      </Form.Item>
+                      <Form.Item label="Expiration Date">
+                        <Input.Group compact>
+                          <Form.Item
+                            noStyle
+                            name={["exp", "month"]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please enter your card's expiration month.",
+                              },
+                              validators.expiration_month,
+                            ]}
+                          >
+                            <Input style={{ width: "30%" }} placeholder="mm" />
+                          </Form.Item>
+                          <Form.Item
+                            noStyle
+                            name={["exp", "year"]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please enter your card's expiration year.",
+                              },
+                              validators.expiration_year,
+                            ]}
+                          >
+                            <Input style={{ width: "30%" }} placeholder="yy" />
+                          </Form.Item>
+                        </Input.Group>
+                      </Form.Item>
+                      <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                          Register
+                        </Button>
+                      </Form.Item>
+                    </Form>
+                  </TabPane>
+                  <TabPane tab="Owner" key="2">
+                    <Form
+                      from={form}
+                      name="register"
+                      className="register-form"
+                      onFinish={registerOwner}
+                      scrollToFirstError
                     >
-                      <Input style={{ width: "30%" }} placeholder="yy" />
-                    </Form.Item>
-                  </Input.Group>
-                </Form.Item>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Register
-                  </Button>
-                </Form.Item>
-              </Form>
-            </TabPane>
-            <TabPane tab="Owner" key="2">
-              <Form
-                from={form}
-                name="register"
-                className="register-form"
-                onFinish={registerOwner}
-                scrollToFirstError
-              >
-                {[...basicFormItems()]}
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Register
-                  </Button>
-                </Form.Item>
-              </Form>
-            </TabPane>
-          </Tabs>
-        </Col>
-      </Row>
+                      {[...basicFormItems()]}
+                      <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                          Register
+                        </Button>
+                      </Form.Item>
+                    </Form>
+                  </TabPane>
+                </Tabs>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Content>
     </Layout>
   );
 }

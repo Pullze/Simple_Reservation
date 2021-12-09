@@ -8,4 +8,6 @@ public interface AirportProcess {
 
     List<AirportInfo> getAirportInfo();
 
+    List<String> getTimeZones();
+
 }

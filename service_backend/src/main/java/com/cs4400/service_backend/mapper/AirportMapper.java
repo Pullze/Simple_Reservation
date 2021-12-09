@@ -9,5 +9,8 @@ import java.util.List;
 public interface AirportMapper {
 
     List<AirportInfo> get_airport_info();
+
+    List<String> get_time_zones();
+
 }
 
