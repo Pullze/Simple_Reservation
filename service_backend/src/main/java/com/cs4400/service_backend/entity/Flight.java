@@ -21,13 +21,13 @@ public class Flight {
 
     @NotNull
     @ApiModelProperty(value = "departure_time")
-    private Date departure_time;
+    private String departure_time;
 
     @ApiModelProperty(value = "arrival_time")
-    private Date arrival_time;
+    private String arrival_time;
 
     @ApiModelProperty(value = "flight_date")
-    private Date flight_date;
+    private String flight_date;
 
     @ApiModelProperty(value = "cost")
     private double cost;

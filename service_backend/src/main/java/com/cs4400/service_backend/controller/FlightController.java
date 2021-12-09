@@ -4,12 +4,11 @@ package com.cs4400.service_backend.controller;
 import com.cs4400.service_backend.entity.Flight;
 import com.cs4400.service_backend.service.FlightProcess;
 import com.cs4400.service_backend.vo.FlightInfo;
+import com.cs4400.service_backend.entity.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,16 +42,20 @@ public class FlightController {
      */
     @PostMapping(value = "/schedule_flight")
     @ApiOperation(value = "schedule flight", notes = "schedule a flight")
-    public ResponseEntity<FlightInfo> schedule_flight(@RequestBody @Valid FlightInfo flightInfo) {
+    public Response<FlightInfo> schedule_flight(@RequestPart("jsonValue") @Valid FlightInfo flightInfo) {
 
+        String message = flightProcess.schedule_flight(flightInfo);
 
-        FlightInfo scheduleFlight = flightProcess.schedule_flight(flightInfo);
+        Response<FlightInfo> response = new Response<>();
+        response.setData(flightInfo);
+        response.setMessage(message);
 
-        if (scheduleFlight.getMessage().equals("schedule succeeded")) {
-            return ResponseEntity.status(HttpStatus.OK).body(scheduleFlight);
+        if (message.equals("Schedule succeeded!")) {
+            response.setCode(200);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(scheduleFlight);
+            response.setCode(400);
         }
+        return response;
     }
 
     @GetMapping(value =  "/view_flight")

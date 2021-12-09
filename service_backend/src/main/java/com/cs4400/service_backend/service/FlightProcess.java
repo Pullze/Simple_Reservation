@@ -9,7 +9,7 @@ import java.sql.Time;
 import java.util.List;
 
 public interface FlightProcess {
-    FlightInfo schedule_flight(FlightInfo flightInfo);
+    String schedule_flight(FlightInfo flightInfo);
 
     List<Flight> view_flight(int minSeats);
 

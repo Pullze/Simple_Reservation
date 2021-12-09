@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Layout,
   Row,
@@ -10,8 +10,8 @@ import {
   Button,
 } from "antd";
 import moment from "moment";
-import airlines from "../../constants/Airlines";
 import FlightList from "../../components/FlightList";
+import axios from "axios";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -43,6 +43,11 @@ const buttons = [
 
 function RemoveFlights() {
   const [form] = Form.useForm();
+  const [airlines, setAirlines] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/airlines").then((res) => setAirlines(res.data));
+  }, []);
 
   const onFinish = (values) => {
     console.log("Success:", values);
@@ -77,7 +82,7 @@ function RemoveFlights() {
               <Form.Item name="airline" label="Airline">
                 <Select>
                   {airlines.map((airline, i) => (
-                    <Option value={airline.value}>{airline.label}</Option>
+                    <Option value={airline.name}>{airline.name}</Option>
                   ))}
                 </Select>
               </Form.Item>
