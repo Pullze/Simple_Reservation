@@ -24,14 +24,16 @@ public class BookController {
      */
     @PostMapping(value = "/book_flight")
     @ApiModelProperty(value = "book flight", notes = "book flight")
-    public Response<BookInfo> book_flight(@RequestBody BookInfo bookInfo) {
+    public Response<BookInfo> book_flight(@RequestPart("jsonValue") BookInfo bookInfo) {
 
         BookInfo returnBookInfo = bookProcess.book_flight(bookInfo);
 
-        Response<BookInfo> response = new Response<>(bookInfo.getBook_message(), returnBookInfo);
+        Response<BookInfo> response = new Response<>();
+        response.setData(returnBookInfo);
+        response.setMessage(returnBookInfo.getBook_message());
 
-        if (response.getMessage() == "Succeeded updating booking on this flight!" ||
-            response.getMessage() == "Succeeded booking this flight")  {
+        if (response.getMessage().equals("Successfully updated booking on this flight!") ||
+            response.getMessage().equals("Successfully booked this flight!"))  {
             response.setCode(200);
         } else {
             response.setCode(400);
