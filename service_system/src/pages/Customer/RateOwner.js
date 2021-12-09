@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { Layout, Row, Col, Table, Form, Input, Button, message } from "antd";
+import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 import "./EditableTable.css";
 
@@ -116,7 +117,7 @@ function RateOwner() {
   const handleSubmit = () => {
     const unratedOwners = [...owners];
     owners.forEach((owner) => {
-      if (owner.rating.length > 0) {
+      if (owner.rating.length > 0 && !isNaN(owner.rating)) {
         const formData = new FormData();
         formData.append(
           "jsonValue",
@@ -124,7 +125,6 @@ function RateOwner() {
         );
         axios.post("api/customer-rate-owner", formData).then((res) => {
           if (res.data.code === 200) {
-            message.success("Submission successful!");
             const index = unratedOwners.indexOf(owner);
             unratedOwners.splice(index, 1);
           } else {
@@ -133,7 +133,15 @@ function RateOwner() {
         });
       }
     });
-    setOwners(unratedOwners);
+    if (unratedOwners.length === owners.length) {
+      return message.error("Please enter an integer value for rating.");
+    }
+    message.success(
+      `Successfully rated ${owners.length - unratedOwners.length} owners!`
+    );
+    setTimeout(() => {
+      setOwners(unratedOwners);
+    }, 1000);
   };
 
   const handleSave = (row) => {
@@ -162,42 +170,54 @@ function RateOwner() {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Row justify="center" gutter={[0, 8]}>
-        <Col span={24} align="middle">
-          <h2>Now logged in as {location.state.email}</h2>
-          <h1>Rate Owner</h1>
-        </Col>
-        <Col align="middle">
-          <Table
-            dataSource={owners}
-            columns={ownerColumns}
-            components={{ body: { row: EditableRow, cell: EditableCell } }}
-            rowClassName={() => "editable-row"}
-            pagination={{ pageSize: "5", hideOnSinglePage: true }}
-          ></Table>
-        </Col>
-        <Col span={24}>
-          <Row justify="center" gutter={16}>
-            <Col>
-              <Button>
-                <Link
-                  to={{
-                    pathname: "/customer/home",
-                    state: { email: location.state.email },
+      <Content style={{ margin: "24px 24px 24px", background: "white" }}>
+        <Row
+          justify="center"
+          align="middle"
+          style={{ margin: "24px 24px 24px" }}
+        >
+          <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+            <Row justify="center" align="middle" gutter={[24, 24]}>
+              <Col span={24} align="middle">
+                <h2>Now logged in as {location.state.email}</h2>
+                <h1 className="heading">Rate Owner</h1>
+              </Col>
+              <Col align="middle">
+                <Table
+                  dataSource={owners}
+                  columns={ownerColumns}
+                  components={{
+                    body: { row: EditableRow, cell: EditableCell },
                   }}
-                >
-                  Back
-                </Link>
-              </Button>
-            </Col>
-            <Col>
-              <Button type="primary" onClick={handleSubmit}>
-                Submit
-              </Button>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+                  rowClassName={() => "editable-row"}
+                  pagination={{ pageSize: "5", hideOnSinglePage: true }}
+                ></Table>
+              </Col>
+              <Col span={24}>
+                <Row justify="center" gutter={16}>
+                  <Col>
+                    <Button>
+                      <Link
+                        to={{
+                          pathname: "/customer/home",
+                          state: { email: location.state.email },
+                        }}
+                      >
+                        Back
+                      </Link>
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button type="primary" onClick={handleSubmit}>
+                      Submit
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Content>
     </Layout>
   );
 }
