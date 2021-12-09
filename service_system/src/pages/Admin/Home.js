@@ -42,6 +42,7 @@ const links = [
 
 function Home(props) {
   const location = useLocation();
+  const history = useHistory();
   console.log(location);
   return (
     <Layout>
@@ -63,7 +64,7 @@ function Home(props) {
             </Col>
           ))}
           <Col span={24} align="middle">
-            <Button type="default" danger href={"/"} style={{ minWidth: "150px", minHeight: "100%" }}> 
+            <Button type="default" danger onClick={()=>{history.replace("/")}} style={{ minWidth: "150px", minHeight: "100%" }}> 
               Logout
             </Button>
         </Col>

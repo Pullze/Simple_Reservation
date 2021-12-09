@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../config/config.js";
 import axios from "axios";
 import {
@@ -12,7 +12,7 @@ import {
   Modal,
   Space,
 } from "antd";
-import { UserOutlined, LockOutlined, BlockOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./Login.css";
 import { useHistory } from "react-router-dom";
 import { Content } from "antd/lib/layout/layout";
@@ -83,6 +83,12 @@ export default function Login() {
         console.error(err);
       });
   };
+
+  useEffect(
+    () => {
+      history.replace("/")
+    }, []
+  )
   return (
     <Layout>
       <Content style={{ margin: "24px, 24px, 24px", background: "white" }}>
