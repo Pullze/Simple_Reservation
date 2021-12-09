@@ -195,41 +195,33 @@ function BookFlight() {
           .post("/api/book_flight", formData)
           .then((res) => {
             if (res.data.code === 200) {
-              const booking = res.data.data;
-              Modal.success({
-                title: res.data.message,
-                content: (
-                  <div style={{ margin: "30px", marginLeft: 0 }}>
-                    <h4>Booking Information</h4>
-                    <Descriptions
-                      size="default"
-                      column={1}
-                      bordered
-                      // style={{ width: "500px" }}
-                    >
-                      <Descriptions.Item label="Booked Flight Number">
-                        {booking.flight_num}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Number of Seats">
-                        {booking.book_seats}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Amount Spent">
-                        {booking.book_cost}
-                      </Descriptions.Item>
-                    </Descriptions>
-                  </div>
-                ),
-              });
-              flight.remaining_seats -= booking.book_seats;
-              flight.book_seats = 0;
-              if (flight.remaining_seats === 0) {
-                setFlights(
-                  flights.filter(({ key }) => key !== selectedRowKeys[0])
-                );
-              } else {
-                setFlights(flights);
-              }
-              setSelectedRowKeys([]);
+              message.success("Success!");
+              setTimeout(() => {
+                const booking = res.data.data;
+                Modal.success({
+                  title: res.data.message,
+                  content: (
+                    <div style={{ margin: "40px 0", marginRight: "30px" }}>
+                      <h2>Booking Information</h2>
+                      <Descriptions size="default" column={1} bordered>
+                        <Descriptions.Item label="Booked Flight Number">
+                          {booking.flight_num}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Number of Seats">
+                          {booking.book_seats}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Amount Spent">
+                          {booking.book_cost}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </div>
+                  ),
+                });
+                flight.remaining_seats -= booking.book_seats;
+                flight.book_seats = 0;
+                setFlights(flights.filter((item) => item.remaining_seats > 0));
+                setSelectedRowKeys([]);
+              }, 1000);
             } else {
               message.error(res.data.message);
             }
