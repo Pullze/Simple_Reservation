@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.cs4400.service_backend.mapper.FlightMapper">
-    <select id = "check_flight" resultType = "Flight">
+    <select id = "check_flight" resultType = "FlightInfo">
         select  * from Flight
             where Flight_Num = #{flight_num} and Airline_Name = #{airline_name};
     </select>

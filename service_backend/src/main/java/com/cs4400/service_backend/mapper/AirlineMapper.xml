@@ -15,4 +15,8 @@
             on a.Airline_Name = f.Airline_Name
         group by a.Airline_Name;
     </select>
+
+    <select id = "check_airline" resultType = "Airline">
+        select * from Airline where Airline_Name = #{airline_name};
+    </select>
 </mapper>

@@ -13,4 +13,6 @@ public interface AirlineMapper {
 
     List<AirlineInfo> get_airline_info();
 
+    Airline check_airline(String airline_name);
+
 }

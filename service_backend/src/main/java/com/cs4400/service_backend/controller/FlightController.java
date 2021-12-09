@@ -9,11 +9,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,7 +42,7 @@ public class FlightController {
     @ApiOperation(value = "schedule flight", notes = "schedule a flight")
     public Response<FlightInfo> schedule_flight(@RequestPart("jsonValue") @Valid FlightInfo flightInfo) {
 
-        String message = flightProcess.schedule_flight(flightInfo);
+        String message = flightProcess.schedule_flight(flightInfo).getMessage();
 
         Response<FlightInfo> response = new Response<>();
         response.setData(flightInfo);
