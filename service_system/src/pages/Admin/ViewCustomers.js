@@ -3,6 +3,7 @@ import { Layout, Row, Col, Button, Table, Input } from "antd";
 import { useHistory, useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
+import Highlighter from 'react-highlight-words';
 
 export default function ViewCustomers(props) {
     const location = useLocation();
@@ -12,12 +13,24 @@ export default function ViewCustomers(props) {
 
     const [customers, setCustomers] = state([]);
     const [name, setName] = state("");
+    const [filtered, setFiltered] = state([]);
+
+    const highLight = () => ({
+        render: text =>
+            <Highlighter
+                highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                searchWords={[name]}
+                autoEscape
+                textToHighlight={text ? text.toString() : ''}
+            />
+    });
 
     const columns = [
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            ...highLight()
         },
         {
             title: 'Average Rating',
@@ -56,11 +69,20 @@ export default function ViewCustomers(props) {
         },
     ]
 
+    const inputFilter = (value) => {
+        setName(value);
+        setFiltered(customers
+            .filter(customer => customer.name.toLowerCase().includes(value.toLowerCase()))
+        );
+        console.log(filtered);
+    }
+
     function getCustomers()  {
         axios.get('/api/view_customer')
             .then((res) => {
                 console.log(res.data);
                 setCustomers(res.data.data);
+                setFiltered(res.data.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -88,11 +110,11 @@ export default function ViewCustomers(props) {
                         <Col span={24} align="middle">
                             <p>
                                 Name:
-                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"} onChange={(e) => setName(e.target.value)}/>
+                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"} onChange={(e) => inputFilter(e.target.value)}/>
                             </p>
                         </Col>
                         <Col>
-                            <Table dataSource={customers} columns={columns}/>
+                            <Table dataSource={filtered} columns={columns}/>
                         </Col>
                     </Row>
                 </Col>

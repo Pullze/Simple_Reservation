@@ -3,6 +3,7 @@ import { Layout, Row, Col, Button, Table, Input, Select } from "antd";
 import { useHistory, useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
+import Highlighter from 'react-highlight-words';
 
 export default function ViewAirlines(props) {
     const location = useLocation();
@@ -12,12 +13,24 @@ export default function ViewAirlines(props) {
 
     const [airlines, setAirlines] = state([]);
     const [name, setName] = state("");
+    const [filtered, setFiltered] = state([]);
+
+    const highLight = () => ({
+        render: text =>
+            <Highlighter
+                highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                searchWords={[name]}
+                autoEscape
+                textToHighlight={text ? text.toString() : ''}
+            />
+    });
 
     const columns = [
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            ...highLight()
         },
         {
             title: 'Rating',
@@ -48,11 +61,20 @@ export default function ViewAirlines(props) {
         },
     ]
 
+    const inputFilter = (value) => {
+        setName(value);
+        setFiltered(airlines
+            .filter(airline => airline.name.toLowerCase().includes(value.toLowerCase()))
+        );
+        console.log(filtered);
+    }
+
     function getAirlines()  {
         axios.get('/api/view_airline')
             .then((res) => {
                 console.log(res.data);
                 setAirlines(res.data.data);
+                setFiltered(res.data.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -79,11 +101,11 @@ export default function ViewAirlines(props) {
                         <Col span={24} align="middle">
                             <span>
                                 Name:
-                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"} onChange={(e) => setName(e.target.value)}/>
+                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"} onChange={(e) => inputFilter(e.target.value)}/>
                             </span>
                         </Col>
                         <Col>
-                            <Table dataSource={airlines} columns={columns}/>
+                            <Table dataSource={filtered} columns={columns}/>
                         </Col>
                     </Row>
                 </Col>
