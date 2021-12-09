@@ -12,10 +12,7 @@ public class FlightInfo extends Flight {
 
     private String message = null;
 
-
     private String current_date;
-
-
 
     public String getMessage() {
         return message;

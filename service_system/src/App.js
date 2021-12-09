@@ -31,11 +31,11 @@ function App() {
         <Route exact path="/admin/home" component={AdminHome} />
         <Route exact path="/admin/schedule-flight" component={ScheduleFlight} />
         <Route exact path="/admin/remove-flight" component={RemoveFlights} />
-        <Route exact path="/admin/view-owner" component={ViewOwners} />
-        <Route exact path="/admin/view-customer" component={ViewCustomers} />
-        <Route exact path="/admin/view-airport" component={ViewAirports} />
-        <Route exact path="/admin/view-airline" component={ViewAirlines} />
-        <Route exact path="/admin/process-date" component={ProcessDate} />
+        <Route exact path="/admin/view-owner" component={ViewOwners}/>
+        <Route exact path="/admin/view-customer" component={ViewCustomers}/>
+        <Route exact path="/admin/view-airport" component={ViewAirports}/>
+        <Route exact path="/admin/view-airline" component={ViewAirlines}/>
+        <Route exact path="/admin/process-date" component={ProcessDate}/>
         <Route exact path="/customer/home" component={CustomerHome} />
         <Route exact path="/customer/book-flight" component={BookFlight} />
         <Route exact path="/customer/cancel-flight" component={CancelFlight} />

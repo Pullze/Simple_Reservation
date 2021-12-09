@@ -16,7 +16,6 @@ import moment from "moment";
 import FlightList from "../../components/FlightList";
 import axios from "axios";
 import { Content } from "antd/lib/layout/layout";
-import { useLocation } from "react-router";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -73,7 +72,6 @@ function RemoveFlights() {
                           style={{ maxWidth: "100%" }}
                           form={form}
                           name="remove-flight"
-                          onFinish={onFinish}
                           scrollToFirstError
                         >
                           <Row justify="center" align="middle" gutter={[36, 36]} >

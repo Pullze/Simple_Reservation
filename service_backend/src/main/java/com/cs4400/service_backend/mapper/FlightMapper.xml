@@ -14,12 +14,12 @@
              #{flight_date}, #{cost}, #{capacity});
     </insert>
 
-    <select id = "check_airport" resultType = "Airport">
+    <select id = "check_airport" resultType = "com.cs4400.service_backend.vo.AirportInfo">
             select * from Airport
                 where Airport_Id = #{airport_id};
     </select>
 
-    <select id = "view_flight" resultType= "Flight">
+    <select id = "view_flight" resultType= "com.cs4400.service_backend.vo.FlightInfo">
         select
         f.Flight_Num,
         f.Airline_Name,
