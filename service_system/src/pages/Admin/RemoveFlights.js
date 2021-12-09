@@ -117,6 +117,7 @@ function RemoveFlights() {
                             </Col>
                             <Col span={24} align="middle">
                               <Space size="large">
+                              <Form.Item>
                                 <Button>
                                   <Link
                                       to={{
@@ -127,6 +128,7 @@ function RemoveFlights() {
                                     Back
                                   </Link>
                                 </Button>
+                                </Form.Item>
                                 {buttons.map((button, i) => (
                                   <Form.Item>
                                     <Button type={button.type} onClick={button.onClick}>
