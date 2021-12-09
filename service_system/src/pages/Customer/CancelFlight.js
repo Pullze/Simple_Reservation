@@ -13,6 +13,7 @@ import {
   Button,
   message,
 } from "antd";
+import { Content } from "antd/lib/layout/layout";
 import moment from "moment";
 import axios from "axios";
 
@@ -62,7 +63,7 @@ function CancelFlight() {
   //             res.data.data.map((item, i) => ({
   //               ...item,
   //               key: i,
-  //               isCancelled: false,
+  //  //           isCancelled: false
   //             }))
   //           )
   //         )
@@ -73,7 +74,6 @@ function CancelFlight() {
   const rowSelection = {
     selectedRowKeys,
     onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys),
-    getCheckboxProps: (record) => ({ disabled: record.isCancelled }),
   };
 
   const handleCancel = () => {
@@ -93,8 +93,13 @@ function CancelFlight() {
         .post("/api/cancel-flight", formData)
         .then((res) => {
           if (res.data.code === 200) {
-            message.success("Cancel flight successful!");
-            flight.isCancelled = true;
+            message.success("Success!");
+            setTimeout(() => {
+              setFlights(
+                flights.filter((item) => item.key !== selectedRowKeys[0])
+              );
+              setSelectedRowKeys([]);
+            }, 1000);
           } else {
             message.error(res.data.message);
           }
@@ -105,70 +110,80 @@ function CancelFlight() {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Row justify="center" align="middle" gutter={[0, 16]}>
-        <Col span={24} align="middle">
-          <h2>Now logged in as {location.state.email}</h2>
-          <h1>Cancel Flight</h1>
-        </Col>
-        <Col span={24} align="middle" style={{ maxWidth: "500px" }}>
-          <Form form={form} name="cancel-flight" scrollToFirstError>
-            <Row justify="center">
-              <Col span={24} align="left">
-                <Form.Item name="current_date" label="Current Date">
-                  <DatePicker defaultValue={today} disabled />
-                </Form.Item>
+      <Content style={{ margin: "24px 24px 24px", background: "white" }}>
+        <Row
+          justify="center"
+          align="middle"
+          style={{ margin: "24px 24px 24px" }}
+        >
+          <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+            <Row justify="center" align="middle" gutter={[24, 24]}>
+              <Col span={24} align="middle">
+                <h2>Now logged in as {location.state.email}</h2>
+                <h1 className="heading">Cancel Flight</h1>
+              </Col>
+              <Col span={24}>
+                <Form form={form} name="cancel-flight" scrollToFirstError>
+                  <Row justify="center">
+                    <Col span={24} align="left">
+                      <Form.Item name="current_date" label="Current Date">
+                        <DatePicker defaultValue={today} disabled />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row justify="center" gutter={16}>
+                    <Col span={14}>
+                      <Form.Item name="airline_name" label="Airline">
+                        <Select>
+                          {airlines.map(({ airline_name }, i) => (
+                            <Option key={i} value={airline_name}>
+                              {airline_name}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={10}>
+                      <Form.Item name="flight_num" label="Flight Number">
+                        <Input />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </Col>
+              <Col span={24}>
+                <Table
+                  dataSource={flights}
+                  columns={columns}
+                  rowSelection={{ type: "radio", ...rowSelection }}
+                  pagination={{ pageSize: "5", hideOnSinglePage: true }}
+                ></Table>
+              </Col>
+              <Col span={24}>
+                <Row justify="center" gutter={16}>
+                  <Col>
+                    <Button>
+                      <Link
+                        to={{
+                          pathname: "/customer/home",
+                          state: { email: location.state.email },
+                        }}
+                      >
+                        Back
+                      </Link>
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button type="primary" onClick={handleCancel}>
+                      Cancel Flight
+                    </Button>
+                  </Col>
+                </Row>
               </Col>
             </Row>
-            <Row justify="center" gutter={16}>
-              <Col span={14}>
-                <Form.Item name="airline_name" label="Airline">
-                  <Select>
-                    {airlines.map(({ airline_name }, i) => (
-                      <Option key={i} value={airline_name}>
-                        {airline_name}
-                      </Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={10}>
-                <Form.Item name="flight_num" label="Flight Number">
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-        <Col span={16} align="middle">
-          <Table
-            dataSource={flights}
-            columns={columns}
-            rowSelection={{ type: "radio", ...rowSelection }}
-            pagination={{ pageSize: "5", hideOnSinglePage: true }}
-          ></Table>
-        </Col>
-        <Col span={24}>
-          <Row justify="center" gutter={16}>
-            <Col>
-              <Button>
-                <Link
-                  to={{
-                    pathname: "/customer/home",
-                    state: { email: location.state.email },
-                  }}
-                >
-                  Back
-                </Link>
-              </Button>
-            </Col>
-            <Col>
-              <Button type="primary" onClick={handleCancel}>
-                Cancel Flight
-              </Button>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </Content>
     </Layout>
   );
 }
