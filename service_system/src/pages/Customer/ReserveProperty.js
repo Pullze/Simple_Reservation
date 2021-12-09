@@ -164,9 +164,16 @@ function ReserveProperty() {
     if (selectedRowKeys.length === 0) {
       message.error("Please select a property.");
     } else {
-      const { property_name, owner_email, capacity, cost } =
-        properties[selectedRowKeys[0]];
-      const num_guests = +properties[selectedRowKeys[0]].num_guests;
+      const property = properties[selectedRowKeys[0]];
+      const { property_name, owner_email, capacity, cost } = property;
+
+      let num_guests = property.num_guests;
+
+      if (isNaN(num_guests)) {
+        return message.error("Please enter a valid value.");
+      }
+
+      num_guests = +num_guests;
 
       if (num_guests <= 0) {
         message.error("Number of guests must be greater than 0.");
