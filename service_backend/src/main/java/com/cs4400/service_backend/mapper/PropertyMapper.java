@@ -1,10 +1,10 @@
 package com.cs4400.service_backend.mapper;
 
-import com.cs4400.service_backend.entity.*;
+import com.cs4400.service_backend.entity.Property;
+import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.vo.ReserveInfo;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.sql.Date;
 import java.util.List;
 
 @Mapper

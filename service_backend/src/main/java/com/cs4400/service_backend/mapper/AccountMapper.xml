@@ -64,7 +64,7 @@
         (#{customer_email}, #{cc_number}, #{cvv}, #{exp_date}, #{location});
     </insert>
 
-    <select id="get_customer_info" resultType="com.cs4400.service_backend.vo.CustomerInfo">
+    <select id="get_customer_info" resultType="com.cs4400.service_backend.vo.ViewCustomerInfo">
         select
             concat(acc.First_Name, space(1), acc.Last_Name) as name,
             avg(rate.Score) as average_rating,
@@ -79,7 +79,7 @@
         group by cus.Email;
     </select>
 
-    <select id="get_owner_info" resultType="com.cs4400.service_backend.vo.OwnerInfo">
+    <select id="get_owner_info" resultType="com.cs4400.service_backend.vo.ViewOwnerInfo">
         select
             concat(acc.First_Name, space(1), acc.Last_Name) as name,
             avg(rate.Score) as average_rating,

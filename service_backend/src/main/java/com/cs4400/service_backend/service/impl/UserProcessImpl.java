@@ -5,14 +5,13 @@ import com.cs4400.service_backend.entity.Customer;
 import com.cs4400.service_backend.entity.Owner;
 import com.cs4400.service_backend.mapper.AccountMapper;
 import com.cs4400.service_backend.service.UserProcess;
-import com.cs4400.service_backend.vo.CustomerInfo;
-import com.cs4400.service_backend.vo.OwnerInfo;
+import com.cs4400.service_backend.vo.ViewCustomerInfo;
+import com.cs4400.service_backend.vo.ViewOwnerInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
@@ -96,12 +95,12 @@ public class UserProcessImpl implements UserProcess {
     }
 
     @Override
-    public List<CustomerInfo> getCustomerInfo() {
+    public List<ViewCustomerInfo> getCustomerInfo() {
         return accountMapper.get_customer_info();
     }
 
     @Override
-    public List<OwnerInfo> getOwnerInfo() {
+    public List<ViewOwnerInfo> getOwnerInfo() {
         return accountMapper.get_owner_info();
     }
 

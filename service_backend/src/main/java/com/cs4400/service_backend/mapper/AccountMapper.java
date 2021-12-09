@@ -2,16 +2,15 @@ package com.cs4400.service_backend.mapper;
 
 import com.cs4400.service_backend.entity.Account;
 import com.cs4400.service_backend.entity.Client;
-import com.cs4400.service_backend.entity.Owner;
 import com.cs4400.service_backend.entity.Customer;
-import com.cs4400.service_backend.vo.CustomerInfo;
+import com.cs4400.service_backend.entity.Owner;
 import com.cs4400.service_backend.vo.LoginInfo;
-import com.cs4400.service_backend.vo.OwnerInfo;
+import com.cs4400.service_backend.vo.ViewCustomerInfo;
+import com.cs4400.service_backend.vo.ViewOwnerInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface AccountMapper {
@@ -39,9 +38,9 @@ public interface AccountMapper {
    // check if email and phone_number are both unique
    Client check_account_uniqueness(String email, String phone_number);
 
-   List<CustomerInfo> get_customer_info();
+   List<ViewCustomerInfo> get_customer_info();
 
-   List<OwnerInfo> get_owner_info();
+   List<ViewOwnerInfo> get_owner_info();
 
    Integer process_date(Date currentDate);
 

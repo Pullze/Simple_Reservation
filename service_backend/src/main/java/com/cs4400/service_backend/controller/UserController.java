@@ -6,8 +6,8 @@ import com.cs4400.service_backend.entity.Owner;
 import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.Login;
 import com.cs4400.service_backend.service.UserProcess;
-import com.cs4400.service_backend.vo.CustomerInfo;
-import com.cs4400.service_backend.vo.OwnerInfo;
+import com.cs4400.service_backend.vo.ViewCustomerInfo;
+import com.cs4400.service_backend.vo.ViewOwnerInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -105,7 +105,7 @@ public class UserController {
     @ApiOperation(value = "Get all customers (admin)", notes = "Get all customers")
     public Response<?> getCustomersInfo() {
 
-        List<CustomerInfo> result = userProcess.getCustomerInfo();
+        List<ViewCustomerInfo> result = userProcess.getCustomerInfo();
         return new Response<>(HttpStatus.OK.value(), "Success", result);
 
     }
@@ -118,7 +118,7 @@ public class UserController {
     @ApiOperation(value = "Get all owners (admin)", notes = "Get all owners")
     public Response<?> getOwnerInfo() {
 
-        List<OwnerInfo> result = userProcess.getOwnerInfo();
+        List<ViewOwnerInfo> result = userProcess.getOwnerInfo();
         return new Response<>(HttpStatus.OK.value(), "Success", result);
 
     }

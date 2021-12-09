@@ -14,8 +14,6 @@
              #{flight_date}, #{cost}, #{capacity});
     </insert>
 
-
-
     <select id = "view_flight" resultType= "Flight">
         select
         f.Flight_Num,
@@ -34,7 +32,6 @@
 		having remaining_seats >= #{minSeats};
     </select>
 
-
     <select id = "check_flight_seats" resultType = "Integer">
         select Capacity - coalesce(sum(b.Num_seats), 0) as remaining_seats
         from Book as b right join Flight as f on
@@ -43,6 +40,35 @@
         group by f.Flight_Num;
     </select>
 
+    <select id="get_flight_info" resultType="com.cs4400.service_backend.vo.ViewFlightInfo">
+        select
+               flight_id as flight_id,
+               Flight_Date as flight_date,
+               airline as airline,
+               From_Airport as "from",
+               To_Airport as "to",
+               Departure_Time as departure_time,
+               Arrival_Time as arrival_time,
+               Cost as seat_cost,
+               Capacity - booked_seats as num_empty_seats,
+               Cost * charged_seats as total_spent
+        from
+             (
+                 select f.Flight_Num as flight_id,
+                        Flight_Date,
+                        f.Airline_Name as airline,
+                        From_Airport,
+                        To_Airport,
+                        Departure_Time,
+                        Arrival_Time,
+                        Cost,
+                        Capacity,
+                        coalesce(SUM(b.Num_Seats * (1 - b.Was_Cancelled)), 0) as booked_seats,
+                        coalesce(SUM(b.Num_Seats * (1 - 0.8 * b.Was_Cancelled)), 0) as charged_seats
+                 from flight as f left join book as b on
+                     b.Airline_Name = f.Airline_Name and b.Flight_Num = f.Flight_Num
+                 group by f.Airline_Name , f.Flight_Num
 
-
+             ) as temp;
+    </select>
 </mapper>

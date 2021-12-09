@@ -2,7 +2,7 @@ package com.cs4400.service_backend.service.impl;
 
 import com.cs4400.service_backend.mapper.AirportMapper;
 import com.cs4400.service_backend.service.AirportProcess;
-import com.cs4400.service_backend.vo.AirportInfo;
+import com.cs4400.service_backend.vo.ViewAirportInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,7 +15,7 @@ public class AirportProcessImpl implements AirportProcess {
     private AirportMapper airportMapper;
 
     @Override
-    public List<AirportInfo> getAirportInfo() {
+    public List<ViewAirportInfo> getAirportInfo() {
         return airportMapper.get_airport_info();
     }
 

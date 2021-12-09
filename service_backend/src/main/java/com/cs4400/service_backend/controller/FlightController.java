@@ -2,18 +2,17 @@ package com.cs4400.service_backend.controller;
 
 
 import com.cs4400.service_backend.entity.Flight;
+import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.FlightProcess;
 import com.cs4400.service_backend.vo.FlightInfo;
-import com.cs4400.service_backend.entity.Response;
+import com.cs4400.service_backend.vo.ViewFlightInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.web.bind.WebDataBinder;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Api (tags = "Flight Controller")
@@ -49,14 +48,27 @@ public class FlightController {
         return response;
     }
 
-    @GetMapping(value =  "/view_flight")
-    @ApiOperation(value = "view flight", notes = "view all flights")
-    public List<Flight> view_flight(@RequestParam(required = false) Integer minSeats) {
-        return  flightProcess.view_flight((minSeats != null)? minSeats : 0);
+    /**
+     * Get all flights.
+     * @param minSeats Minimum avaliable seats.
+     * @return Response contain all flights.
+     */
+    @GetMapping(value =  "/flights")
+    @ApiOperation(value = "Get all flights", notes = "get all flights")
+    public Response<?> getFlights(@RequestParam(required = false) Integer minSeats) {
+
+        List<Flight> result = flightProcess.view_flight((minSeats != null)? minSeats : 0);
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
 
     }
 
+    @GetMapping(value = "/view_flight")
+    @ApiOperation(value = "Get all flights (Admin)")
+    public Response<?> getFlightInfo() {
 
+        List<ViewFlightInfo> result = flightProcess.getFlightInfo();
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
 
+    }
 
 }

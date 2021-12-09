@@ -3,7 +3,7 @@ package com.cs4400.service_backend.controller;
 import com.cs4400.service_backend.entity.Airline;
 import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.AirlineProcess;
-import com.cs4400.service_backend.vo.AirlineInfo;
+import com.cs4400.service_backend.vo.ViewAirlineInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class AirlineController {
     @ApiOperation(value = "Get all airlines (admin)")
     public Response<?> getAirlineInfo() {
 
-        List<AirlineInfo> result = airlineProcess.getAirlineInfo();
+        List<ViewAirlineInfo> result = airlineProcess.getAirlineInfo();
         return new Response<>(HttpStatus.OK.value(), "Success", result);
 
     }

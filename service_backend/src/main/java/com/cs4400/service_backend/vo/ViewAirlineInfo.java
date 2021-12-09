@@ -4,10 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class AirlineInfo {
+public class ViewAirlineInfo {
 
     @ApiModelProperty(value = "Name")
-    private String name;
+    private String airline_name;
 
     @ApiModelProperty(value = "Rating")
     private Double rating;

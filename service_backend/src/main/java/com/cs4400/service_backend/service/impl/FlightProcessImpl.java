@@ -6,6 +6,7 @@ import com.cs4400.service_backend.mapper.AirportMapper;
 import com.cs4400.service_backend.mapper.FlightMapper;
 import com.cs4400.service_backend.service.FlightProcess;
 import com.cs4400.service_backend.vo.FlightInfo;
+import com.cs4400.service_backend.vo.ViewFlightInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -83,6 +84,11 @@ public class FlightProcessImpl implements FlightProcess {
     @Override
     public List<Flight> view_flight(int minSeats) {
         return flightMapper.view_flight(minSeats);
+    }
+
+    @Override
+    public List<ViewFlightInfo> getFlightInfo() {
+        return flightMapper.get_flight_info();
     }
 
 

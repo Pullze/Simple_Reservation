@@ -9,16 +9,11 @@ import com.cs4400.service_backend.service.UserProcess;
 import com.cs4400.service_backend.vo.ReserveInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 @Api(tags = "Property Controller")
@@ -90,16 +85,16 @@ public class PropertyController {
     }
 
     /**
-     *
+     *  Get all future reservations.
      * @param customerEmail customer's email
-     * @return
+     * @return Response contain of ReserveInfo
      */
     @GetMapping(value = "/customer-future-reservations")
     @ApiOperation(value ="customer future reservations", notes = "customer future reservations")
-    public List<ReserveInfo> viewCustomerFutureReservations(@RequestParam String customerEmail) {
+    public Response<?> viewCustomerFutureReservations(@RequestParam String customerEmail) {
         List<ReserveInfo> result = propertyProcess.viewCustomerFutureReservations(customerEmail);
         System.out.println(result);
-        return result;
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 }
 

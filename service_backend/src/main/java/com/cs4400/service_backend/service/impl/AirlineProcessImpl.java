@@ -3,7 +3,7 @@ package com.cs4400.service_backend.service.impl;
 import com.cs4400.service_backend.entity.Airline;
 import com.cs4400.service_backend.mapper.AirlineMapper;
 import com.cs4400.service_backend.service.AirlineProcess;
-import com.cs4400.service_backend.vo.AirlineInfo;
+import com.cs4400.service_backend.vo.ViewAirlineInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +21,7 @@ public class AirlineProcessImpl implements AirlineProcess {
     }
 
     @Override
-    public List<AirlineInfo> getAirlineInfo() {
+    public List<ViewAirlineInfo> getAirlineInfo() {
         return airlineMapper.get_airline_info();
     }
 

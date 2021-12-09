@@ -2,7 +2,7 @@ package com.cs4400.service_backend.controller;
 
 import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.AirportProcess;
-import com.cs4400.service_backend.vo.AirportInfo;
+import com.cs4400.service_backend.vo.ViewAirportInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class AirportController {
     @ApiOperation(value = "Get all airports (admin)")
     public Response<?> getAirportInfo() {
 
-        List<AirportInfo> result = airportProcess.getAirportInfo();
+        List<ViewAirportInfo> result = airportProcess.getAirportInfo();
         return new Response<>(HttpStatus.OK.value(), "Success", result);
 
     }

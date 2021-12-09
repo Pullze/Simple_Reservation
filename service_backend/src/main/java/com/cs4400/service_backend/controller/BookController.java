@@ -6,7 +6,9 @@ import com.cs4400.service_backend.vo.BookInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @Api (tags = "Book Controller")
 
@@ -30,8 +32,8 @@ public class BookController {
 
         Response<BookInfo> response = new Response<>(bookInfo.getBook_message(), returnBookInfo);
 
-        if (response.getMessage() == "Succeeded updating booking on this flight!" ||
-            response.getMessage() == "Succeeded booking this flight")  {
+        if (response.getMessage().equals("Succeeded updating booking on this flight!") ||
+                response.getMessage().equals("Succeeded booking this flight"))  {
             response.setCode(200);
         } else {
             response.setCode(400);

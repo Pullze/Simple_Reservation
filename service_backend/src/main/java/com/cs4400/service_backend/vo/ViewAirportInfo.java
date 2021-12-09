@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class AirportInfo {
+public class ViewAirportInfo {
 
     @ApiModelProperty(value = "Airport Id")
     private String airport_id;
