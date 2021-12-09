@@ -5,21 +5,21 @@ import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 import Highlighter from 'react-highlight-words';
 
-export default function ViewAirlines(props) {
+export default function ViewFlights(props) {
     const location = useLocation();
     console.log(location.state);
 
     const state = useState;
 
-    const [airlines, setAirlines] = state([]);
-    const [name, setName] = state("");
+    const [flights, setFlights] = state([]);
+    const [seat, setSeat] = state();
     const [filtered, setFiltered] = state([]);
 
     const highLight = () => ({
         render: text =>
             <Highlighter
                 highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                searchWords={[name]}
+                searchWords={[seat]}
                 autoEscape
                 textToHighlight={text ? text.toString() : ''}
             />
@@ -27,53 +27,87 @@ export default function ViewAirlines(props) {
 
     const columns = [
         {
-            title: 'Name',
-            dataIndex: 'airline_name',
-            key: 'airline_name',
+            title: 'ID',
+            dataIndex: 'flight_id',
+            key: 'flight_id',
+            sorter: {
+                compare: (a, b) => a.flight_id - b.flight_id,
+                multiple: 1
+            },
+        },
+        {
+            title: 'Airline',
+            dataIndex: 'airline',
+            key: 'airline',
+        },
+        {
+            title: 'From',
+            dataIndex: 'from',
+            key: 'from',
+        },
+        {
+            title: 'To',
+            dataIndex: 'to',
+            key: 'to',
+        },
+        {
+            title: 'Dept. Time',
+            dataIndex: 'departure_time',
+            key: 'departure_time',
+        },
+        {
+            title: 'Arr. Time',
+            dataIndex: 'arrival_time',
+            key: 'arrival_time',
+        },
+        {
+            title: 'Date',
+            dataIndex: 'flight_date',
+            key: 'flight_date',
+        },
+        {
+            title: 'Available Seats',
+            dataIndex: 'num_empty_seats',
+            key: 'num_empty_seats',
+            sorter: {
+                compare: (a, b) => a.num_empty_seats - b.num_empty_seats,
+                multiple: 1
+            },
             ...highLight()
         },
         {
-            title: 'Rating',
-            dataIndex: 'rating',
-            key: 'rating',
+            title: 'Cost per Seaet',
+            dataIndex: 'seat_cost',
+            key: 'seat_cost',
             sorter: {
-                compare: (a, b) => a.rating - b.rating,
+                compare: (a, b) => a.seat_cost - b.seat_cost,
                 multiple: 1
             },
         },
         {
-            title: 'Total Flights',
-            dataIndex: 'total_flights',
-            key: 'total_flights',
+            title: 'Total Spent',
+            dataIndex: 'total_spent',
+            key: 'total_spent',
             sorter: {
-                compare: (a, b) => a.total_flights - b.total_flights,
-                multiple: 1
-            },
-        },
-        {
-            title: 'Minimum Flight Cost',
-            dataIndex: 'minimum_flight_cost',
-            key: 'minimum_flight_cost',
-            sorter: {
-                compare: (a, b) => a.minimum_flight_cost - b.minimum_flight_cost,
+                compare: (a, b) => a.total_spent - b.total_spent,
                 multiple: 1
             },
         },
     ]
 
     const inputFilter = (value) => {
-        setName(value);
-        setFiltered(airlines
-            .filter(airline => airline.airline_name.toLowerCase().startsWith(value.toLowerCase()))
+        setSeat(value);
+        setFiltered(flights
+            .filter(flight => ("" + flight.num_empty_seats).startsWith(value))
         );
         console.log(filtered);
     }
 
-    function getAirlines()  {
-        axios.get('/api/view_airline')
+    function getFlights()  {
+        axios.get('/api/view_flight')
             .then((res) => {
                 console.log(res.data);
-                setAirlines(res.data.data);
+                setFlights(res.data.data);
                 setFiltered(res.data.data);
             })
             .catch((err) => {
@@ -84,7 +118,7 @@ export default function ViewAirlines(props) {
     }
     useEffect(
         () => {
-            getAirlines();
+            getFlights();
         }, []
     )
 
@@ -96,12 +130,12 @@ export default function ViewAirlines(props) {
                     <Row justify="center" align="middle" gutter={[24, 24]} >
                         <Col span={24} align="middle">
                             <h2>Now logged in as {location.state.email}</h2>
-                            <h1>View Airlines</h1>
+                            <h1>View Flights</h1>
                         </Col>
                         <Col span={24} align="middle">
                             <span>
-                                Name:
-                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"} onChange={(e) => inputFilter(e.target.value)}/>
+                                Avaliable Seats:
+                                <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"#"} onChange={(e) => inputFilter(e.target.value)}/>
                             </span>
                         </Col>
                         <Col>

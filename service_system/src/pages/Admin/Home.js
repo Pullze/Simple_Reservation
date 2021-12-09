@@ -27,6 +27,10 @@ const links = [
     path: "/admin/view-airline",
   },
   {
+    label: "View Flights",
+    path: "/admin/view-flight",
+  },
+  {
     label: "View Customers",
     path: "/admin/view-customer",
   },
