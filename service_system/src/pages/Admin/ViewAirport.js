@@ -142,7 +142,7 @@ export default function ViewAirports(props) {
                             <Col span={12} align="middle">
                                 <span>
                                     ID:
-                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"ID"} onChange={(e) => {inputFilter(e.target.value)}} />
+                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"ID"} onChange={(e) => inputFilter(e.target.value)} />
                                 </span>
                             </Col>
                             <Col span={12} align="middle">
