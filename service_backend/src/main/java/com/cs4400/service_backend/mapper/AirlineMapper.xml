@@ -7,7 +7,7 @@
 
     <select id="get_airline_info" resultType="com.cs4400.service_backend.vo.AirlineInfo">
         select
-            a.Airline_Name as name,
+            a.Airline_Name as airline_name,
             Rating as rating,
             count(Flight_Num) as total_flights,
             min(cost) as minimum_flight_cost

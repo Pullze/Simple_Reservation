@@ -97,8 +97,8 @@ function ScheduleFlight() {
       input: (
         <Select>
           {airlines.map((airline, i) => (
-            <Option key={i} value={airline.name} style={{width: "100%"}}>
-              {airline.name}
+            <Option key={i} value={airline.airline_name} style={{width: "100%"}}>
+              {airline.airline_name}
             </Option>
           ))}
         </Select>

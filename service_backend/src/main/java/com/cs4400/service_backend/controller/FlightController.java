@@ -7,6 +7,7 @@ import com.cs4400.service_backend.vo.FlightInfo;
 import com.cs4400.service_backend.entity.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.WebDataBinder;
@@ -24,7 +25,7 @@ import java.util.List;
 public class FlightController {
 
 
-    @Resource
+    @Autowired
     private FlightProcess flightProcess;
 
     @InitBinder
