@@ -16,6 +16,12 @@ public class BookController {
     @Autowired
     private BookProcess bookProcess;
 
+    /**
+     *
+     * @param bookInfo book information,
+     * fields required: flight_num, airline_name, customer_email, book_seats, flight_date
+     * @return if successful return corresponding book information from database
+     */
     @PostMapping(value = "/book_flight")
     @ApiModelProperty(value = "book flight", notes = "book flight")
     public Response<BookInfo> book_flight(@RequestBody BookInfo bookInfo) {

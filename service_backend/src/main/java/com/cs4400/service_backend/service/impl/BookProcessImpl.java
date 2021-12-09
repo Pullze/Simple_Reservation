@@ -17,6 +17,13 @@ public class BookProcessImpl implements BookProcess {
     @Resource
     private BookMapper bookMapper;
 
+    /**
+     *
+     * @param bookInfo book information,
+     * fields required: flight_num, airline_name, customer_email, book_seats, flight_date
+     * @return if successful return corresponding book information from database
+     */
+
     @Override
     public BookInfo book_flight(BookInfo bookInfo) {
 
