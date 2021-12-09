@@ -14,14 +14,12 @@ export default function ViewAirports(props) {
     const { Option } = Select;
 
     const [airports, setAirports] = state([]);
+    const [filtered, setFiltered] = state([]);
     const [timzones, setTimeZones] = state([]);
     const [id, setId] = state("");
     const [time, setTime] = state("");
     
-    const getColumnSearchProps = () => ({
-    
-        onFilter: (value, record) =>
-          record.toString().toLowerCase().includes(value.toLowerCase()),
+    const highLight = () => ({
         render: text =>
             <Highlighter
                 highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
@@ -30,13 +28,31 @@ export default function ViewAirports(props) {
                 textToHighlight={text ? text.toString() : ''}
             />
     });
+
+    const inputFilter = (value) => {
+        setId(value);
+        setFiltered(airports
+            .filter(airport => airport.time_zone.toLowerCase().includes(time.toLowerCase()))
+            .filter(airport => airport.airport_id.toLowerCase().includes(value.toLowerCase()))
+        );
+        console.log(filtered);
+    }
+
+    const handleChange = (value) => {
+        setTime(value);
+        console.log(`selected ${value}`);
+        setFiltered(airports
+            .filter(airport => airport.airport_id.toLowerCase().includes(id.toLowerCase()))
+            .filter(airport => airport.time_zone.toLowerCase().includes(value.toLowerCase()))
+        );
+    }
     
     const columns = [
         {
             title: 'ID',
             dataIndex: 'airport_id',
             key: 'airport_id',
-            ...getColumnSearchProps(),
+            ...highLight(),
         },
         {
             title: 'Airport Name',
@@ -82,6 +98,7 @@ export default function ViewAirports(props) {
             .then((res) => {
                 console.log(res.data);
                 setAirports(res.data.data);
+                setFiltered(res.data.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -94,6 +111,7 @@ export default function ViewAirports(props) {
         axios.get('/api/airport/time_zone')
             .then((res) => {
                 console.log(res.data);
+                res.data.data.unshift("");
                 setTimeZones(res.data.data);
             })
             .catch((err) => {
@@ -101,11 +119,6 @@ export default function ViewAirports(props) {
             }
         );
             
-    }
-
-    const handleChange = (value) => {
-        setTime(value);
-        console.log(`selected ${value}`);
     }
 
     useEffect(
@@ -129,7 +142,7 @@ export default function ViewAirports(props) {
                             <Col span={12} align="middle">
                                 <span>
                                     ID:
-                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"ID"} onChange={(e) => {setId(e.target.value)}} />
+                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"ID"} onChange={(e) => {inputFilter(e.target.value)}} />
                                 </span>
                             </Col>
                             <Col span={12} align="middle">
@@ -145,7 +158,7 @@ export default function ViewAirports(props) {
                                 </span>
                             </Col>
                             <Col>
-                                <Table dataSource={airports} columns={columns}/>
+                                <Table dataSource={filtered} columns={columns}/>
                             </Col>
                         </Row>
                     </Col>
