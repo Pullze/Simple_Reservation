@@ -30,7 +30,7 @@
         From_Airport,
         To_Airport,
         Capacity - coalesce(SUM(b.Num_Seats * (1 - b.Was_Cancelled)), 0) as remaining_seats,
-		cost * coalesce(SUM(b.Num_Seats * (1 - 0.8 * b.Was_Cancelled)), 0) total_spent
+		cost * coalesce(SUM(b.Num_Seats * (1 - 0.8 * b.Was_Cancelled)), 0) as total_spent
 		from flight as f left join book as b on
         b.Airline_Name = f.Airline_Name and b.Flight_Num = f.Flight_Num
 		group by f.Airline_Name , f.Flight_Num
@@ -64,10 +64,14 @@
         update Book set Num_Seats = Num_seats + #{num_seats} where Customer = #{customer_email} and Flight_Num = #{flight_num}  and Airline_Name = #{airline_name};
     </update>
 
+
     <select id = "check_bookInfo" resultType = "BookInfo">
-        select *, #{seats_booked} as seats_booked, Cost * #{seats_booked} as book_cost, Cost * Num_Seats as total_cost
-        from Book natural join Flight where Customer = #{customer_email} and Flight_Num = #{flight_num} and Airline_Name = %{airline_name};
+       select Customer, Flight_Num, Airline_Name, Num_Seats, #{seats_booked} as seats_booked, Cost * #{seats_booked} as book_cost, Cost * Num_Seats as total_cost
+      from Book natural join Flight where Customer = #{customer_email} and Flight_Num = #{flight_num} and Airline_Name = %{airline_name};
     </select>
+
+
+
 
     <insert id = "book_new_flight" >
         insert into Book(Customer, Flight_Num, Airline_Name, Num_Seats, Was_Cancelled)

@@ -4,6 +4,7 @@ import com.cs4400.service_backend.entity.Airport;
 import com.cs4400.service_backend.entity.Book;
 import com.cs4400.service_backend.entity.Flight;
 import com.cs4400.service_backend.vo.BookInfo;
+import com.cs4400.service_backend.vo.FlightInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.Date;

@@ -83,9 +83,10 @@ public class FlightProcessImpl implements FlightProcess {
                 return new BookInfo("No sufficient seats to book!");
             } else{
                 flightMapper.update_book(flight_num, airline_name, customer_email, num_seats);
-                BookInfo bookInfo = flightMapper.check_bookIfo(flight_num, airline_name, customer_email, num_seats);
-                bookInfo.setBook_message("Succeeded updating booking on this flight!");
+               BookInfo bookInfo = flightMapper.check_bookIfo(flight_num, airline_name, customer_email, num_seats);
+                 bookInfo.setBook_message("Succeeded updating booking on this flight!");
                 return bookInfo;
+              //  return null;
             }
         } else if (flightMapper.check_book_by_date(customer_email, flight_date) != null) {
             return new BookInfo("Already booked a flight on this date");
@@ -93,9 +94,10 @@ public class FlightProcessImpl implements FlightProcess {
             return new BookInfo("No sufficient seats to book!");
         } else {
             flightMapper.book_new_flight(flight_num, airline_name, customer_email, num_seats);
-            BookInfo bookInfo = flightMapper.check_bookIfo(flight_num, airline_name, customer_email, num_seats);
+             BookInfo bookInfo = flightMapper.check_bookIfo(flight_num, airline_name, customer_email, num_seats);
             bookInfo.setBook_message("Succeeded booking this flight");
-            return bookInfo;
+             return bookInfo;
+          //  return null;
         }
 
 
