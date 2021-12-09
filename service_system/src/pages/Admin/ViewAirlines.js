@@ -64,7 +64,7 @@ export default function ViewAirlines(props) {
     const inputFilter = (value) => {
         setName(value);
         setFiltered(airlines
-            .filter(airline => airline.name.toLowerCase().includes(value.toLowerCase()))
+            .filter(airline => airline.name.toLowerCase().startsWith(value.toLowerCase()))
         );
         console.log(filtered);
     }

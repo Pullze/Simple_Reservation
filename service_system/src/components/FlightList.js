@@ -40,8 +40,8 @@ function FlightList() {
   }, []);
 
   return (
-    <Row justify="center">
-      <Col xs={22} sm={20} md={16} lg={15} xl={15}>
+    <Row justify="space-around" style={{minWidth: "100%"}}>
+      <Col span={18}>
         <Table dataSource={flights} columns={columns} />
       </Col>
     </Row>
