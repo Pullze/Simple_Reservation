@@ -18,7 +18,7 @@ public interface PropertyMapper {
 
    Reserve checkReserveExist(String propertyName, String ownerEmail, String customerEmail);
 
-   Reserve checkReserveCondition(String customerEmail, Date startDate, Date endDate);
+   List<Reserve> checkReserveCondition(String customerEmail, Date startDate, Date endDate);
 
    void reserveProperty(String propertyName, String ownerEmail, String customerEmail, Date startDate, Date endDate, Integer numGuests);
 

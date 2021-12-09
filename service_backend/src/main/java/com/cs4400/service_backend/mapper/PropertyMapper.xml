@@ -32,16 +32,18 @@
         where ifnull(r.reserved_seats, 0) &lt; p.capacity;
     </select>
 
-<!--    check the propertyName, ownerEmail, Customer unique in the system -->
+<!--    check the propertyName, ownerEmail, Customer unique in the system. return property for bad request. -->
     <select id = "checkReserveExist" resultType = "Reserve">
         select * from reserve
-            where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail} and Customer = #{customer};
+            where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail} and Customer = #{customerEmail};
     </select>
 
-    <!--    check the property reserve overlap with previous reserve for other properties -->
+    <!--    check the property reserve overlap with previous reserve for other properties. return property if overlap -->
     <select id = "checkReserveCondition" resultType = "Reserve">
         select * from reserve
-        where Customer = #{customerEmail};
+        where Customer = #{customerEmail} and
+              ((Start_Date between #{startDate} and #{endDate}) or (End_Date between #{startDate} and #{endDate})
+                   or (Start_Date &lt; #{startDate} and End_Date > #{endDate}));
     </select>
 
     <insert id="reserveProperty">
