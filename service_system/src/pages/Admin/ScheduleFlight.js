@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router";
+import { Link } from "react-router-dom";
 import {
   Layout,
   Row,
@@ -12,6 +13,9 @@ import {
   TimePicker,
   Button,
   message,
+  Result,
+  Descriptions,
+  PageHeader,
 } from "antd";
 import moment from "moment";
 import axios from "axios";
@@ -196,29 +200,24 @@ function ScheduleFlight() {
 
   if (flight.isScheduled) {
     return (
-      <Layout style={{ minHeight: "100vh", padding: "10% 20%" }} align="middle">
-        <Row justify="center" style={{ marginBottom: "5%" }}>
-          <Col span={24}>
-            <h1 className="heading">Flight Information</h1>
-          </Col>
-        </Row>
-        {Object.entries(fieldLabel).map(([name, label], i) => (
-          <Row key={i} style={{ margin: "0 30%" }} justify="center">
-            <Col span={12} align="left">
-              <p style={{ fontWeight: "bold" }}>{label}</p>
-            </Col>
-            <Col span={12} align="left">
-              <p>{flight[name]}</p>
+      <Layout style={{ minHeight: "100vh" }} align="middle">
+        <PageHeader
+          onBack={() => window.location.reload()}
+          title="Schedule Another Flight"
+        >
+          <Result status="success" title="Successfully scheduled a flight!" />
+          <Row justify="center">
+            <Col>
+              <Descriptions bordered size="default" column={1}>
+                {Object.entries(fieldLabel).map(([name, label], i) => (
+                  <Descriptions.Item label={label}>
+                    {flight[name]}
+                  </Descriptions.Item>
+                ))}
+              </Descriptions>
             </Col>
           </Row>
-        ))}
-        <Row style={{ marginTop: "5%" }}>
-          <Col span={24}>
-            <Button type="primary" onClick={handleClick}>
-              Schedule another flight
-            </Button>
-          </Col>
-        </Row>
+        </PageHeader>
       </Layout>
     );
   }
@@ -253,13 +252,22 @@ function ScheduleFlight() {
                 {formItem.input}
               </Form.Item>
             ))}
-            <Row>
-              <Col span={12}>
+            <Row justify="center" gutter={16}>
+              <Col>
                 <Form.Item>
-                  <Button htmlType="reset">Cancel</Button>
+                  <Button>
+                    <Link
+                      to={{
+                        pathname: "/admin/home",
+                        state: { email: location.state.email },
+                      }}
+                    >
+                      Back
+                    </Link>
+                  </Button>
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col>
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Schedule
