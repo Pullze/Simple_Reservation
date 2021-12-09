@@ -32,6 +32,7 @@ function App() {
         <Route exact path="/admin/view-airline" component={ViewAirlines}/>
         <Route exact path="/admin/process-date" component={ProcessDate}/>
         <Route exact path="/customer/home" component={CustomerHome} />
+        <Route exact path="/owner/home" component={OwnerHome} />
         <Route
           exact
           path="/customer/reserve-property"
