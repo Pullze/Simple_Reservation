@@ -8,6 +8,7 @@ import AdminHome from "./pages/Admin/Home";
 import ScheduleFlight from "./pages/Admin/ScheduleFlight";
 import RemoveFlights from "./pages/Admin/RemoveFlights";
 import CustomerHome from "./pages/Customer/Home";
+import ReserveProperty from "./pages/Customer/ReserveProperty";
 import OwnerHome from "./pages/Owner/Home";
 import ViewOwners from "./pages/Admin/ViewOwners";
 import ViewCustomers from "./pages/Admin/ViewCustomers";
@@ -31,6 +32,11 @@ function App() {
         <Route exact path="/admin/view-airline" component={ViewAirlines}/>
         <Route exact path="/admin/process-date" component={ProcessDate}/>
         <Route exact path="/customer/home" component={CustomerHome} />
+        <Route
+          exact
+          path="/customer/reserve-property"
+          component={ReserveProperty}
+        />
         <Route exact path="/owner/home" component={OwnerHome} />
       </Switch>
     </Router>

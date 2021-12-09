@@ -1,11 +1,10 @@
 package com.cs4400.service_backend.service.impl;
 
-import com.cs4400.service_backend.entity.Account;
+import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.mapper.PropertyMapper;
 import com.cs4400.service_backend.entity.Property;
 import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.service.PropertyProcess;
-import com.cs4400.service_backend.vo.LoginInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,7 +38,14 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public String reserveProperty(String propertyName, String ownerEmail, String customerEmail, String startDate, String endDate, Integer numGuests) {
+    public String reserveProperty(Reserve reserve) {
+        String propertyName = reserve.getProperty_name();
+        String ownerEmail = reserve.getOwner_email();
+        String customerEmail = reserve.getCustomer();
+        String startDate = reserve.getStart_date();
+        String endDate = reserve.getEnd_date();
+        Integer numGuests = reserve.getNum_guests();
+
         if (startDate.compareTo(endDate) > 0) {
             return "the end date has to after start date";
         }
@@ -55,7 +61,7 @@ public class PropertyProcessImpl implements PropertyProcess {
         }
 
         propertyMapper.reserveProperty(propertyName, ownerEmail, customerEmail, startDate, endDate,numGuests);
-        return "reserved Successfully";
+        return "Reserved succeeded!";
 
     }
 

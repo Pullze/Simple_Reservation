@@ -1,6 +1,8 @@
 package com.cs4400.service_backend.controller;
 
 import com.cs4400.service_backend.entity.Property;
+import com.cs4400.service_backend.entity.Reserve;
+import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.Login;
 import com.cs4400.service_backend.service.PropertyProcess;
 import com.cs4400.service_backend.service.UserProcess;
@@ -8,10 +10,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Date;
+import javax.validation.Valid;
+
 import java.util.List;
 
 @Api(tags = "Property Controller")
@@ -54,7 +59,7 @@ public class PropertyController {
      * @param end end date in the filter
      * @return list of available properties.
      */
-    @GetMapping(value = "/availableProperties")
+    @GetMapping(value = "/available-properties")
     @ApiOperation(value = "available Properties", notes = "available Properties")
     public List<Property> availableProperties(@RequestParam String start, @RequestParam String end) {
         List<Property> result = propertyProcess.viewAvailableProperties(start, end);
@@ -64,19 +69,22 @@ public class PropertyController {
 
     /**
      * reserve a property
-     * @param propertyName property's name
-     * @param ownerEmail owner's email
-     * @param customerEmail customer's email
-     * @param startDate start date
-     * @param endDate end date
-     * @param numGuests number of guests
+     * @param reserve reservation object
      * @return result
      */
-    @GetMapping(value = "/reserveProperty")
+    @PostMapping(value = "/reserve-property")
     @ApiOperation(value = "reserve Property", notes = "reserve Property")
-    public String reserveProperty(@RequestParam String propertyName, @RequestParam String ownerEmail, @RequestParam String customerEmail, @RequestParam String startDate, @RequestParam String endDate, @RequestParam Integer numGuests) {
-        String result = propertyProcess.reserveProperty(propertyName, ownerEmail, customerEmail, startDate, endDate, numGuests);
-        return result;
+    public Response<Reserve> reserveProperty(@RequestPart("jsonValue") @Valid Reserve reserve) {
+        String message = propertyProcess.reserveProperty(reserve);
+        Response<Reserve> response = new Response<>();
+        response.setData(reserve);
+        response.setMessage(message);
+        if (message.equals("Reserved succeeded!")) {
+            response.setCode(200);
+        } else {
+            response.setCode(400);
+        }
+        return response;
     }
 }
 

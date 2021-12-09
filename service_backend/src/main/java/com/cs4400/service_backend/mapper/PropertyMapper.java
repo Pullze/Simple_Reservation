@@ -21,5 +21,4 @@ public interface PropertyMapper {
    List<Reserve> checkReserveCondition(String customerEmail, String startDate, String endDate);
 
    void reserveProperty(String propertyName, String ownerEmail, String customerEmail, String startDate, String endDate, Integer numGuests);
-
 }
