@@ -1,9 +1,29 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import { Layout, Row, Col, Form, Input, Button, Table, message } from "antd";
+import {
+  Layout,
+  Row,
+  Col,
+  Form,
+  Input,
+  Select,
+  DatePicker,
+  Button,
+  Table,
+  Descriptions,
+  Modal,
+  message,
+} from "antd";
+import { Content } from "antd/lib/layout/layout";
+import moment from "moment";
 import axios from "axios";
 import "./EditableTable.css";
+
+const { Option } = Select;
+
+const today = moment();
+const dateFormat = "YYYY-MM-DD";
 
 const columns = [
   {
@@ -16,30 +36,26 @@ const columns = [
     dataIndex: "flight_num",
     sorter: (a, b) => +a.flight_num - +b.flight_num,
   },
-  //   {
-  //     title: "Available Seats",
-  //     dataIndex: "capacity",
-  //     sorter: (a, b) => a.capacity - b.capacity,
-  //   },
+  {
+    title: "From",
+    dataIndex: "from_airport",
+  },
+  {
+    title: "To",
+    dataIndex: "to_airport",
+  },
+  {
+    title: "Date",
+    dataIndex: "flight_date",
+  },
+  {
+    title: "Available Seats",
+    dataIndex: "remaining_seats",
+  },
   {
     title: "Number of Seats",
-    dataIndex: "num_seats",
+    dataIndex: "book_seats",
     editable: true,
-  },
-];
-
-const bookingColumns = [
-  {
-    title: "Booked Flight Num",
-    dataIndex: "flight_num",
-  },
-  {
-    title: "Number of Seats",
-    dataIndex: "num_seats",
-  },
-  {
-    title: "Amount Spent",
-    dataIndex: "total_cost",
   },
 ];
 
@@ -115,75 +131,117 @@ const EditableCell = ({
 
 function BookFlight() {
   const location = useLocation();
+  const [form] = Form.useForm();
+  const [airports, setAirports] = useState([]);
   const [flights, setFlights] = useState([]);
-  const [selectedRowKey, setSelectedRowKey] = useState(-1);
-  const [booking, setBooking] = useState(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [from, setFrom] = useState("all");
+  const [to, setTo] = useState("all");
+  const [date, setDate] = useState(null);
 
   useEffect(() => {
+    axios.get("/api/view_airport").then((res) =>
+      setAirports([
+        { value: "all", label: "All" },
+        ...res.data.data.map(({ airport_id, airport_name }) => ({
+          value: airport_id,
+          label: `${airport_name} (${airport_id})`,
+        })),
+      ])
+    );
     axios
-      .get("/api/available-flights")
-      .then((res) =>
-        setFlights(
-          res.data.map((item, i) => ({ ...item, key: i, num_seats: 0 }))
-        )
-      )
+      .get("/api/view_flight", { params: { minSeats: 1 } })
+      .then((res) => {
+        const data = res.data.map((item, i) => ({
+          ...item,
+          key: i,
+          book_seats: "0",
+        }));
+        setFlights(data);
+      })
       .catch((err) => console.error(err));
   }, []);
 
   const handleBook = () => {
-    if (selectedRowKey >= 0) {
-      const { airline_name, flight_num, capacity, cost } =
-        flights[selectedRowKey];
-      const num_seats = +flights[selectedRowKey].num_seats;
+    if (selectedRowKeys.length === 0) {
+      message.error("Please select a flight.");
+    } else {
+      const flight = flights.filter(({ key }) => key === selectedRowKeys[0])[0];
+      if (isNaN(flight.book_seats)) {
+        return message.error("Please enter an integer value.");
+      }
 
-      if (num_seats <= 0) {
+      const { airline_name, flight_num, remaining_seats } = flight;
+      const book_seats = +flight.book_seats;
+
+      if (book_seats <= 0) {
         message.error("Number of seats must be greater than 0.");
-      } else if (num_seats > capacity) {
-        message.error(
-          "Number of seats must not be greater than flight capacity."
-        );
+      } else if (book_seats > remaining_seats) {
+        message.error("Number of seats must not exceed flight capacity.");
       } else {
         const bookInfo = {
           airline_name,
           flight_num,
           customer: location.state.email,
-          num_seats,
+          book_seats,
         };
         const formData = new FormData();
         formData.append(
           "jsonValue",
           new Blob([JSON.stringify(bookInfo)], { type: "application/json" })
         );
+        console.log(bookInfo);
         axios
-          .post("/api/book-flight", formData)
+          .post("/api/book_flight", formData)
           .then((res) => {
             if (res.data.code === 200) {
-              setBooking([
-                {
-                  ...res.data.data,
-                  total_cost: res.data.data.num_seats * cost,
-                },
-              ]);
-              flights[selectedRowKey].capacity -= res.data.data.num_seats;
-              if (flights[selectedRowKey].capacity === 0) {
-                flights.splice(selectedRowKey, 1);
+              const booking = res.data.data;
+              Modal.success({
+                title: res.data.message,
+                content: (
+                  <div style={{ margin: "30px", marginLeft: 0 }}>
+                    <h4>Booking Information</h4>
+                    <Descriptions
+                      size="default"
+                      column={1}
+                      bordered
+                      // style={{ width: "500px" }}
+                    >
+                      <Descriptions.Item label="Booked Flight Number">
+                        {booking.flight_num}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Number of Seats">
+                        {booking.book_seats}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Amount Spent">
+                        {booking.book_cost}
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </div>
+                ),
+              });
+              flight.remaining_seats -= booking.book_seats;
+              flight.book_seats = 0;
+              if (flight.remaining_seats === 0) {
+                setFlights(
+                  flights.filter(({ key }) => key !== selectedRowKeys[0])
+                );
+              } else {
+                setFlights(flights);
               }
-              flights[selectedRowKey].num_seats = 0;
-              setFlights([...flights]);
+              setSelectedRowKeys([]);
             } else {
               message.error(res.data.message);
             }
           })
           .catch((err) => console.error(err));
       }
-    } else {
-      message.error("Please select a flight.");
     }
   };
 
   const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) =>
-      setSelectedRowKey(selectedRowKeys[0]),
+    selectedRowKeys,
+    onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys),
   };
 
   const handleSave = (row) => {
@@ -210,57 +268,125 @@ function BookFlight() {
     };
   });
 
+  const renderAirportSelect = (name, label, dependency) => {
+    return (
+      <Form.Item
+        name={name}
+        label={label}
+        dependencies={[dependency]}
+        rules={[
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (
+                !value ||
+                value === "all" ||
+                value !== getFieldValue(dependency)
+              ) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error("Origin and destination must not be the same.")
+              );
+            },
+          }),
+        ]}
+      >
+        <Select
+          showSearch
+          defaultValue={"All"}
+          onSelect={(value) =>
+            name === "from_airport" ? setFrom(value) : setTo(value)
+          }
+        >
+          {airports.map((airport, i) => (
+            <Option key={i} value={airport.value}>
+              {airport.label}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+    );
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Row justify="center" align="middle">
-        <Col span={24} align="middle">
-          <h2>Now logged in as {location.state.email} </h2>
-        </Col>
-        <Col span={24} align="middle">
-          <h1 className="heading">Book Flight</h1>
-        </Col>
-      </Row>
-
-      <Row justify="center" style={{ padding: "0 20%" }}>
-        <Col span={24}>
-          <Table
-            components={{ body: { row: EditableRow, cell: EditableCell } }}
-            rowClassName={() => "editable-row"}
-            rowSelection={{ type: "radio", ...rowSelection }}
-            dataSource={flights}
-            columns={flightColumns}
-            pagination={{ pageSize: "5", hideOnSinglePage: true }}
-          />
-        </Col>
-      </Row>
-      {booking && (
-        <Row justify="center">
-          <Table
-            dataSource={booking}
-            columns={bookingColumns}
-            pagination={false}
-          ></Table>
+      <Content style={{ margin: "24px 24px 24px", background: "white" }}>
+        <Row
+          justify="center"
+          align="middle"
+          style={{ margin: "24px 24px 24px" }}
+        >
+          <Col xs={22} sm={20} md={20} lg={20} xl={15} xxl={15}>
+            <Row justify="center" align="middle" gutter={[24, 24]}>
+              <Col span={24} align="middle">
+                <h2>Now logged in as {location.state.email}</h2>
+                <h1 className="heading">Book Flight</h1>
+              </Col>
+              <Col span={18} style={{ maxWidth: "500px" }}>
+                <Form form={form} name="book-flight" scrollToFirstError>
+                  <Row justify="center" gutter={8}>
+                    <Col span={24}>
+                      {renderAirportSelect(
+                        "from_airport",
+                        "From",
+                        "to_airport"
+                      )}
+                    </Col>
+                    <Col span={24}>
+                      {renderAirportSelect("to_airport", "To", "from_airport")}
+                    </Col>
+                    <Col span={24}>
+                      <Form.Item name="flight_date" label="Date">
+                        <DatePicker
+                          onChange={(value) => setDate(value)}
+                          disabledDate={(d) =>
+                            !d ||
+                            d.format(dateFormat) <= today.format(dateFormat)
+                          }
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </Col>
+              <Col span={24}>
+                <Table
+                  components={{
+                    body: { row: EditableRow, cell: EditableCell },
+                  }}
+                  rowClassName={() => "editable-row"}
+                  rowSelection={{ type: "radio", ...rowSelection }}
+                  dataSource={flights.filter(
+                    (flight) =>
+                      (from === "all" || flight.from_airport === from) &&
+                      (to === "all" || flight.to_airport === to) &&
+                      (!date || date.format(dateFormat) === flight.flight_date)
+                  )}
+                  columns={flightColumns}
+                  pagination={{ pageSize: "5", hideOnSinglePage: true }}
+                />
+              </Col>
+              <Col align="middle">
+                <Button>
+                  <Link
+                    to={{
+                      pathname: "/customer/home",
+                      state: { email: location.state.email },
+                    }}
+                  >
+                    Back
+                  </Link>
+                </Button>
+              </Col>
+              <Col align="middle">
+                <Button type="primary" onClick={handleBook}>
+                  Book Flight
+                </Button>
+              </Col>
+            </Row>
+          </Col>
         </Row>
-      )}
-      <Row justify="center" style={{ padding: "2% 40%" }}>
-        <Col span={12} align="middle">
-          <Button>
-            <Link
-              to={{
-                pathname: "/customer/home",
-                state: { email: location.state.email },
-              }}
-            >
-              Back
-            </Link>
-          </Button>
-        </Col>
-        <Col span={12} align="middle">
-          <Button type="primary" onClick={handleBook}>
-            Reserve
-          </Button>
-        </Col>
-      </Row>
+      </Content>
     </Layout>
   );
 }
