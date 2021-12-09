@@ -98,7 +98,6 @@ public class FlightProcessImpl implements FlightProcess {
             return bookInfo;
         }
 
-        return null;
 
     }
 }
