@@ -56,7 +56,7 @@ public class PropertyController {
      */
     @GetMapping(value = "/availableProperties")
     @ApiOperation(value = "available Properties", notes = "available Properties")
-    public List<Property> availableProperties(@RequestParam Date start, @RequestParam Date end) {
+    public List<Property> availableProperties(@RequestParam String start, @RequestParam String end) {
         List<Property> result = propertyProcess.viewAvailableProperties(start, end);
         System.out.println(result);
         return result;
@@ -74,7 +74,7 @@ public class PropertyController {
      */
     @GetMapping(value = "/reserveProperty")
     @ApiOperation(value = "reserve Property", notes = "reserve Property")
-    public String reserveProperty(@RequestParam String propertyName, @RequestParam String ownerEmail, @RequestParam String customerEmail, @RequestParam Date startDate, @RequestParam Date endDate, @RequestParam Integer numGuests) {
+    public String reserveProperty(@RequestParam String propertyName, @RequestParam String ownerEmail, @RequestParam String customerEmail, @RequestParam String startDate, @RequestParam String endDate, @RequestParam Integer numGuests) {
         String result = propertyProcess.reserveProperty(propertyName, ownerEmail, customerEmail, startDate, endDate, numGuests);
         return result;
     }

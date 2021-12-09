@@ -18,10 +18,10 @@ public class Reserve {
     private String customer;
 
     @ApiModelProperty(value = "Start Date")
-    private Date start_date;
+    private String start_date;
 
     @ApiModelProperty(value = "End Date")
-    private Date end_date;
+    private String end_date;
 
     @ApiModelProperty(value = "Number of Guests")
     private Integer num_guests;

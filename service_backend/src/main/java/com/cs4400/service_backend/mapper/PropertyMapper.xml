@@ -43,7 +43,7 @@
         select * from reserve
         where Customer = #{customerEmail} and
               ((Start_Date between #{startDate} and #{endDate}) or (End_Date between #{startDate} and #{endDate})
-                   or (Start_Date &lt; #{startDate} and End_Date > #{endDate}));
+                   or (Start_Date &lt;= #{startDate} and End_Date > #{endDate}));
     </select>
 
     <insert id="reserveProperty">

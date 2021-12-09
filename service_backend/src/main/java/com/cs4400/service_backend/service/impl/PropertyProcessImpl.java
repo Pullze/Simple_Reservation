@@ -31,7 +31,7 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public List<Property> viewAvailableProperties(Date start, Date end) {
+    public List<Property> viewAvailableProperties(String start, String end) {
 //        System.out.println(propertyMapper.getAllProperties());
 
         List<Property> properties = propertyMapper.viewAvailableProperties(start, end);
@@ -39,14 +39,14 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public String reserveProperty(String propertyName, String ownerEmail, String customerEmail, Date startDate, Date endDate, Integer numGuests) {
+    public String reserveProperty(String propertyName, String ownerEmail, String customerEmail, String startDate, String endDate, Integer numGuests) {
         if (startDate.compareTo(endDate) > 0) {
             return "the end date has to after start date";
         }
 
         Reserve existedReserve = propertyMapper.checkReserveExist(propertyName, ownerEmail, customerEmail);
         if (existedReserve != null) {
-            return "Reserve failed. You already reserve the " + propertyName + " from " + existedReserve.getStart_date() + " to " + existedReserve.getEnd_date() +". No multiple reserve for the same item";
+            return "Reserve failed. You already reserve the " + propertyName + " from " + existedReserve.getStart_date() + " to " + existedReserve.getEnd_date() +". No multiple reserve for the same item.";
         }
 
         List<Reserve> overlapReserve = propertyMapper.checkReserveCondition(customerEmail, startDate, endDate);
