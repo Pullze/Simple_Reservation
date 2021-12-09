@@ -44,4 +44,14 @@ public interface AccountMapper {
 
    Integer process_date(Date currentDate);
 
+   Integer del_owner_rate_customer(String email);
+
+   Integer del_customer_rate_owner(String email);
+
+   Integer del_owner(String email);
+
+   Integer del_client(String email);
+
+   Integer del_account(String email);
+
 }

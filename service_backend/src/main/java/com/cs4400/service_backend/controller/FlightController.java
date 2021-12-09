@@ -62,6 +62,10 @@ public class FlightController {
 
     }
 
+    /**
+     * Admin view all flights.
+     * @return Response contain all flightInfo for admin.
+     */
     @GetMapping(value = "/view_flight")
     @ApiOperation(value = "Get all flights (Admin)")
     public Response<?> getFlightInfo() {

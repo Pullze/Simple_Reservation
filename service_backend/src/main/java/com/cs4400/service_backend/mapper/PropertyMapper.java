@@ -23,4 +23,7 @@ public interface PropertyMapper {
    void reserveProperty(String propertyName, String ownerEmail, String customerEmail, String startDate, String endDate, Integer numGuests);
 
    List<ReserveInfo> viewCustomerFutureReservations(String customerEmail);
+
+   Boolean check_owner_has_property(String email);
+
 }

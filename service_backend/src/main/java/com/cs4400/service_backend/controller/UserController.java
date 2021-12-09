@@ -144,5 +144,26 @@ public class UserController {
 
     }
 
+    @DeleteMapping(value = "/delete_owner")
+    @ApiOperation(value = "Delete Owner", notes = "Owner delete account.")
+    public Response<?> deleteOwner(@RequestParam String email) {
+
+        int response = userProcess.deleteOwner(email);
+
+        if (response >= 0) { //Success
+            String msg = String.format("Success! There are %d related deletion.", response);
+            return new Response<>(HttpStatus.OK.value(), msg);
+        } else if (response == -1) {
+            String msg = String.format("Query Failed, your account has already been deleted. " +
+                    "Error status %d", response);
+            return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
+        } else {
+            String msg = String.format("Query Failed, please remove all properties before delete. " +
+                    "Error status %d", response);
+            return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
+        }
+
+    }
+
 }
 

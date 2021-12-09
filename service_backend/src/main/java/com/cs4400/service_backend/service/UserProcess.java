@@ -22,4 +22,6 @@ public interface UserProcess {
 
     Integer processDate(String currentDate);
 
+    Integer deleteOwner(String email);
+
 }

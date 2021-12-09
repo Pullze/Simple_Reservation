@@ -4,6 +4,7 @@ import com.cs4400.service_backend.entity.Account;
 import com.cs4400.service_backend.entity.Customer;
 import com.cs4400.service_backend.entity.Owner;
 import com.cs4400.service_backend.mapper.AccountMapper;
+import com.cs4400.service_backend.mapper.PropertyMapper;
 import com.cs4400.service_backend.service.UserProcess;
 import com.cs4400.service_backend.vo.ViewCustomerInfo;
 import com.cs4400.service_backend.vo.ViewOwnerInfo;
@@ -20,6 +21,8 @@ public class UserProcessImpl implements UserProcess {
 
     @Resource
     private AccountMapper accountMapper;
+    @Resource
+    private PropertyMapper propertyMapper;
 
     @Override
     public List<Account> getAllAccounts() {
@@ -111,6 +114,31 @@ public class UserProcessImpl implements UserProcess {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    @Override
+    public Integer deleteOwner(String email) {
+        if (accountMapper.check_owner_exist(email) == null) {
+            return  -1;
+        }
+
+        int count = 0;
+
+        if (!propertyMapper.check_owner_has_property(email)) {
+            count += accountMapper.del_owner_rate_customer(email);
+            count += accountMapper.del_customer_rate_owner(email);
+            count += accountMapper.del_owner(email);
+
+            if (accountMapper.check_customer_exist(email) == null) {
+                count += accountMapper.del_client(email);
+                count += accountMapper.del_account(email);
+            }
+
+            return count;
+
+        } else {
+            return -2;
         }
     }
 

@@ -102,4 +102,24 @@
             set Location = State
         where Flight_Date = #{currentDate};
     </update>
+
+    <delete id="del_owner_rate_customer">
+        delete from Owners_Rate_Customers where Owner_Email = #{email};
+    </delete>
+
+    <delete id="del_customer_rate_owner">
+        delete from Customers_Rate_Owners where Owner_Email = #{email};
+    </delete>
+
+    <delete id="del_owner">
+        delete from Owners where Email = #{email};
+    </delete>
+
+    <delete id="del_client">
+        delete from Clients where Email = #{email};
+    </delete>
+
+    <delete id="del_account">
+        delete from Accounts where Email = #{email};
+    </delete>
 </mapper>

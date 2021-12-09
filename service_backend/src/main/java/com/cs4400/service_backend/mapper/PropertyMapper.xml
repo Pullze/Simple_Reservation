@@ -59,4 +59,8 @@
         where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date > CURDATE() and r.Customer = #{customerEmail};
     </select>
 
+    <select id="check_owner_has_property" resultType="Boolean">
+        select exists(select * from Property where Owner_Email = #{email});
+    </select>
+
 </mapper>
