@@ -102,5 +102,13 @@ public class PropertyController {
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
+
+    @GetMapping(value = "/cancel reservation")
+    @ApiOperation(value ="cancel reservation", notes = "cancel reservation")
+    public String cancelPropertyReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail) {
+        String result = propertyProcess.cancelPropertyReservation(propertyName, ownerEmail, customerEmail);
+        System.out.println(result);
+        return result;
+    }
 }
 

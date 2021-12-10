@@ -73,7 +73,6 @@ public class UserProcessImpl implements UserProcess {
         String location = customer.getLocation();
 
         if (accountMapper.check_customer_exist(customer_email) != null) {
-
             return "The customer already exists.";
         }
 
@@ -117,6 +116,7 @@ public class UserProcessImpl implements UserProcess {
         }
     }
 
+<<<<<<< HEAD
     @Override
     public Integer deleteOwner(String email) {
         if (accountMapper.check_owner_exist(email) == null) {
@@ -141,5 +141,7 @@ public class UserProcessImpl implements UserProcess {
             return -2;
         }
     }
+=======
+>>>>>>> zhao
 
 }
