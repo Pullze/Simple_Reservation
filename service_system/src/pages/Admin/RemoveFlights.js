@@ -93,7 +93,7 @@ function RemoveFlights() {
                               <Form.Item name="airline_name" label="Airline">
                                 <Select style={{width: "100%"}}>
                                   {airlines.map((airline, i) => (
-                                    <Option value={airline.name}>{airline.name}</Option>
+                                    <Option value={airline.airline_name}>{airline.airline_name}</Option>
                                   ))}
                                 </Select>
                               </Form.Item>
