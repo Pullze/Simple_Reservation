@@ -71,7 +71,7 @@ public class PropertyController {
      */
     @PostMapping(value = "/reserve-property")
     @ApiOperation(value = "reserve Property", notes = "reserve Property")
-    public Response<Reserve> reserveProperty(@RequestPart("jsonValue") @Valid Reserve reserve) {
+    public Response<?> reserveProperty(@RequestPart("jsonValue") @Valid Reserve reserve) {
         String message = propertyProcess.reserveProperty(reserve);
         Response<Reserve> response = new Response<>();
         response.setData(reserve);
@@ -85,7 +85,7 @@ public class PropertyController {
     }
 
     /**
-     *  Get all future reservations.
+     * Get all future reservations.
      * @param customerEmail customer's email
      * @return Response contain of ReserveInfo
      */
@@ -97,6 +97,13 @@ public class PropertyController {
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
+    /**
+     * Cancel property reservation.
+     * @param propertyName the property's name.
+     * @param ownerEmail the owner Email.
+     * @param customerEmail the customer Email.
+     * @return result String.
+     */
     @GetMapping(value = "/cancel reservation")
     @ApiOperation(value ="cancel reservation", notes = "cancel reservation")
     public String cancelPropertyReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail) {

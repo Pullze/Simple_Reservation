@@ -33,7 +33,7 @@ public class FlightController {
      */
     @PostMapping(value = "/schedule_flight")
     @ApiOperation(value = "schedule flight", notes = "schedule a flight")
-    public Response<FlightInfo> schedule_flight(@RequestPart("jsonValue") @Valid FlightInfo flightInfo) {
+    public Response<?> schedule_flight(@RequestPart("jsonValue") @Valid FlightInfo flightInfo) {
 
         String message = flightProcess.schedule_flight(flightInfo).getMessage();
 
@@ -76,6 +76,13 @@ public class FlightController {
 
     }
 
+    /**
+     * Remove a flight and concurrent book from the system.
+     * @param flightNum the flight number.
+     * @param airlineName the airline name.
+     * @param currentDate the current date.
+     * @return response indicate success or not.
+     */
     @DeleteMapping(value = "/remove_flight")
     @ApiOperation(value = "Remove flight", notes = "remove a flight")
     public Response<?> removeFlight(@RequestParam String flightNum, @RequestParam String airlineName,
