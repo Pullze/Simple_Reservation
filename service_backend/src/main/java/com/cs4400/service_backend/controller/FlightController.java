@@ -120,7 +120,7 @@ public class FlightController {
             String msg = String.format("Success! There are %d related removed.", response);
             return new Response<>(HttpStatus.OK.value(), msg);
         } else if (response == -1) {
-            String msg = String.format("Query Failed, Check your date format. Error status %d", response);
+            String msg = String.format("Failed, Check your date format. Error status %d", response);
             return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
         } else if (response == -2) {
             String msg = String.format("Caution! The passed in date is NOT current date. %d", response);

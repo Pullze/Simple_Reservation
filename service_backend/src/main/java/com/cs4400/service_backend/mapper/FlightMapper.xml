@@ -106,12 +106,11 @@
                     Flight_Date &lt;= #{end_date} and Flight_Date &gt;= #{start_date}
                 </if>
                 <if test="airline_name != null and airline_name != ''">
-                    Airline_Name = #{airline_name}
+                    and Airline_Name = #{airline_name}
                 </if>
                 <if test="flight_num != null and flight_num != ''">
-                    Flight_Num = #{flight_num}
+                    and Flight_Num = #{flight_num}
                 </if>
             </where>
-        order by Flight_Date asc
     </select>
 </mapper>

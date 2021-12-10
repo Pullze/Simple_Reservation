@@ -11,9 +11,12 @@ import {
   Select,
   Button,
   Space,
+  Table,
+  message,
+  Modal,
+  Result
 } from "antd";
 import moment from "moment";
-import FlightList from "../../components/FlightList";
 import axios from "axios";
 import { Content } from "antd/lib/layout/layout";
 
@@ -27,28 +30,150 @@ function RemoveFlights() {
   const location = useLocation();
   const [form] = Form.useForm();
   const [airlines, setAirlines] = useState([]);
-  const [selectedFlight, setSelectedFlight] = useState(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRow, setSelectedRow] = useState([]);
+  const [flights, setFlights] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [airlineName, setAirlineName] = useState("");
+  const [flightNumber, setFlightNumber] = useState("");
+  const [modalState, setModalState] = useState("warning");
+  const [modalTitle, setModalTitle] = useState("");
+  const [visible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    axios.get("/api/airlines").then((res) => setAirlines(res.data.data));
+    getAirlines();
+    getFlights();
   }, []);
 
-  const handleReset = () => {};
+  const handleReset = async () => {
+    setStartDate("");
+    setEndDate("");
+    setAirlineName("");
+    setFlightNumber("");
+    setSelectedRowKeys([]);
+    setSelectedRow([]);
+    form.resetFields();
+    const res = await axios.get("/api/view_remove_flight");
+    setFlights(res.data.data.map((item, i) => ({
+      ...item,
+      key: i
+    })));
+  };
+
+  const showModal = () => {
+    setIsVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsVisible(false);
+    handleReset();
+  };
+
   const handleRemove = () => {
-    if (selectedFlight) {
-      console.log(selectedFlight);
+    if (selectedRowKeys.length === 0) {
+      message.error("Please select a flight.");
+    } else {
+      axios.delete("/api/remove_flight", {
+        params: {
+          airlineName: selectedRow[0].airline_name,
+          currentDate: today.format(dateFormat),
+          flightNum: selectedRow[0].flight_number
+        }
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.code === 200) {
+          setModalState("success");
+        } else {
+          setModalState("error");
+        }
+        setModalTitle(res.data.message);
+        showModal();
+      })
     }
   };
+
+  const selectAirline = (value) => {
+    setAirlineName(value);
+  }
+
+  const getAirlines = async () => {
+    const res = await axios.get("/api/airlines");
+    res.data.data.unshift("");
+    setAirlines(res.data.data);
+  }
+  
+
+  const getFlights = async () => {
+   
+    const res = await axios.get("/api/view_remove_flight", {
+      params: {
+        startDate: startDate,
+        endDate: endDate,
+        airlineName: airlineName,
+        flightNumber: flightNumber
+      }
+    });
+
+    const flights = await res.data.data;
+    setFlights(flights.map((item, i) => ({
+      ...item,
+      key: i
+    })));
+  };
+
+
+  const columns = [
+    {
+      title: "Airline",
+      dataIndex: "airline_name",
+      key: "airline_name",
+      sorter: {
+        compare: (a, b) => a.airline_name.localeCompare(b.airline_name),
+        multiple: 1
+      },
+    },
+    {
+      title: "Flight Number",
+      dataIndex: "flight_number",
+      key: "flight_number",
+      sorter: {
+        compare: (a, b) => a.flight_number - b.flight_number,
+        multiple: 1
+      },
+    },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+      sorter: {
+        compare: (a, b) => parseInt(a.date.replaceAll('-', '')) - parseInt(b.date.replaceAll('-', '')),
+        multiple: 1
+      },
+    },
+  ];
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setSelectedRowKeys(selectedRowKeys);
+      setSelectedRow(selectedRows);
+    }
+  };
+
 
   const buttons = [
     {
       label: "Reset",
-      type: "default",
+      type: "reset",
       onClick: handleReset,
     },
     {
       label: "Filter",
       type: "default",
+      onClick: getFlights,
     },
     {
       label: "Remove",
@@ -61,6 +186,21 @@ function RemoveFlights() {
     <Layout style={{minHeight : "100vh"}}>
       <Content style={{ margin: '24px 24px 24px', background: "white"}}>
             <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}>
+              <Modal
+                visible={visible}
+                title="Alert"
+                footer={modalState === "warning" && [
+                <Button key="back" type="primary" onClick={() => handleCancel()}>
+                  OK
+                </Button>,
+                ]}
+                onCancel={() => handleCancel()}
+            >
+              <Result
+                status={modalState}
+                title={modalTitle}
+              />
+            </Modal>
                 <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
                     <Row justify="center" align="middle" gutter={[24, 24]} >
                       <Col span={24} align="middle">
@@ -74,24 +214,25 @@ function RemoveFlights() {
                           name="remove-flight"
                           scrollToFirstError
                         >
-                          <Row justify="center" align="middle" gutter={[36, 36]} >
+                          <Row justify="center" align="middle" gutter={[24, 24]} >
                             <Col span={12} align="middle">
                               <Form.Item
                                 name="dates"
                                 label="Dates"
-                                rules={[{ required: true, message: "Please enter dates." }]}
+                                //rules={[{ required: true, message: "Please enter dates." }]}
                               >
                                 <RangePicker
                                     disabledDate={(d) =>
                                         !d || d.format(dateFormat) <= today.format(dateFormat)
                                     }
                                     style={{width: "100%"}}
+                                    onChange={(date, dateString) => {setStartDate(dateString[0]); setEndDate(dateString[1])}}
                                 />
                               </Form.Item>
                             </Col>
                             <Col span={12} align="middle">
                               <Form.Item name="airline_name" label="Airline">
-                                <Select style={{width: "100%"}}>
+                                <Select style={{width: "100%"}} onChange={selectAirline}>
                                   {airlines.map((airline, i) => (
                                     <Option value={airline.airline_name}>{airline.airline_name}</Option>
                                   ))}
@@ -109,11 +250,12 @@ function RemoveFlights() {
                             </Col>
                             <Col span={12} align="middle">
                               <Form.Item name="flight_num" label="Flight Number">
-                                <Input style={{width: "100%"}}/>
+                                <Input style={{width: "100%"}} onChange={(e) => setFlightNumber(e.target.value)}/>
                               </Form.Item>
                             </Col>
                             <Col span={24} align="middle">
-                              <FlightList />
+                              <Table dataSource={flights} rowSelection={{ type: "radio", ...rowSelection }} 
+                                columns={columns} pagination={{ pageSize: 6 }}/>
                             </Col>
                             <Col span={24} align="middle">
                               <Space size="large">

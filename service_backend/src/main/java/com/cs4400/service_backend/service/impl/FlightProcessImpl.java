@@ -139,11 +139,16 @@ public class FlightProcessImpl implements FlightProcess {
             return null;
         }
 
-        if (flightNumber.length() > 5 || airlineName.length() > 50) {
-            return null;
+        List<RemoveFlightInfo> result;
+
+        try {
+            result = flightMapper.view_remove_flight(startDate, endDate, airlineName, flightNumber);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = null;
         }
 
-        return flightMapper.view_remove_flight(startDate, endDate, airlineName, flightNumber);
+        return result;
 
     }
 
