@@ -71,7 +71,6 @@ public class UserProcessImpl implements UserProcess {
         String location = customer.getLocation();
 
         if (accountMapper.check_customer_exist(customer_email) != null) {
-
             return "The customer already exists.";
         }
 
@@ -114,5 +113,6 @@ public class UserProcessImpl implements UserProcess {
             return -1;
         }
     }
+
 
 }

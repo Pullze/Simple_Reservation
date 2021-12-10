@@ -23,4 +23,6 @@ public interface PropertyMapper {
    void reserveProperty(String propertyName, String ownerEmail, String customerEmail, String startDate, String endDate, Integer numGuests);
 
    List<ReserveInfo> viewCustomerFutureReservations(String customerEmail);
+
+   void cancelPropertytReservation(String propertyName, String ownerEmail, String customerEmail);
 }
