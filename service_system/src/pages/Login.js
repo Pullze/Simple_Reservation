@@ -84,11 +84,9 @@ export default function Login() {
       });
   };
 
-  useEffect(
-    () => {
-      history.replace("/")
-    }, []
-  )
+  useEffect(() => {
+    history.replace("/");
+  }, []);
   return (
     <Layout>
       <Content style={{ margin: "24px, 24px, 24px", background: "white" }}>
@@ -108,7 +106,7 @@ export default function Login() {
             onCancel={() => handleCancel()}
           >
             <p>
-              It seems like you are both a customer and a owner, please select
+              It seems that you are both a customer and a owner. Please select
               which panal you would like to go:
             </p>
             <Space>
