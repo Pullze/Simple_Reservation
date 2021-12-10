@@ -126,7 +126,7 @@ public class FlightController {
             String msg = String.format("Caution! The passed in date is NOT current date. %d", response);
             return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
         } else {
-            String msg = String.format("Query Failed, the flight has already been removed " +
+            String msg = String.format("Failed, the flight has already been removed " +
                     "or it's not in the future %d", response);
             return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
         }
