@@ -2,6 +2,7 @@ package com.cs4400.service_backend.mapper;
 
 import com.cs4400.service_backend.entity.Flight;
 import com.cs4400.service_backend.vo.FlightInfo;
+import com.cs4400.service_backend.vo.RemoveFlightInfo;
 import com.cs4400.service_backend.vo.ViewFlightInfo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -26,5 +27,8 @@ public interface FlightMapper {
     Integer remove_flight(String flight_num, String airline_name);
 
     Integer remove_book_flight(String flight_num, String airline_name);
+
+    List<RemoveFlightInfo> view_remove_flight(String start_date, String end_date,
+                                              String airline_name, String flight_num);
 
 }

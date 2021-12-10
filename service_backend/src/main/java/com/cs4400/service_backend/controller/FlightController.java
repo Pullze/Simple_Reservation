@@ -5,6 +5,7 @@ import com.cs4400.service_backend.entity.Flight;
 import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.FlightProcess;
 import com.cs4400.service_backend.vo.FlightInfo;
+import com.cs4400.service_backend.vo.RemoveFlightInfo;
 import com.cs4400.service_backend.vo.ViewFlightInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.Date;
 import java.util.List;
 
 @Api (tags = "Flight Controller")
@@ -73,6 +73,32 @@ public class FlightController {
 
         List<ViewFlightInfo> result = flightProcess.getFlightInfo();
         return new Response<>(HttpStatus.OK.value(), "Success", result);
+
+    }
+
+    /**
+     * Views of Remove Flight Page.
+     * @param startDate the start date.
+     * @param endDate the end date.
+     * @param airlineName the airline name.
+     * @param flightNumber the flight number.
+     * @return respond contain return flight data.
+     */
+    @GetMapping(value = "/view_remove_flight")
+    @ApiOperation(value = "View Flight (Remove)")
+    public Response<?>  viewRemoveFlight(@RequestParam(required = false) String startDate,
+                                         @RequestParam(required = false) String endDate,
+                                         @RequestParam(required = false) String airlineName,
+                                         @RequestParam(required = false) String flightNumber) {
+
+        List<RemoveFlightInfo> result = flightProcess.viewRemoveFlight(startDate,  endDate, airlineName, flightNumber);
+
+        if (result == null) {
+            String msg = String.format("Query Failed, Check your input format. Error status %d", -1);
+            return new Response<>(HttpStatus.BAD_REQUEST.value(), msg, null);
+        } else {
+            return new Response<>(HttpStatus.OK.value(), "Success", result);
+        }
 
     }
 

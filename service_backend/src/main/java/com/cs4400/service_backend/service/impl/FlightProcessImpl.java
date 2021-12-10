@@ -6,6 +6,7 @@ import com.cs4400.service_backend.mapper.AirportMapper;
 import com.cs4400.service_backend.mapper.FlightMapper;
 import com.cs4400.service_backend.service.FlightProcess;
 import com.cs4400.service_backend.vo.FlightInfo;
+import com.cs4400.service_backend.vo.RemoveFlightInfo;
 import com.cs4400.service_backend.vo.ViewFlightInfo;
 import org.springframework.stereotype.Service;
 
@@ -120,6 +121,29 @@ public class FlightProcessImpl implements FlightProcess {
         }
 
         return count;
+
+    }
+
+    @Override
+    public List<RemoveFlightInfo> viewRemoveFlight(String startDate, String endDate, String airlineName, String flightNumber) {
+
+        try {
+            if (startDate != null && !startDate.equals("")) {
+                Date.valueOf(startDate);
+            }
+            if (endDate != null && !endDate.equals("")) {
+                Date.valueOf(endDate);
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (flightNumber.length() > 5 || airlineName.length() > 50) {
+            return null;
+        }
+
+        return flightMapper.view_remove_flight(startDate, endDate, airlineName, flightNumber);
 
     }
 
