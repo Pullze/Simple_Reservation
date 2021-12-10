@@ -14,4 +14,6 @@ public interface FlightProcess {
 
     List<ViewFlightInfo> getFlightInfo();
 
+    Integer removeFlight(String flightNum, String airlineName, String currentDate);
+
 }

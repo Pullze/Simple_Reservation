@@ -10,6 +10,8 @@ import com.cs4400.service_backend.vo.ViewFlightInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -91,5 +93,34 @@ public class FlightProcessImpl implements FlightProcess {
         return flightMapper.get_flight_info();
     }
 
+    @Override
+    public Integer removeFlight(String flightNum, String airlineName, String currentDate) {
+
+        Date paramDate;
+        try {
+            paramDate = Date.valueOf(currentDate); // convert string currentDate param to java.sql.Date
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return -1;
+        }
+
+        Date realDate = Date.valueOf(LocalDate.now());
+
+        if (false && !realDate.equals(paramDate)) { // check if the passed-in date is really today
+            return -2;
+        }
+
+        Integer count = 0;
+
+        if (!flightMapper.check_if_future_flight(flightNum, airlineName, paramDate)) { // check if is future flight
+            return -3;
+        } else {
+            count += flightMapper.remove_book_flight(flightNum, airlineName);
+            count += flightMapper.remove_flight(flightNum, airlineName);
+        }
+
+        return count;
+
+    }
 
 }

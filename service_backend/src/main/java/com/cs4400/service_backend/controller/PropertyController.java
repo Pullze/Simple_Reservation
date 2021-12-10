@@ -25,12 +25,6 @@ import java.util.List;
 public class PropertyController {
 
     @Autowired
-    private UserProcess userProcess;
-
-    @Autowired
-    private Login login;
-
-    @Autowired
     private PropertyProcess propertyProcess;
 
     /**

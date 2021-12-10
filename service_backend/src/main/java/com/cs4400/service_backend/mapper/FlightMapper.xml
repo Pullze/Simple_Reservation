@@ -71,4 +71,22 @@
 
              ) as temp;
     </select>
+
+    <select id="check_if_future_flight" resultType="Boolean">
+        select exists(
+            select *
+            from Flight
+            where Flight_Num = #{flight_num}
+              and #{airline_name} = Airline_Name
+              and #{current_date} &lt; Flight_Date
+           )
+    </select>
+
+    <delete id="remove_book_flight">
+        delete from Book where book.Flight_Num = #{flight_num} and book.Airline_Name = #{airline_name};
+    </delete>
+
+    <delete id="remove_flight">
+        delete from Flight where flight.Flight_Num = #{flight_num} and flight.Airline_Name = #{airline_name};
+    </delete>
 </mapper>

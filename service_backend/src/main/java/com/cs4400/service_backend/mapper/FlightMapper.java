@@ -5,6 +5,7 @@ import com.cs4400.service_backend.vo.FlightInfo;
 import com.cs4400.service_backend.vo.ViewFlightInfo;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.sql.Date;
 import java.util.List;
 
 @Mapper
@@ -19,5 +20,11 @@ public interface FlightMapper {
     List<Flight> view_flight(int minSeats);
 
     List<ViewFlightInfo> get_flight_info();
+
+    Boolean check_if_future_flight(String flight_num, String airline_name, Date current_date);
+
+    Integer remove_flight(String flight_num, String airline_name);
+
+    Integer remove_book_flight(String flight_num, String airline_name);
 
 }

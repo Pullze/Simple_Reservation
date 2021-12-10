@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Date;
 import java.util.List;
 
 @Api (tags = "Flight Controller")
@@ -50,7 +51,7 @@ public class FlightController {
 
     /**
      * Get all flights.
-     * @param minSeats Minimum avaliable seats.
+     * @param minSeats Minimum available seats.
      * @return Response contain all flights.
      */
     @GetMapping(value =  "/flights")
@@ -72,6 +73,30 @@ public class FlightController {
 
         List<ViewFlightInfo> result = flightProcess.getFlightInfo();
         return new Response<>(HttpStatus.OK.value(), "Success", result);
+
+    }
+
+    @DeleteMapping(value = "/remove_flight")
+    @ApiOperation(value = "Remove flight", notes = "remove a flight")
+    public Response<?> removeFlight(@RequestParam String flightNum, @RequestParam String airlineName,
+                                    @RequestParam String currentDate) {
+
+        int response = flightProcess.removeFlight(flightNum, airlineName, currentDate);
+
+        if (response >= 0) { //Success
+            String msg = String.format("Success! There are %d related removed.", response);
+            return new Response<>(HttpStatus.OK.value(), msg);
+        } else if (response == -1) {
+            String msg = String.format("Query Failed, Check your date format. Error status %d", response);
+            return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
+        } else if (response == -2) {
+            String msg = String.format("Caution! The passed in date is NOT current date. %d", response);
+            return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
+        } else {
+            String msg = String.format("Query Failed, the flight has already been removed " +
+                    "or it's not in the future %d", response);
+            return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
+        }
 
     }
 
