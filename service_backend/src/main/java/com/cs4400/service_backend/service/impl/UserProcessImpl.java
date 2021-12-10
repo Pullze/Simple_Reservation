@@ -116,7 +116,6 @@ public class UserProcessImpl implements UserProcess {
         }
     }
 
-<<<<<<< HEAD
     @Override
     public Integer deleteOwner(String email) {
         if (accountMapper.check_owner_exist(email) == null) {
@@ -141,7 +140,5 @@ public class UserProcessImpl implements UserProcess {
             return -2;
         }
     }
-=======
->>>>>>> zhao
 
 }

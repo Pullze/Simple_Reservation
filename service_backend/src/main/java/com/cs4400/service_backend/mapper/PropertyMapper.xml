@@ -62,7 +62,7 @@
     <select id="check_owner_has_property" resultType="Boolean">
         select exists(select * from Property where Owner_Email = #{email});
     </select>
-    
+
     <update id = "cancelPropertytReservation">
         Update Reserve Set Was_Cancelled = 1 where Property_Name = #{propertyName} and Customer = #{customerEmail} and Owner_Email = #{ownerEmail};
     </update>
