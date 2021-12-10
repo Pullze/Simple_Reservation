@@ -150,15 +150,16 @@ function BookFlight() {
       ])
     );
     axios
-      .get("/api/view_flight", { params: { minSeats: 1 } })
-      .then((res) => {
-        const data = res.data.map((item, i) => ({
-          ...item,
-          key: i,
-          book_seats: "0",
-        }));
-        setFlights(data);
-      })
+      .get("/api/flights", { params: { minSeats: 1 } })
+      .then((res) =>
+        setFlights(
+          res.data.data.map((item, i) => ({
+            ...item,
+            key: i,
+            book_seats: "0",
+          }))
+        )
+      )
       .catch((err) => console.error(err));
   }, []);
 
