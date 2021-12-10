@@ -151,7 +151,9 @@ function ReserveProperty() {
     if (selectedRowKeys.length === 0) {
       message.error("Please select a property.");
     } else {
-      const property = properties[selectedRowKeys[0]];
+      const property = properties.filter(
+        ({ key }) => key === selectedRowKeys[0]
+      )[0];
       const { property_name, owner_email, capacity, cost } = property;
 
       let num_guests = property.num_guests;
