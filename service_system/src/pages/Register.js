@@ -249,16 +249,20 @@ function Register() {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Content style={{ margin: '24px 24px 24px', background: "white"}}>
-        <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
+      <Content style={{ margin: "24px 24px 24px", background: "white" }}>
+        <Row
+          justify="center"
+          align="middle"
+          style={{ margin: "24px 24px 24px" }}
+        >
           <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
-            <Row justify="center" align="middle" gutter={[24, 24]} >
+            <Row justify="center" align="middle" gutter={[24, 24]}>
               <Col span={24} align="middle">
                 <h1 className="heading">Register Account</h1>
               </Col>
               <Col span={24} align="middle">
                 <Tabs defaultActiveKey="1" type="card" centered>
-                  <TabPane tab="Customer" key="1" >
+                  <TabPane tab="Customer" key="1">
                     <Form
                       form={form}
                       name="register"
@@ -301,7 +305,8 @@ function Register() {
                             rules={[
                               {
                                 required: true,
-                                message: "Please enter your card's expiration month.",
+                                message:
+                                  "Please enter your card's expiration month.",
                               },
                               validators.expiration_month,
                             ]}
@@ -314,7 +319,8 @@ function Register() {
                             rules={[
                               {
                                 required: true,
-                                message: "Please enter your card's expiration year.",
+                                message:
+                                  "Please enter your card's expiration year.",
                               },
                               validators.expiration_year,
                             ]}

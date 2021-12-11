@@ -42,7 +42,7 @@ const links = [
 function Home() {
   const location = useLocation();
   return (
-    <Layout>
+    <Layout style={{ minHeight: "100vh" }}>
       <Content style={{ margin: "24px", background: "white" }}>
         <Row
           className="admin-home-row"
