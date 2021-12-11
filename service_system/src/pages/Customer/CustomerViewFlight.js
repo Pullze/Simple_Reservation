@@ -30,27 +30,27 @@ export default function CustomerViewFlight(props) {
     const columns = [
         {
             title: 'ID',
-            dataIndex: 'flight_id',
-            key: 'flight_id',
+            dataIndex: 'flight_num',
+            key: 'flight_num',
             sorter: {
-                compare: (a, b) => a.flight_id - b.flight_id,
+                compare: (a, b) => a.flight_num - b.flight_num,
                 multiple: 1
             },
         },
         {
             title: 'Airline',
-            dataIndex: 'airline',
-            key: 'airline',
+            dataIndex: 'airline_name',
+            key: 'airline_name',
         },
         {
             title: 'From',
-            dataIndex: 'from',
-            key: 'from',
+            dataIndex: 'from_airport',
+            key: 'from_airport',
         },
         {
             title: 'To',
-            dataIndex: 'to',
-            key: 'to',
+            dataIndex: 'to_airport',
+            key: 'to_airport',
         },
         {
             title: 'Dept. Time',
@@ -69,20 +69,20 @@ export default function CustomerViewFlight(props) {
         },
         {
             title: 'Available Seats',
-            dataIndex: 'num_empty_seats',
-            key: 'num_empty_seats',
+            dataIndex: 'remaining_seats',
+            key: 'remaining_seats',
             sorter: {
-                compare: (a, b) => a.num_empty_seats - b.num_empty_seats,
+                compare: (a, b) => a.remaining_seats - b.remaining_seats,
                 multiple: 1
             },
             ...highLight()
         },
         {
             title: 'Cost per Seaet',
-            dataIndex: 'seat_cost',
-            key: 'seat_cost',
+            dataIndex: 'cost',
+            key: 'cost',
             sorter: {
-                compare: (a, b) => a.seat_cost - b.seat_cost,
+                compare: (a, b) => a.cost - b.cost,
                 multiple: 1
             },
         }
@@ -97,7 +97,7 @@ export default function CustomerViewFlight(props) {
     }
 
     function getFlights()  {
-        axios.get('/api/view_flight')
+        axios.get('/api/customer_view_flights')
             .then((res) => {
                 console.log(res.data);
                 setFlights(res.data.data);
@@ -120,7 +120,7 @@ export default function CustomerViewFlight(props) {
         <Layout style={{minHeight : "100vh"}}>
             <Content style={{ margin: '24px 24px 24px', background: "white"}}>
                 <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
-                    <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+                    <Col xs={22} sm={20} md={17} lg={17} xl={16} xxl={15}>
                         <Row justify="center" align="middle" gutter={[24, 24]} >
                             <Col span={24} align="middle">
                                 <h2>Now logged in as {location.state.email}</h2>
