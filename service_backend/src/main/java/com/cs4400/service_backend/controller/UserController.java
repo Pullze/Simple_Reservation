@@ -148,7 +148,7 @@ public class UserController {
      * @param email the owen Email.
      * @return response indicate success or not.
      */
-    @DeleteMapping(value = "/delete_owner")
+    @DeleteMapping(value = "/delete_owner") // -> /owner/delete
     @ApiOperation(value = "Delete Owner", notes = "Owner delete account.")
     public Response<?> deleteOwner(@RequestParam String email) {
 
