@@ -41,7 +41,7 @@
     <!--    check the property reserve overlap with previous reserve for other properties. return property if overlap -->
     <select id = "checkReserveCondition" resultType = "Reserve">
         select * from reserve
-        where Customer = #{customerEmail} and
+        where Customer = #{customerEmail} and Was_Cancelled = 0 and
               ((Start_Date between #{startDate} and #{endDate}) or (End_Date between #{startDate} and #{endDate})
                    or (Start_Date &lt;= #{startDate} and End_Date > #{endDate}));
     </select>
@@ -63,8 +63,30 @@
         select exists(select * from Property where Owner_Email = #{email});
     </select>
 
-    <update id = "cancelPropertytReservation">
+    <update id = "cancelPropertyReservation" >
         Update Reserve Set Was_Cancelled = 1 where Property_Name = #{propertyName} and Customer = #{customerEmail} and Owner_Email = #{ownerEmail};
+    </update>
+
+    <select id = "viewCustomerPastReservations" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
+        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ',', p.City, ',', p.State, ',', p.Zip) as address, review.content as review, review.Score as rating
+        from reserve as r left join review on r.Customer = review.Customer and r.Owner_Email = review.Owner_Email, property as p
+        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date &lt; CURDATE() and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
+    </select>
+
+    <select id = "viewOwnersToRate" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
+        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ',', p.City, ',', p.State, ',', p.Zip) as address, rate.Score as rating
+        from reserve as r left join customers_rate_owners as rate on r.Customer = rate.Customer and r.Owner_Email = rate.Owner_Email, property as p
+        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date &lt; CURDATE() and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
+    </select>
+
+    <update id = "reviewReservation" >
+        insert into review (Property_Name, Owner_Email, Customer, Content, Score) values
+            (#{propertyName}, #{ownerEmail}, #{customerEmail}, #{content}, #{score});
+    </update>
+
+    <update id = "rateOwner" >
+        insert into Customers_Rate_Owners (Customer, Owner_Email, Score) VALUES
+            (#{customerEmail}, #{ownerEmail}, #{score});
     </update>
 
 </mapper>

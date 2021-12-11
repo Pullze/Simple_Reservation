@@ -13,7 +13,9 @@ import {
   Table,
   Descriptions,
   Modal,
+  Result,
   message,
+  Spin
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import moment from "moment";
@@ -47,10 +49,34 @@ const columns = [
   {
     title: "Date",
     dataIndex: "flight_date",
+    sorter: {
+      compare: (a, b) => parseInt(a.flight_date.replaceAll('-', '')) - parseInt(b.flight_date.replaceAll('-', '')),
+      multiple: 1
+    },
+  },
+  {
+    title: "Departure Time",
+    dataIndex: "departure_time",
+    sorter: {
+      compare: (a, b) => parseInt(a.departure_time.replaceAll(':', '')) - parseInt(b.departure_time.replaceAll(':', '')),
+      multiple: 1
+    },
+  },
+  {
+    title: "Arrival Time",
+    dataIndex: "arrival_time",
+    sorter: {
+      compare: (a, b) => parseInt(a.arrival_time.replaceAll(':', '')) - parseInt(b.arrival_time.replaceAll(':', '')),
+      multiple: 1
+    },
   },
   {
     title: "Available Seats",
     dataIndex: "remaining_seats",
+    sorter: {
+      compare: (a, b) => a.remaining_seats - b.remaining_seats,
+      multiple: 1
+    },
   },
   {
     title: "Number of Seats",
@@ -135,6 +161,13 @@ function BookFlight() {
   const [airports, setAirports] = useState([]);
   const [flights, setFlights] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [booking, setBooking] = useState({
+    flight_num: null,
+    book_seats: null,
+    boot_cost: null,
+    is_booked: false,
+  });
   const [from, setFrom] = useState("all");
   const [to, setTo] = useState("all");
   const [date, setDate] = useState(null);
@@ -151,15 +184,16 @@ function BookFlight() {
     );
     axios
       .get("/api/flights", { params: { minSeats: 1 } })
-      .then((res) =>
+      .then((res) => {
         setFlights(
           res.data.data.map((item, i) => ({
             ...item,
             key: i,
             book_seats: "0",
           }))
-        )
-      )
+        );
+        setLoading(false);
+      })
       .catch((err) => console.error(err));
   }, []);
 
@@ -172,7 +206,7 @@ function BookFlight() {
         return message.error("Please enter an integer value.");
       }
 
-      const { airline_name, flight_num, remaining_seats } = flight;
+      const { airline_name, flight_num, flight_date, remaining_seats } = flight;
       const book_seats = +flight.book_seats;
 
       if (book_seats <= 0) {
@@ -183,6 +217,7 @@ function BookFlight() {
         const bookInfo = {
           airline_name,
           flight_num,
+          flight_date,
           customer: location.state.email,
           book_seats,
         };
@@ -191,38 +226,17 @@ function BookFlight() {
           "jsonValue",
           new Blob([JSON.stringify(bookInfo)], { type: "application/json" })
         );
-        console.log(bookInfo);
         axios
           .post("/api/book_flight", formData)
           .then((res) => {
             if (res.data.code === 200) {
-              message.success("Success!");
-              setTimeout(() => {
-                const booking = res.data.data;
-                Modal.success({
-                  title: res.data.message,
-                  content: (
-                    <div style={{ margin: "40px 0", marginRight: "30px" }}>
-                      <h2>Booking Information</h2>
-                      <Descriptions size="default" column={1} bordered>
-                        <Descriptions.Item label="Booked Flight Number">
-                          {booking.flight_num}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Number of Seats">
-                          {booking.book_seats}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Amount Spent">
-                          {booking.book_cost}
-                        </Descriptions.Item>
-                      </Descriptions>
-                    </div>
-                  ),
-                });
-                flight.remaining_seats -= booking.book_seats;
-                flight.book_seats = 0;
-                setFlights(flights.filter((item) => item.remaining_seats > 0));
-                setSelectedRowKeys([]);
-              }, 1000);
+              const booking = res.data.data;
+              setBooking({ ...booking, is_booked: true });
+
+              flight.remaining_seats -= booking.book_seats;
+              flight.book_seats = 0;
+              setFlights(flights.filter((item) => item.remaining_seats > 0));
+              setSelectedRowKeys([]);
             } else {
               message.error(res.data.message);
             }
@@ -343,21 +357,23 @@ function BookFlight() {
                 </Form>
               </Col>
               <Col span={24}>
-                <Table
-                  components={{
-                    body: { row: EditableRow, cell: EditableCell },
-                  }}
-                  rowClassName={() => "editable-row"}
-                  rowSelection={{ type: "radio", ...rowSelection }}
-                  dataSource={flights.filter(
-                    (flight) =>
-                      (from === "all" || flight.from_airport === from) &&
-                      (to === "all" || flight.to_airport === to) &&
-                      (!date || date.format(dateFormat) === flight.flight_date)
-                  )}
-                  columns={flightColumns}
-                  pagination={{ pageSize: "5", hideOnSinglePage: true }}
-                />
+                <Spin spinning={loading}>
+                   <Table
+                    components={{
+                      body: { row: EditableRow, cell: EditableCell },
+                    }}
+                    rowClassName={() => "editable-row"}
+                    rowSelection={{ type: "radio", ...rowSelection }}
+                    dataSource={flights.filter(
+                      (flight) =>
+                        (from === "all" || flight.from_airport === from) &&
+                        (to === "all" || flight.to_airport === to) &&
+                        (!date || date.format(dateFormat) === flight.flight_date)
+                    )}
+                    columns={flightColumns}
+                    pagination={{ pageSize: "5", hideOnSinglePage: true }}
+                  />
+                </Spin>
               </Col>
               <Col align="middle">
                 <Button>
@@ -376,6 +392,37 @@ function BookFlight() {
                   Book Flight
                 </Button>
               </Col>
+              <Modal
+                visible={booking.is_booked}
+                footer={[
+                  <Button
+                    onClick={() => setBooking({ ...booking, is_booked: false })}
+                  >
+                    OK
+                  </Button>,
+                ]}
+                onCancel={() => setBooking({ ...booking, is_booked: false })}
+              > 
+                 <Result
+                  status="success"
+                  title={`You have successfully booked ${booking.book_seats} seat(s) on Flight ${booking.flight_num}.`}
+                  extra={
+                    <div style={{ background: "white" }}>
+                      <Descriptions size="default" column={1} bordered>
+                        <Descriptions.Item label="Booked Flight Number">
+                          {booking.flight_num}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Number of Seats">
+                          {booking.book_seats}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Amount Spent">
+                          {"$" + booking.book_cost}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </div>
+                  }
+                />
+              </Modal>
             </Row>
           </Col>
         </Row>

@@ -80,7 +80,7 @@ function CancelFlight() {
     if (selectedRowKeys.length === 0) {
       message.error("Please select a flight.");
     } else {
-      const flight = flights[selectedRowKeys[0]];
+      const flight = flights.filter(({ key }) => key === selectedRowKeys[0])[0];
       const { airline_name, flight_num } = flight;
       const formData = new FormData();
       formData.append(

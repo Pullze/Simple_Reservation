@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,15 +69,60 @@ public class PropertyProcessImpl implements PropertyProcess {
 
     @Override
     public List<ReserveInfo> viewCustomerFutureReservations(String customerEmail) {
-        System.out.println(propertyMapper.viewCustomerFutureReservations(customerEmail));
-
+//        System.out.println(propertyMapperr.viewCustomerFutureReservations(customerEmail));
         return propertyMapper.viewCustomerFutureReservations(customerEmail);
     }
 
     @Override
+    public List<ReserveInfo> viewCustomerPastReservations(String customerEmail) {
+        return propertyMapper.viewCustomerPastReservations(customerEmail);
+    }
+
+    @Override
+    public List<ReserveInfo> viewReservationsToReview(String customerEmail) {
+        List<ReserveInfo> pastReservations = propertyMapper.viewCustomerPastReservations(customerEmail);
+        ArrayList<ReserveInfo> reservationsToReview = new ArrayList<>();
+        for (ReserveInfo reservation: pastReservations) {
+            if (reservation.getReview() == null) {
+                reservationsToReview.add(reservation);
+            }
+        }
+        return reservationsToReview;
+    }
+
+    @Override
     public String cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail) {
-        propertyMapper.cancelPropertytReservation(propertyName, ownerEmail, customerEmail);
+        propertyMapper.cancelPropertyReservation(propertyName, ownerEmail, customerEmail);
         return "cancel the reservation for " + propertyName + " succeeded!";
     }
+
+    @Override
+    public String reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score) {
+        if (content == null || score == null) {
+            return "please type in valid content and score";
+        }
+        propertyMapper.reviewReservation(propertyName, ownerEmail, customerEmail, content, score);
+        return "review the reservation for " + propertyName + " succeeded!";
+    }
+
+    @Override
+    public List<ReserveInfo> viewOwnersToRate(String customerEmail) {
+        List<ReserveInfo> pastOwners = propertyMapper.viewOwnersToRate(customerEmail);
+        ArrayList<ReserveInfo> ownersToRate = new ArrayList<>();
+        for (ReserveInfo reservation: pastOwners) {
+            if (reservation.getRating() == null) {
+               ownersToRate.add(reservation);
+            }
+        }
+        return ownersToRate;
+    }
+
+    @Override
+    public String rateOwner(String ownerEmail, String customerEmail, Integer score) {
+        propertyMapper.rateOwner(ownerEmail, customerEmail, score);
+        return "rate " + ownerEmail + " succeed!";
+    }
+
+
 
 }

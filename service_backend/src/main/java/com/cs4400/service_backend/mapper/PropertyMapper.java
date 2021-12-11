@@ -23,6 +23,17 @@ public interface PropertyMapper {
    void reserveProperty(String propertyName, String ownerEmail, String customerEmail, String startDate, String endDate, Integer numGuests);
 
    List<ReserveInfo> viewCustomerFutureReservations(String customerEmail);
+
+   List<ReserveInfo> viewCustomerPastReservations(String customerEmail);
+
+   List<ReserveInfo> viewOwnersToRate(String customerEmail);
+
    Boolean check_owner_has_property(String email);
- void cancelPropertytReservation(String propertyName, String ownerEmail, String customerEmail);
+
+   void cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail);
+
+   void reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score);
+
+   void rateOwner(String ownerEmail, String customerEmail, Integer score);
+
 }

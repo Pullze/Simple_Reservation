@@ -110,7 +110,7 @@ export default function Login() {
           >
             <Result
               status="warning"
-              title="It seems like you are both a customer and a owner, please select
+              title="It seems that you are both a customer and a owner, please select
               which panal you would like to go:"
               extra={
                 <Space>

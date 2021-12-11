@@ -14,7 +14,9 @@ import {
   Table,
   message,
   Modal,
-  Result
+  Result,
+  Popconfirm,
+  Spin
 } from "antd";
 import moment from "moment";
 import axios from "axios";
@@ -40,6 +42,7 @@ function RemoveFlights() {
   const [modalState, setModalState] = useState("warning");
   const [modalTitle, setModalTitle] = useState("");
   const [visible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAirlines();
@@ -47,6 +50,7 @@ function RemoveFlights() {
   }, []);
 
   const handleReset = async () => {
+    setLoading(true);
     setStartDate("");
     setEndDate("");
     setAirlineName("");
@@ -59,6 +63,7 @@ function RemoveFlights() {
       ...item,
       key: i
     })));
+    setLoading(false);
   };
 
   const showModal = () => {
@@ -106,6 +111,8 @@ function RemoveFlights() {
   
 
   const getFlights = async () => {
+
+    setLoading(true);
    
     const res = await axios.get("/api/view_remove_flight", {
       params: {
@@ -121,6 +128,7 @@ function RemoveFlights() {
       ...item,
       key: i
     })));
+    setLoading(false);
   };
 
 
@@ -174,12 +182,7 @@ function RemoveFlights() {
       label: "Filter",
       type: "default",
       onClick: getFlights,
-    },
-    {
-      label: "Remove",
-      type: "primary",
-      onClick: handleRemove,
-    },
+    }
   ];
 
   return (
@@ -254,8 +257,10 @@ function RemoveFlights() {
                               </Form.Item>
                             </Col>
                             <Col span={24} align="middle">
-                              <Table dataSource={flights} rowSelection={{ type: "radio", ...rowSelection }} 
+                              <Spin spinning={loading}> 
+                                <Table dataSource={flights} rowSelection={{ type: "radio", ...rowSelection }} 
                                 columns={columns} pagination={{ pageSize: 6 }}/>
+                              </Spin>
                             </Col>
                             <Col span={24} align="middle">
                               <Space size="large">
@@ -278,6 +283,14 @@ function RemoveFlights() {
                                     </Button>
                                   </Form.Item>
                                 ))}
+                                <Form.Item>
+                                  <Popconfirm
+                                    title="Are you sure to delete this flight?"
+                                    onConfirm={handleRemove}
+                                  >
+                                    <Button type="default" danger> Remove </Button>
+                                  </Popconfirm>
+                                </Form.Item>
                               </Space>
                             </Col>
                           </Row>

@@ -76,7 +76,6 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
-
     }
 
     /**
@@ -149,7 +148,7 @@ public class UserController {
      * @param email the owen Email.
      * @return response indicate success or not.
      */
-    @DeleteMapping(value = "/delete_owner")
+    @DeleteMapping(value = "/delete_owner") // -> /owner/delete
     @ApiOperation(value = "Delete Owner", notes = "Owner delete account.")
     public Response<?> deleteOwner(@RequestParam String email) {
 
@@ -159,13 +158,13 @@ public class UserController {
             String msg = String.format("Success! There are %d related deletion.", response);
             return new Response<>(HttpStatus.OK.value(), msg);
         } else if (response == -1) {
-            String msg = String.format("Query Failed, your account has already been deleted. " +
+            String msg = String.format("Your account has already been deleted. " +
                     "Error status %d", response);
             return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
         } else {
-            String msg = String.format("Query Failed, please remove all properties before delete. " +
+            String msg = String.format("Please remove all properties before delete. " +
                     "Error status %d", response);
-            return new Response<>(HttpStatus.BAD_REQUEST.value(), msg);
+            return new Response<>(HttpStatus.FORBIDDEN.value(), msg);
         }
 
     }

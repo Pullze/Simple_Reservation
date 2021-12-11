@@ -11,7 +11,6 @@ public interface BookMapper {
 
     void update_book (String flight_num, String airline_name, String customer_email, int book_seats);
 
-
     // retrieve book information including the cost of new booked seats and total cost.
     BookInfo check_bookInfo (String flight_num, String airline_name, String customer_email, int book_seats);
 

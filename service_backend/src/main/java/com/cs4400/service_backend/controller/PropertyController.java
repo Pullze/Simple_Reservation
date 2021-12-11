@@ -98,18 +98,71 @@ public class PropertyController {
     }
 
     /**
+     * Get all past reservations
+     * @param customerEmail customer's email
+     * @return response contain of ReserveInfo
+     */
+    @GetMapping(value = "/customer-past-reservations")
+    @ApiOperation(value ="customer past reservations", notes = "customer past reservations")
+    public Response<?> viewCustomerPastReservations(@RequestParam String customerEmail) {
+        List<ReserveInfo> result = propertyProcess.viewCustomerPastReservations(customerEmail);
+        System.out.println(result);
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+    }
+
+    /**
+     *
+     * @param customerEmail customer's email
+     * @return
+     */
+    @GetMapping(value = "/owners-to-rate")
+    @ApiOperation(value ="customer view owners to rate", notes = "customer view owners to rate")
+    public Response<?> viewOwnersToRate(@RequestParam String customerEmail) {
+        List<ReserveInfo> result = propertyProcess.viewOwnersToRate(customerEmail);
+        System.out.println(result);
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+    }
+
+    @GetMapping(value = "/rate-owner")
+    @ApiOperation(value ="rate owner", notes = "rate owner")
+    public String reviewReservation(@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam Integer score) {
+        String result = propertyProcess.rateOwner(ownerEmail, customerEmail, score);
+        System.out.println(result);
+        return result;
+    }
+
+    /**
      * Cancel property reservation.
      * @param propertyName the property's name.
      * @param ownerEmail the owner Email.
      * @param customerEmail the customer Email.
-     * @return result String.
+     * @return Response object
      */
-    @GetMapping(value = "/cancel reservation")
+    @PostMapping(value = "/cancel_reservation")
     @ApiOperation(value ="cancel reservation", notes = "cancel reservation")
-    public String cancelPropertyReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail) {
+    public Response<?> cancelPropertyReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail) {
         String result = propertyProcess.cancelPropertyReservation(propertyName, ownerEmail, customerEmail);
+        System.out.println(result);
+        return new Response(HttpStatus.OK.value(), "");
+    }
+
+    /**
+     *
+     * @param propertyName property's name
+     * @param ownerEmail owner's email
+     * @param customerEmail cutomer's email
+     * @param content content
+     * @param score score
+     * @return
+     */
+    @GetMapping(value = "/reivew reservation")
+    @ApiOperation(value ="review reservation", notes = "review reservation")
+    public String reviewReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam String content, @RequestParam Integer score) {
+        String result = propertyProcess.reviewReservation(propertyName, ownerEmail, customerEmail, content, score);
         System.out.println(result);
         return result;
     }
+
+
 }
 

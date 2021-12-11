@@ -40,7 +40,10 @@ function ReviewProperty() {
     if (selectedRowKeys.length === 0) {
       return message.error("Please select a property to review.");
     }
-    const { property_name, owner_email } = properties[selectedRowKeys[0]];
+    const property = properties.filter(
+      ({ key }) => key === selectedRowKeys[0]
+    )[0];
+    const { property_name, owner_email } = property;
     const review = {
       property_name,
       owner_email,

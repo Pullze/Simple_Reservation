@@ -52,10 +52,6 @@ function ViewProperties() {
       .catch((err) => console.error(err));
   };
 
-  //   useEffect(() => {
-  //       getProperties();
-  //   }, [bounds]);
-
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content style={{ margin: "24px 24px 24px", background: "white" }}>
@@ -164,7 +160,7 @@ function ViewProperties() {
                 </Form>
               </Col>
               <Col span={24} align="left">
-                <h3>Expand each row to read property description!</h3>
+                <h3>Click '+' to read each property's description!</h3>
               </Col>
               <Col span={24}>
                 <Table

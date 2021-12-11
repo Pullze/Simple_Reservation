@@ -5,16 +5,15 @@ import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 import Highlighter from 'react-highlight-words';
 
-export default function ViewOwners(props) {
-
+export default function CustomerViewFlight(props) {
     const location = useLocation();
     const history = useHistory();
     console.log(location.state);
 
     const state = useState;
 
-    const [owners, setOwners] = state([]);
-    const [name, setName] = state("");
+    const [flights, setFlights] = state([]);
+    const [seat, setSeat] = state();
     const [filtered, setFiltered] = state([]);
     const [loading, setLoading] = state(true);
 
@@ -22,7 +21,7 @@ export default function ViewOwners(props) {
         render: text =>
             <Highlighter
                 highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                searchWords={[name]}
+                searchWords={[seat]}
                 autoEscape
                 textToHighlight={text ? text.toString() : ''}
             />
@@ -30,54 +29,78 @@ export default function ViewOwners(props) {
 
     const columns = [
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'ID',
+            dataIndex: 'flight_id',
+            key: 'flight_id',
+            sorter: {
+                compare: (a, b) => a.flight_id - b.flight_id,
+                multiple: 1
+            },
+        },
+        {
+            title: 'Airline',
+            dataIndex: 'airline',
+            key: 'airline',
+        },
+        {
+            title: 'From',
+            dataIndex: 'from',
+            key: 'from',
+        },
+        {
+            title: 'To',
+            dataIndex: 'to',
+            key: 'to',
+        },
+        {
+            title: 'Dept. Time',
+            dataIndex: 'departure_time',
+            key: 'departure_time',
+        },
+        {
+            title: 'Arr. Time',
+            dataIndex: 'arrival_time',
+            key: 'arrival_time',
+        },
+        {
+            title: 'Date',
+            dataIndex: 'flight_date',
+            key: 'flight_date',
+        },
+        {
+            title: 'Available Seats',
+            dataIndex: 'num_empty_seats',
+            key: 'num_empty_seats',
+            sorter: {
+                compare: (a, b) => a.num_empty_seats - b.num_empty_seats,
+                multiple: 1
+            },
             ...highLight()
         },
         {
-            title: 'Average Rating',
-            dataIndex: 'average_rating',
-            key: 'average_rating',
+            title: 'Cost per Seaet',
+            dataIndex: 'seat_cost',
+            key: 'seat_cost',
             sorter: {
-                compare: (a, b) => a.average_rating - b.average_rating,
+                compare: (a, b) => a.seat_cost - b.seat_cost,
                 multiple: 1
             },
-        },
-        {
-            title: '#Property Owned',
-            dataIndex: 'number_of_properties_owned',
-            key: 'number_of_properties_owned',
-            sorter: {
-                compare: (a, b) => a.number_of_properties_owned - b.number_of_properties_owned,
-                multiple: 1
-            },
-        },
-        {
-            title: 'Avg. Property Rating',
-            dataIndex: 'average_property_rating',
-            key: 'average_property_rating',
-            sorter: {
-                compare: (a, b) => a.average_property_rating - b.average_property_rating,
-                multiple: 1
-            },
-        },
+        }
     ]
 
     const inputFilter = (value) => {
-        setName(value);
-        setFiltered(owners
-            .filter(owner => owner.name.toLowerCase().startsWith(value.toLowerCase()))
+        setSeat(value);
+        setFiltered(flights
+            .filter(flight => ("" + flight.num_empty_seats).startsWith(value))
         );
         console.log(filtered);
     }
 
-
-    function getOwners()  {
-        axios.get('/api/view_owner')
+    function getFlights()  {
+        axios.get('/api/view_flight')
             .then((res) => {
                 console.log(res.data);
-                setOwners(res.data.data);
+                setFlights(res.data.data);
                 setFiltered(res.data.data);
                 setLoading(false);
             })
@@ -87,13 +110,12 @@ export default function ViewOwners(props) {
         );
             
     }
-
     useEffect(
         () => {
-            getOwners();
+            getFlights();
         }, []
     )
-    
+
     return(
         <Layout style={{minHeight : "100vh"}}>
             <Content style={{ margin: '24px 24px 24px', background: "white"}}>
@@ -102,13 +124,13 @@ export default function ViewOwners(props) {
                         <Row justify="center" align="middle" gutter={[24, 24]} >
                             <Col span={24} align="middle">
                                 <h2>Now logged in as {location.state.email}</h2>
-                                <h1>View Owners</h1>
+                                <h1>View Flights</h1>
                             </Col>
                             <Col span={24} align="middle">
-                                <p>
-                                    Name:
-                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"Name"} onChange={(e) => inputFilter(e.target.value)}/>
-                                </p>
+                                <span>
+                                    Avaliable Seats:
+                                    <Input style={{maxWidth: "300px", marginLeft: "8px"}} placeholder={"#"} onChange={(e) => inputFilter(e.target.value)}/>
+                                </span>
                             </Col>
                             <Col>
                                 <Spin spinning={loading}>

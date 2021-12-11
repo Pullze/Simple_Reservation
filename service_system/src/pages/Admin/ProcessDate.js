@@ -46,7 +46,7 @@ export default function ProcessDate(props) {
         <Content style={{ margin: '24px 24px 24px', background: "white"}}>
             <Row justify="center" align="middle" style={{margin: '24px 24px 24px'}}> 
                 <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
-                    <Row justify="center" align="middle" gutter={[24, 24]} style={{ minHeight: "36vh"}}>
+                    <Row justify="center" align="middle" gutter={[24, 24]} style={{ minHeight: "36vh", padding: "25% 10%"}}>
                         <Modal
                             visible={visible}
                             title="Alert"
