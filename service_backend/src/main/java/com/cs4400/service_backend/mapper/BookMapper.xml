@@ -18,7 +18,7 @@
         select Customer from Book natural join Flight where Customer = #{customer_email} and Flight_Date = #{flight_date};
     </select>
 
-    <update id = "update_book">
+    <update id = "update_book_seats">
         update Book set Num_Seats = Num_seats + #{book_seats} where Customer = #{customer_email} and Flight_Num = #{flight_num}  and Airline_Name = #{airline_name};
     </update>
 
@@ -34,8 +34,18 @@
         values (#{customer_email}, #{flight_num}, #{airline_name}, #{book_seats}, 0);
     </insert>
 
-    <delete id="remove_all_book">
+    <delete id = "remove_all_book_flight">
         delete from Book where book.Flight_Num = #{flight_num} and book.Airline_Name = #{airline_name};
     </delete>
+
+    <select id = "check_all_book_customer" resultType = "Book">
+        select * from Book where Customer = #{customer} and Was_Cancelled = 0;
+    </select>
+
+    <update id = "cancel_book">
+        update Book SET Was_Cancelled = 1
+        where Flight_Num = #{flight_num} and Airline_Name = #{airline_name} and Customer = #{customer_email} and Was_Cancelled = 0;
+    </update>
+
 
 </mapper>
