@@ -34,4 +34,8 @@
         values (#{customer_email}, #{flight_num}, #{airline_name}, #{book_seats}, 0);
     </insert>
 
+    <delete id="remove_all_book">
+        delete from Book where book.Flight_Num = #{flight_num} and book.Airline_Name = #{airline_name};
+    </delete>
+
 </mapper>

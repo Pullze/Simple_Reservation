@@ -3,6 +3,7 @@ package com.cs4400.service_backend.service.impl;
 import com.cs4400.service_backend.entity.Flight;
 import com.cs4400.service_backend.mapper.AirlineMapper;
 import com.cs4400.service_backend.mapper.AirportMapper;
+import com.cs4400.service_backend.mapper.BookMapper;
 import com.cs4400.service_backend.mapper.FlightMapper;
 import com.cs4400.service_backend.service.FlightProcess;
 import com.cs4400.service_backend.vo.FlightInfo;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,6 +28,9 @@ public class FlightProcessImpl implements FlightProcess {
 
     @Resource
     private AirportMapper airportMapper;
+
+    @Resource
+    private BookMapper bookMapper;
 
     @Override
     public FlightInfo schedule_flight(FlightInfo flightInfo) {
@@ -85,8 +90,8 @@ public class FlightProcessImpl implements FlightProcess {
 
 
     @Override
-    public List<Flight> view_flight(int minSeats) {
-        return flightMapper.view_flight(minSeats);
+    public List<Flight> customer_view_flight(int minSeats) {
+        return flightMapper.customer_view_flight(minSeats);
     }
 
     @Override
@@ -116,7 +121,7 @@ public class FlightProcessImpl implements FlightProcess {
         if (!flightMapper.check_if_future_flight(flightNum, airlineName, paramDate)) { // check if is future flight
             return -3;
         } else {
-            count += flightMapper.remove_book_flight(flightNum, airlineName);
+            count += bookMapper.remove_all_book(flightNum, airlineName);
             count += flightMapper.remove_flight(flightNum, airlineName);
         }
 
@@ -151,5 +156,8 @@ public class FlightProcessImpl implements FlightProcess {
         return result;
 
     }
+
+
+
 
 }

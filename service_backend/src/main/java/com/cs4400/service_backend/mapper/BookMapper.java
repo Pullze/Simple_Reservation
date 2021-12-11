@@ -11,6 +11,7 @@ public interface BookMapper {
 
     void update_book (String flight_num, String airline_name, String customer_email, int book_seats);
 
+
     // retrieve book information including the cost of new booked seats and total cost.
     BookInfo check_bookInfo (String flight_num, String airline_name, String customer_email, int book_seats);
 
@@ -19,4 +20,7 @@ public interface BookMapper {
     Book check_book_cancelled(String flight_num, String airline_name, String customer_email);
 
     Book check_book_by_date (String customer_email, String flight_date);
+
+    // remove all books on the flight
+    Integer remove_all_book(String flight_num, String airline_name);
 }
