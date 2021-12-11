@@ -11,6 +11,7 @@ import {
   Button,
   Table,
   Modal,
+  Result,
   Descriptions,
   message,
 } from "antd";
@@ -125,6 +126,12 @@ function ReserveProperty() {
   const [dates, setDates] = useState(null);
   const [properties, setProperties] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [reservation, setReservation] = useState({
+    property_name: null,
+    num_guests: null,
+    total_cost: null,
+    is_reserved: false,
+  });
 
   useEffect(() => {
     if (dates) {
@@ -151,7 +158,9 @@ function ReserveProperty() {
     if (selectedRowKeys.length === 0) {
       message.error("Please select a property.");
     } else {
-      const property = properties[selectedRowKeys[0]];
+      const property = properties.filter(
+        ({ key }) => key === selectedRowKeys[0]
+      )[0];
       const { property_name, owner_email, capacity, cost } = property;
 
       let num_guests = property.num_guests;
@@ -165,9 +174,7 @@ function ReserveProperty() {
       if (num_guests <= 0) {
         message.error("Number of guests must be greater than 0.");
       } else if (num_guests > capacity) {
-        message.error(
-          "Number of guests must not be greater than property capacity."
-        );
+        message.error("Number of guests must not exceed property capacity.");
       } else {
         const reserve = {
           property_name,
@@ -186,34 +193,15 @@ function ReserveProperty() {
           .post("/api/reserve-property", formData)
           .then((res) => {
             if (res.data.code === 200) {
-              message.success("Success!");
-              setTimeout(() => {
-                const reservation = res.data.data;
-                reservation.total_cost = reservation.num_guests * cost;
-                Modal.success({
-                  title: "You have successfully reserved a property.",
-                  content: (
-                    <div style={{ margin: "40px 0", marginRight: "30px" }}>
-                      <h2>Reservation Information</h2>
-                      <Descriptions size="default" column={1} bordered>
-                        <Descriptions.Item label="Booked Property Name">
-                          {reservation.property_name}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Number of Guests">
-                          {reservation.num_guests}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Amount Spent">
-                          {reservation.total_cost}
-                        </Descriptions.Item>
-                      </Descriptions>
-                    </div>
-                  ),
-                });
-                property.capacity -= reservation.num_guests;
-                property.num_guests = 0;
-                setProperties(properties.filter((item) => item.capacity > 0));
-                setSelectedRowKeys([]);
-              }, 1000);
+              const reservation = res.data.data;
+              reservation.total_cost = reservation.num_guests * cost;
+              reservation.is_reserved = true;
+              setReservation(reservation);
+
+              property.capacity -= reservation.num_guests;
+              property.num_guests = 0;
+              setProperties(properties.filter((item) => item.capacity > 0));
+              setSelectedRowKeys([]);
             } else {
               message.error(res.data.message);
             }
@@ -326,6 +314,40 @@ function ReserveProperty() {
               </Col>
             </Row>
           </Col>
+          <Modal
+            visible={reservation.is_reserved}
+            footer={[
+              <Button
+                onClick={() =>
+                  setReservation({ ...reservation, is_reserved: false })
+                }
+              >
+                OK
+              </Button>,
+            ]}
+            onCancel={() =>
+              setReservation({ ...reservation, is_reserved: false })
+            }
+          >
+            <Result
+              status="success"
+              title={`You have successfully made a reservation at ${reservation.property_name}.`}
+            >
+              <div style={{ background: "white" }}>
+                <Descriptions size="default" column={1} bordered>
+                  <Descriptions.Item label="Booked Property Name">
+                    {reservation.property_name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Number of Guests">
+                    {reservation.num_guests}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Amount Spent">
+                    {"$" + reservation.total_cost}
+                  </Descriptions.Item>
+                </Descriptions>
+              </div>
+            </Result>
+          </Modal>
         </Row>
       </Content>
     </Layout>
