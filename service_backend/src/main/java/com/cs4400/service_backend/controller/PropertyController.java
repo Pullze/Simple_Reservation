@@ -110,12 +110,25 @@ public class PropertyController {
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
-    @GetMapping(value = "/customer-reservations-to-review")
-    @ApiOperation(value ="customer reservations to review", notes = "customer reservations to review")
-    public Response<?> viewReservationsToReview(@RequestParam String customerEmail) {
-        List<ReserveInfo> result = propertyProcess.viewReservationsToReview(customerEmail);
+    /**
+     *
+     * @param customerEmail customer's email
+     * @return
+     */
+    @GetMapping(value = "/owners-to-rate")
+    @ApiOperation(value ="customer view owners to rate", notes = "customer view owners to rate")
+    public Response<?> viewOwnersToRate(@RequestParam String customerEmail) {
+        List<ReserveInfo> result = propertyProcess.viewOwnersToRate(customerEmail);
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
+    }
+
+    @GetMapping(value = "/rate-owner")
+    @ApiOperation(value ="rate owner", notes = "rate owner")
+    public String reviewReservation(@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam Integer score) {
+        String result = propertyProcess.rateOwner(ownerEmail, customerEmail, score);
+        System.out.println(result);
+        return result;
     }
 
     /**

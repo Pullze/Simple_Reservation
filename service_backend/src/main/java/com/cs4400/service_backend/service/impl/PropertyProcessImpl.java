@@ -105,4 +105,24 @@ public class PropertyProcessImpl implements PropertyProcess {
         return "review the reservation for " + propertyName + " succeeded!";
     }
 
+    @Override
+    public List<ReserveInfo> viewOwnersToRate(String customerEmail) {
+        List<ReserveInfo> pastOwners = propertyMapper.viewOwnersToRate(customerEmail);
+        ArrayList<ReserveInfo> ownersToRate = new ArrayList<>();
+        for (ReserveInfo reservation: pastOwners) {
+            if (reservation.getRating() == null) {
+               ownersToRate.add(reservation);
+            }
+        }
+        return ownersToRate;
+    }
+
+    @Override
+    public String rateOwner(String ownerEmail, String customerEmail, Integer score) {
+        propertyMapper.rateOwner(ownerEmail, customerEmail, score);
+        return "rate " + ownerEmail + " succeed!";
+    }
+
+
+
 }
