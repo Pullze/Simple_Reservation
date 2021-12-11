@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Table, Input, Button } from "antd";
+import { Layout, Row, Col, Table, Input, Button, Spin } from "antd";
 import { useLocation, useHistory } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
@@ -10,6 +10,7 @@ export default function ViewAirlines(props) {
   const history = useHistory();
 
   const [airlines, setAirlines] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
   const [filtered, setFiltered] = useState([]);
 
@@ -77,6 +78,7 @@ export default function ViewAirlines(props) {
         console.log(res.data);
         setAirlines(res.data.data);
         setFiltered(res.data.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -111,7 +113,9 @@ export default function ViewAirlines(props) {
                 </span>
               </Col>
               <Col>
-                <Table dataSource={filtered} columns={columns} pagination={{ pageSize: 8 }}/>
+                <Spin spinning={loading}>
+                  <Table dataSource={filtered} columns={columns} pagination={{ pageSize: 8 }}/>
+                </Spin>
               </Col>
               <Col align="middle" span={24}>
                   <Button onClick={() => history.goBack()}> Back </Button>
