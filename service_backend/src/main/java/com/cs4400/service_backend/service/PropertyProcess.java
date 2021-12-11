@@ -12,6 +12,9 @@ public interface PropertyProcess {
     List<Property> viewAvailableProperties(String start, String end);
     String reserveProperty(Reserve reserve);
     List<ReserveInfo> viewCustomerFutureReservations(String customerEmail);
+    List<ReserveInfo> viewCustomerPastReservations(String customerEmail);
+    List<ReserveInfo> viewReservationsToReview(String customerEmail);
     String cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail);
+
 
 }

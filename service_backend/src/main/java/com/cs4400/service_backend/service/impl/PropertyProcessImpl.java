@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,9 +69,25 @@ public class PropertyProcessImpl implements PropertyProcess {
 
     @Override
     public List<ReserveInfo> viewCustomerFutureReservations(String customerEmail) {
-        System.out.println(propertyMapper.viewCustomerFutureReservations(customerEmail));
-
+//        System.out.println(propertyMapperr.viewCustomerFutureReservations(customerEmail));
         return propertyMapper.viewCustomerFutureReservations(customerEmail);
+    }
+
+    @Override
+    public List<ReserveInfo> viewCustomerPastReservations(String customerEmail) {
+        return propertyMapper.viewCustomerPastReservations(customerEmail);
+    }
+
+    @Override
+    public List<ReserveInfo> viewReservationsToReview(String customerEmail) {
+        List<ReserveInfo> pastReservations = propertyMapper.viewCustomerPastReservations(customerEmail);
+        ArrayList<ReserveInfo> reservationsToReview = new ArrayList<>();
+        for (ReserveInfo reservation: pastReservations) {
+            if (reservation.getReview() == null) {
+                reservationsToReview.add(reservation);
+            }
+        }
+        return reservationsToReview;
     }
 
     @Override

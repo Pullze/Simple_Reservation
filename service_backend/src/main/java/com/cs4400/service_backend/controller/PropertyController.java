@@ -98,6 +98,27 @@ public class PropertyController {
     }
 
     /**
+     * Get all past reservations
+     * @param customerEmail customer's email
+     * @return response contain of ReserveInfo
+     */
+    @GetMapping(value = "/customer-past-reservations")
+    @ApiOperation(value ="customer past reservations", notes = "customer past reservations")
+    public Response<?> viewCustomerPastReservations(@RequestParam String customerEmail) {
+        List<ReserveInfo> result = propertyProcess.viewCustomerPastReservations(customerEmail);
+        System.out.println(result);
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+    }
+
+    @GetMapping(value = "/customer-reservations-to-review")
+    @ApiOperation(value ="customer reservations to review", notes = "customer reservations to review")
+    public Response<?> viewReservationsToReview(@RequestParam String customerEmail) {
+        List<ReserveInfo> result = propertyProcess.viewReservationsToReview(customerEmail);
+        System.out.println(result);
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+    }
+
+    /**
      * Cancel property reservation.
      * @param propertyName the property's name.
      * @param ownerEmail the owner Email.
@@ -111,5 +132,7 @@ public class PropertyController {
         System.out.println(result);
         return result;
     }
+
+
 }
 
