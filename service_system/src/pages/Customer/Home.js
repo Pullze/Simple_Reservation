@@ -10,6 +10,10 @@ const links = [
     path: "/customer/book-flight",
   },
   {
+    label: "View Flight",
+    path: "/customer/view-flight",
+  },
+  {
     label: "Cancel Flights",
     path: "/customer/cancel-flight",
   },
