@@ -21,6 +21,7 @@ import {
 import { Content } from "antd/lib/layout/layout";
 import moment from "moment";
 import axios from "axios";
+import Modal from "antd/lib/modal/Modal";
 
 const { Option } = Select;
 
@@ -47,6 +48,7 @@ function ScheduleFlight() {
   const [form] = Form.useForm();
   const [airlines, setAirlines] = useState([]);
   const [flight, setFlight] = useState({ isScheduled: false });
+  const [visible, setIsVisible] = useState(false);
 
   useEffect(() => {
     axios.get("/api/airlines").then((res) => setAirlines(res.data.data));
@@ -77,7 +79,8 @@ function ScheduleFlight() {
               ...res.data.data,
               isScheduled: true,
             });
-          }, 1000);
+          }, 500);
+          showModal();
         } else {
           message.error(res.data.message);
         }
@@ -85,8 +88,12 @@ function ScheduleFlight() {
       .catch((err) => console.log(err));
   };
 
-  const handleClick = () => {
-    window.location.reload();
+  const showModal = () => {
+    setIsVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsVisible(false);
   };
 
   const formItems = [
@@ -212,30 +219,6 @@ function ScheduleFlight() {
     },
   ];
 
-  if (flight.isScheduled) {
-    return (
-      <Layout style={{ minHeight: "100vh", background: "white" }} align="middle" >
-        <PageHeader
-          onBack={() => window.location.reload()}
-          title="Schedule Another Flight"
-        >
-          <Result status="success" title="Successfully scheduled a flight!" />
-          <Row justify="center">
-            <Col>
-              <Descriptions bordered size="default" column={1}>
-                {Object.entries(fieldLabel).map(([name, label], i) => (
-                  <Descriptions.Item label={label}>
-                    {flight[name]}
-                  </Descriptions.Item>
-                ))}
-              </Descriptions>
-            </Col>
-          </Row>
-        </PageHeader>
-      </Layout>
-    );
-  }
-
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content style={{ margin: "24px 24px 24px", background: "white" }}>
@@ -246,6 +229,21 @@ function ScheduleFlight() {
         >
           <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
             <Row justify="center" align="middle" gutter={[24, 24]}>
+              <Modal visible={visible}
+              title="Alert"
+              footer={[<Button type="primary" onClick={handleCancel}> OK </Button>]}
+              onCancel={handleCancel}>
+                <Result status="success" extra={
+                  <Descriptions bordered size="small" column={1}>
+                    {Object.entries(fieldLabel).map(([name, label], i) => (
+                      <Descriptions.Item label={label}>
+                        {flight[name]}
+                      </Descriptions.Item>
+                    ))}
+                  </Descriptions>
+                } 
+                title="Successfully scheduled a flight!" />
+              </Modal>
               <Col span={24} align="middle">
                 <h2>Now logged in as {location.state.email}</h2>
               </Col>
