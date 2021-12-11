@@ -13,6 +13,7 @@ import {
   Table,
   Descriptions,
   Modal,
+  Result,
   message,
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
@@ -135,6 +136,12 @@ function BookFlight() {
   const [airports, setAirports] = useState([]);
   const [flights, setFlights] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [booking, setBooking] = useState({
+    flight_num: null,
+    book_seats: null,
+    boot_cost: null,
+    is_booked: false,
+  });
   const [from, setFrom] = useState("all");
   const [to, setTo] = useState("all");
   const [date, setDate] = useState(null);
@@ -172,7 +179,7 @@ function BookFlight() {
         return message.error("Please enter an integer value.");
       }
 
-      const { airline_name, flight_num, remaining_seats } = flight;
+      const { airline_name, flight_num, flight_date, remaining_seats } = flight;
       const book_seats = +flight.book_seats;
 
       if (book_seats <= 0) {
@@ -183,6 +190,7 @@ function BookFlight() {
         const bookInfo = {
           airline_name,
           flight_num,
+          flight_date,
           customer: location.state.email,
           book_seats,
         };
@@ -191,38 +199,17 @@ function BookFlight() {
           "jsonValue",
           new Blob([JSON.stringify(bookInfo)], { type: "application/json" })
         );
-        console.log(bookInfo);
         axios
           .post("/api/book_flight", formData)
           .then((res) => {
             if (res.data.code === 200) {
-              message.success("Success!");
-              setTimeout(() => {
-                const booking = res.data.data;
-                Modal.success({
-                  title: res.data.message,
-                  content: (
-                    <div style={{ margin: "40px 0", marginRight: "30px" }}>
-                      <h2>Booking Information</h2>
-                      <Descriptions size="default" column={1} bordered>
-                        <Descriptions.Item label="Booked Flight Number">
-                          {booking.flight_num}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Number of Seats">
-                          {booking.book_seats}
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Amount Spent">
-                          {booking.book_cost}
-                        </Descriptions.Item>
-                      </Descriptions>
-                    </div>
-                  ),
-                });
-                flight.remaining_seats -= booking.book_seats;
-                flight.book_seats = 0;
-                setFlights(flights.filter((item) => item.remaining_seats > 0));
-                setSelectedRowKeys([]);
-              }, 1000);
+              const booking = res.data.data;
+              setBooking({ ...booking, is_booked: true });
+
+              flight.remaining_seats -= booking.book_seats;
+              flight.book_seats = 0;
+              setFlights(flights.filter((item) => item.remaining_seats > 0));
+              setSelectedRowKeys([]);
             } else {
               message.error(res.data.message);
             }
@@ -376,6 +363,36 @@ function BookFlight() {
                   Book Flight
                 </Button>
               </Col>
+              <Modal
+                visible={booking.is_booked}
+                footer={[
+                  <Button
+                    onClick={() => setBooking({ ...booking, is_booked: false })}
+                  >
+                    OK
+                  </Button>,
+                ]}
+                onCancel={() => setBooking({ ...booking, is_booked: false })}
+              >
+                <Result
+                  status="success"
+                  title={`You have successfully booked ${booking.book_seats} seat(s) on Flight ${booking.flight_num}.`}
+                >
+                  <div style={{ background: "white" }}>
+                    <Descriptions size="default" column={1} bordered>
+                      <Descriptions.Item label="Booked Flight Number">
+                        {booking.flight_num}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Number of Seats">
+                        {booking.book_seats}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Amount Spent">
+                        {"$" + booking.book_cost}
+                      </Descriptions.Item>
+                    </Descriptions>
+                  </div>
+                </Result>
+              </Modal>
             </Row>
           </Col>
         </Row>
