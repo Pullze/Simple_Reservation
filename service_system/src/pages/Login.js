@@ -11,6 +11,7 @@ import {
   Layout,
   Modal,
   Space,
+  Result
 } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./Login.css";
@@ -72,11 +73,11 @@ export default function Login() {
             buttRedirect("customer");
           } else if (res.data.data.is_client) {
             buttRedirect("client");
+          } else {
+            message.error("Login Failed. Please check your username and password.");
           }
         } else {
-          const { code, message } = res.data;
-          console.log(code, message);
-          message.error(message);
+          message.error("Connection Failed. Please check your connectoin.");
         }
       })
       .catch((err) => {
@@ -84,9 +85,11 @@ export default function Login() {
       });
   };
 
-  useEffect(() => {
-    history.replace("/");
-  }, []);
+  useEffect(
+    () => {
+      history.replace("/")
+    }, []
+  )
   return (
     <Layout>
       <Content style={{ margin: "24px, 24px, 24px", background: "white" }}>
@@ -105,20 +108,23 @@ export default function Login() {
             ]}
             onCancel={() => handleCancel()}
           >
-            <p>
-              It seems that you are both a customer and a owner. Please select
-              which panal you would like to go:
-            </p>
-            <Space>
-              <Button onClick={() => buttRedirect("owner")}>
-                {" "}
-                Owner Portal{" "}
-              </Button>
-              <Button onClick={() => buttRedirect("customer")}>
-                {" "}
-                Customer Portal{" "}
-              </Button>
-            </Space>
+            <Result
+              status="warning"
+              title="It seems like you are both a customer and a owner, please select
+              which panal you would like to go:"
+              extra={
+                <Space>
+                  <Button onClick={() => buttRedirect("owner")}>
+                    {" "}
+                    Owner Portal{" "}
+                  </Button>
+                  <Button onClick={() => buttRedirect("customer")}>
+                    {" "}
+                    Customer Portal{" "}
+                  </Button>
+                </Space>
+              }
+            />
           </Modal>
           <Col span={24} align="middle">
             <Form

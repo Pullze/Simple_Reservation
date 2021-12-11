@@ -71,4 +71,46 @@
 
              ) as temp;
     </select>
+
+    <select id="check_if_future_flight" resultType="Boolean">
+        select exists(
+            select *
+            from Flight
+            where Flight_Num = #{flight_num}
+              and #{airline_name} = Airline_Name
+              and #{current_date} &lt; Flight_Date
+           )
+    </select>
+
+    <delete id="remove_book_flight">
+        delete from Book where book.Flight_Num = #{flight_num} and book.Airline_Name = #{airline_name};
+    </delete>
+
+    <delete id="remove_flight">
+        delete from Flight where flight.Flight_Num = #{flight_num} and flight.Airline_Name = #{airline_name};
+    </delete>
+
+    <select id="view_remove_flight" resultType="RemoveFlightInfo">
+        select Airline_Name as airline_name,
+               Flight_Num as flight_number,
+               Flight_Date as "date"
+        from flight
+            <where>
+                <if test="(start_date in {null, ''}) and (end_date not in {null, ''})">
+                    Flight_Date &lt;= #{end_date}
+                </if>
+                <if test="(start_date not in {null, ''}) and (end_date in {null, ''})">
+                    Flight_Date &gt;= #{start_date}
+                </if>
+                <if test="(start_date not in {null, ''}) and (end_date not in {null, ''})">
+                    Flight_Date &lt;= #{end_date} and Flight_Date &gt;= #{start_date}
+                </if>
+                <if test="airline_name != null and airline_name != ''">
+                    and Airline_Name = #{airline_name}
+                </if>
+                <if test="flight_num != null and flight_num != ''">
+                    and Flight_Num = #{flight_num}
+                </if>
+            </where>
+    </select>
 </mapper>

@@ -29,12 +29,12 @@ function Home(props) {
 
   const showModal = () => {
     setModalState("warning");
-    setModalTitle("Are your suer you want to DELETE your own Owner account?");
+    setModalTitle("Are your sure you want to delete your own Owner account?");
     setIsVisible(true);
   };
 
   const handleCancel = () => {
-      if (modalState !== "warning") {
+      if (modalState === "success" || modalState === "error") {
         history.replace("/");
       }
       setIsVisible(false);
@@ -51,6 +51,8 @@ function Home(props) {
       console.log(res.data);
       if (res.data.code === 200) {
         setModalState("success");
+      } else if (res.data.code === 403) {
+        setModalState("info");
       } else {
         setModalState("error");
       }
@@ -80,7 +82,7 @@ function Home(props) {
             <Result
               status={modalState}
               title={modalTitle}
-              extra={modalState !== "warning" && <Button type="primary" href="/"> Back to Login </Button>}
+              extra={modalState !== "warning"&& modalState !== "info" && <Button type="primary" href="/"> Back to Login </Button>}
             />
           </Modal>
           <Col span={24} align="middle">

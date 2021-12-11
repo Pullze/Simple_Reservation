@@ -214,7 +214,7 @@ function ScheduleFlight() {
 
   if (flight.isScheduled) {
     return (
-      <Layout style={{ minHeight: "100vh" }} align="middle">
+      <Layout style={{ minHeight: "100vh", background: "white" }} align="middle" >
         <PageHeader
           onBack={() => window.location.reload()}
           title="Schedule Another Flight"

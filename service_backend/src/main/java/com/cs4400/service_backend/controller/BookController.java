@@ -24,7 +24,7 @@ public class BookController {
      */
     @PostMapping(value = "/book_flight")
     @ApiModelProperty(value = "book flight", notes = "book flight")
-    public Response<BookInfo> book_flight(@RequestPart("jsonValue") BookInfo bookInfo) {
+    public Response<?> book_flight(@RequestPart("jsonValue") BookInfo bookInfo) {
 
         BookInfo returnBookInfo = bookProcess.book_flight(bookInfo);
 
