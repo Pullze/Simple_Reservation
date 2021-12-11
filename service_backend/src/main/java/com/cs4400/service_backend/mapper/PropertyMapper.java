@@ -2,6 +2,7 @@ package com.cs4400.service_backend.mapper;
 
 import com.cs4400.service_backend.entity.Property;
 import com.cs4400.service_backend.entity.Reserve;
+import com.cs4400.service_backend.vo.PropertyInfo;
 import com.cs4400.service_backend.vo.ReserveInfo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -37,5 +38,13 @@ public interface PropertyMapper {
    void reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score);
 
    void rateOwner(String ownerEmail, String customerEmail, Integer score);
+
+   PropertyInfo checkAddressExist(Property property);
+
+   PropertyInfo checkNameExist(Property property);
+
+   PropertyInfo checkPropertyExist(String propertyName, String ownerEmail);
+
+   void addProperty(Property property);
 
 }

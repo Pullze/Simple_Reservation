@@ -1,10 +1,12 @@
 package com.cs4400.service_backend.service.impl;
 
 import com.cs4400.service_backend.entity.Reserve;
+import com.cs4400.service_backend.mapper.AirportMapper;
 import com.cs4400.service_backend.mapper.PropertyMapper;
 import com.cs4400.service_backend.entity.Property;
 import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.service.PropertyProcess;
+import com.cs4400.service_backend.vo.PropertyInfo;
 import com.cs4400.service_backend.vo.ReserveInfo;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class PropertyProcessImpl implements PropertyProcess {
 
     @Resource
     private PropertyMapper propertyMapper;
+
+    @Resource AirportMapper airportMapper;
 
     @Override
     public List<Property> viewProperties(Integer high, Integer low) {
@@ -129,5 +133,28 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
 
+    @Override
+    public PropertyInfo addProperty(Property property, String nearestAirport, int distance) {
 
+        if (propertyMapper.checkAddressExist(property) != null) {
+            PropertyInfo returnPropertyInfo = new PropertyInfo();
+            returnPropertyInfo.setMessage("Address already exists!");
+        }
+
+        if (propertyMapper.checkNameExist(property) != null) {
+            PropertyInfo returnPropertyInfo = new PropertyInfo();
+            returnPropertyInfo.setMessage("The property name already exists in your properties!");
+        }
+
+        if (nearestAirport != null && airportMapper.check_airport(nearestAirport) == null) {
+            PropertyInfo returnPropertyInfo = new PropertyInfo();
+            returnPropertyInfo.setMessage("This nearest airport does not exists!");
+        }
+
+
+
+
+
+        return null;
+    }
 }
