@@ -31,7 +31,7 @@ public class ReserveInfo {
     private String review;
 
     @ApiModelProperty(value = "Property rating")
-    private String rating;
+    private Integer rating;
 
     @ApiModelProperty(value = "Property Address")
     private String address;

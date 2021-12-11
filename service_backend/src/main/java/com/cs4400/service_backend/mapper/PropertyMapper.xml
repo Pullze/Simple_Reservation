@@ -63,8 +63,19 @@
         select exists(select * from Property where Owner_Email = #{email});
     </select>
 
-    <update id = "cancelPropertytReservation">
+    <update id = "cancelPropertytReservation" >
         Update Reserve Set Was_Cancelled = 1 where Property_Name = #{propertyName} and Customer = #{customerEmail} and Owner_Email = #{ownerEmail};
+    </update>
+
+    <select id = "viewCustomerPastReservations" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
+        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ',', p.City, ',', p.State, ',', p.Zip) as address, review.content as review, review.Score as rating
+        from reserve as r left join review on r.Customer = review.Customer and r.Owner_Email = review.Owner_Email, property as p
+        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date &lt; CURDATE() and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
+    </select>
+
+    <update id = "reviewReservation" >
+        insert into review (Property_Name, Owner_Email, Customer, Content, Score) values
+            (#{propertyName}, #{ownerEmail}, #{customerEmail}, #{content}, #{score});
     </update>
 
 </mapper>
