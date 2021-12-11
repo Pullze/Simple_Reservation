@@ -14,7 +14,8 @@ import {
   Table,
   message,
   Modal,
-  Result
+  Result,
+  Popconfirm
 } from "antd";
 import moment from "moment";
 import axios from "axios";
@@ -174,12 +175,7 @@ function RemoveFlights() {
       label: "Filter",
       type: "default",
       onClick: getFlights,
-    },
-    {
-      label: "Remove",
-      type: "primary",
-      onClick: handleRemove,
-    },
+    }
   ];
 
   return (
@@ -278,6 +274,14 @@ function RemoveFlights() {
                                     </Button>
                                   </Form.Item>
                                 ))}
+                                <Form.Item>
+                                  <Popconfirm
+                                    title="Are you sure to delete this flight?"
+                                    onConfirm={handleRemove}
+                                  >
+                                    <Button type="default" danger> Remove </Button>
+                                  </Popconfirm>
+                                </Form.Item>
                               </Space>
                             </Col>
                           </Row>
