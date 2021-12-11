@@ -103,7 +103,7 @@ public class PropertyController {
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
-    @GetMapping(value = "/cancel reservation")
+    @PostMapping(value = "/cancel_reservation")
     @ApiOperation(value ="cancel reservation", notes = "cancel reservation")
     public String cancelPropertyReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail) {
         String result = propertyProcess.cancelPropertyReservation(propertyName, ownerEmail, customerEmail);
