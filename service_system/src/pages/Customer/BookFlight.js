@@ -48,10 +48,18 @@ const columns = [
   {
     title: "Date",
     dataIndex: "flight_date",
+    sorter: {
+      compare: (a, b) => parseInt(a.flight_date.replaceAll('-', '')) - parseInt(b.flight_date.replaceAll('-', '')),
+      multiple: 1
+    },
   },
   {
     title: "Available Seats",
     dataIndex: "remaining_seats",
+    sorter: {
+      compare: (a, b) => a.remaining_seats - b.remaining_seats,
+      multiple: 1
+    },
   },
   {
     title: "Number of Seats",
@@ -373,25 +381,26 @@ function BookFlight() {
                   </Button>,
                 ]}
                 onCancel={() => setBooking({ ...booking, is_booked: false })}
-              >
-                <Result
+              > 
+                 <Result
                   status="success"
                   title={`You have successfully booked ${booking.book_seats} seat(s) on Flight ${booking.flight_num}.`}
-                >
-                  <div style={{ background: "white" }}>
-                    <Descriptions size="default" column={1} bordered>
-                      <Descriptions.Item label="Booked Flight Number">
-                        {booking.flight_num}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Number of Seats">
-                        {booking.book_seats}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Amount Spent">
-                        {"$" + booking.book_cost}
-                      </Descriptions.Item>
-                    </Descriptions>
-                  </div>
-                </Result>
+                  extra={
+                    <div style={{ background: "white" }}>
+                      <Descriptions size="default" column={1} bordered>
+                        <Descriptions.Item label="Booked Flight Number">
+                          {booking.flight_num}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Number of Seats">
+                          {booking.book_seats}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Amount Spent">
+                          {"$" + booking.book_cost}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </div>
+                  }
+                />
               </Modal>
             </Row>
           </Col>
