@@ -31,6 +31,11 @@ public class Response<T> {
         this.data = data;
     }
 
+    public Response(int code, T data) {
+        this.code = code;
+        this.data = data;
+    }
+
     public Response() { }
 
 
