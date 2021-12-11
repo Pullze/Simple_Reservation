@@ -96,4 +96,13 @@ public class PropertyProcessImpl implements PropertyProcess {
         return "cancel the reservation for " + propertyName + " succeeded!";
     }
 
+    @Override
+    public String reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score) {
+        if (content == null || score == null) {
+            return "please type in valid content and score";
+        }
+        propertyMapper.reviewReservation(propertyName, ownerEmail, customerEmail, content, score);
+        return "review the reservation for " + propertyName + " succeeded!";
+    }
+
 }

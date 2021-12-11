@@ -15,6 +15,6 @@ public interface PropertyProcess {
     List<ReserveInfo> viewCustomerPastReservations(String customerEmail);
     List<ReserveInfo> viewReservationsToReview(String customerEmail);
     String cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail);
-
+    String reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score);
 
 }

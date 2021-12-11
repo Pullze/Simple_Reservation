@@ -26,4 +26,5 @@ public interface PropertyMapper {
    List<ReserveInfo> viewCustomerPastReservations(String customerEmail);
    Boolean check_owner_has_property(String email);
    void cancelPropertytReservation(String propertyName, String ownerEmail, String customerEmail);
+   void reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score);
 }

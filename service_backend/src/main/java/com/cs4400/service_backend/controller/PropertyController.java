@@ -133,6 +133,23 @@ public class PropertyController {
         return result;
     }
 
+    /**
+     *
+     * @param propertyName property's name
+     * @param ownerEmail owner's email
+     * @param customerEmail cutomer's email
+     * @param content content
+     * @param score score
+     * @return
+     */
+    @GetMapping(value = "/reivew reservation")
+    @ApiOperation(value ="review reservation", notes = "review reservation")
+    public String reviewReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam String content, @RequestParam Integer score) {
+        String result = propertyProcess.reviewReservation(propertyName, ownerEmail, customerEmail, content, score);
+        System.out.println(result);
+        return result;
+    }
+
 
 }
 
