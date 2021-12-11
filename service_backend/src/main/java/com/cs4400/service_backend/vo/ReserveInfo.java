@@ -25,7 +25,7 @@ public class ReserveInfo {
     private String customerEmail;
 
     @ApiModelProperty(value = "Property Cost")
-    private String cost;
+    private Integer cost;
 
     @ApiModelProperty(value = "Property Review")
     private String review;

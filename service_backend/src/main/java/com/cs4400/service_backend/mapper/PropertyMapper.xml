@@ -89,4 +89,22 @@
             (#{customerEmail}, #{ownerEmail}, #{score});
     </update>
 
+    <select id = "viewPropertyReservations" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
+        select
+            p.Property_Name as propertyName,
+            res.Start_Date as startDate,
+            res.End_Date as endDate,
+            res.Customer as customerEmail,
+            cli.Phone_Number as custPhone,
+            p.Cost  * (1 - (0.8  * (res.Was_Cancelled))) * (res.End_Date - res.Start_Date + 1) as cost,
+            rev.Score as rating,
+            rev.Content as review
+        from property as p
+                 left join review as rev on p.Property_Name = rev.Property_Name
+                 left join reserve as res on p.Property_Name = res.Property_Name
+                 left join clients as cli on res.Customer = cli.Email
+        where p.Property_Name = #{propertyName} and p.Owner_Email = #{ownerEmail}
+        group by p.Property_Name, res.Was_Cancelled, res.Customer;
+    </select>
+
 </mapper>

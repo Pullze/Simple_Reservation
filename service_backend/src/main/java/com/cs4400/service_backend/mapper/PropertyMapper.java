@@ -28,6 +28,8 @@ public interface PropertyMapper {
 
    List<ReserveInfo> viewOwnersToRate(String customerEmail);
 
+   List<ReserveInfo> viewPropertyReservations(String propertyName, String ownerEmail);
+
    Boolean check_owner_has_property(String email);
 
    void cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail);
