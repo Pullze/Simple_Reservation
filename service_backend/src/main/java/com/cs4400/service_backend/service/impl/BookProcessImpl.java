@@ -37,7 +37,7 @@ public class BookProcessImpl implements BookProcess {
         String flight_date = bookInfo.getFlight_date();
 
         if (bookMapper.check_book_cancelled(flight_num, airline_name, customer_email) != null) {
-            return new BookInfo("Already cancelled a book on this flight!");
+            return new BookInfo("Already cancelled a booking on this flight!");
         }
 
         if (bookMapper.check_if_booked_flight(flight_num, airline_name, customer_email) != null) {
@@ -50,7 +50,7 @@ public class BookProcessImpl implements BookProcess {
                 return returnBookInfo;
             }
         } else if (bookMapper.check_book_by_date(customer_email, flight_date) != null) {
-            return new BookInfo("Already booked a flight on this date");
+            return new BookInfo("Already booked a flight on this date!");
         } else if (flightMapper.check_flight_seats(flight_num, airline_name) < book_seats) {
             return new BookInfo("No sufficient seats to book!");
         } else {
