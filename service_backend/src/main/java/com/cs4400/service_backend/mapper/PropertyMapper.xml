@@ -41,7 +41,7 @@
     <!--    check the property reserve overlap with previous reserve for other properties. return property if overlap -->
     <select id = "checkReserveCondition" resultType = "Reserve">
         select * from reserve
-        where Customer = #{customerEmail} and
+        where Customer = #{customerEmail} and Was_Cancelled = 0 and
               ((Start_Date between #{startDate} and #{endDate}) or (End_Date between #{startDate} and #{endDate})
                    or (Start_Date &lt;= #{startDate} and End_Date > #{endDate}));
     </select>
