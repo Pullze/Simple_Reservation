@@ -15,6 +15,7 @@ import {
   Modal,
   Result,
   message,
+  Spin
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import moment from "moment";
@@ -48,10 +49,34 @@ const columns = [
   {
     title: "Date",
     dataIndex: "flight_date",
+    sorter: {
+      compare: (a, b) => parseInt(a.flight_date.replaceAll('-', '')) - parseInt(b.flight_date.replaceAll('-', '')),
+      multiple: 1
+    },
+  },
+  {
+    title: "Departure Time",
+    dataIndex: "departure_time",
+    sorter: {
+      compare: (a, b) => parseInt(a.departure_time.replaceAll(':', '')) - parseInt(b.departure_time.replaceAll(':', '')),
+      multiple: 1
+    },
+  },
+  {
+    title: "Arrival Time",
+    dataIndex: "arrival_time",
+    sorter: {
+      compare: (a, b) => parseInt(a.arrival_time.replaceAll(':', '')) - parseInt(b.arrival_time.replaceAll(':', '')),
+      multiple: 1
+    },
   },
   {
     title: "Available Seats",
     dataIndex: "remaining_seats",
+    sorter: {
+      compare: (a, b) => a.remaining_seats - b.remaining_seats,
+      multiple: 1
+    },
   },
   {
     title: "Number of Seats",
@@ -136,6 +161,7 @@ function BookFlight() {
   const [airports, setAirports] = useState([]);
   const [flights, setFlights] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState({
     flight_num: null,
     book_seats: null,
@@ -158,15 +184,16 @@ function BookFlight() {
     );
     axios
       .get("/api/flights", { params: { minSeats: 1 } })
-      .then((res) =>
+      .then((res) => {
         setFlights(
           res.data.data.map((item, i) => ({
             ...item,
             key: i,
             book_seats: "0",
           }))
-        )
-      )
+        );
+        setLoading(false);
+      })
       .catch((err) => console.error(err));
   }, []);
 
@@ -330,21 +357,23 @@ function BookFlight() {
                 </Form>
               </Col>
               <Col span={24}>
-                <Table
-                  components={{
-                    body: { row: EditableRow, cell: EditableCell },
-                  }}
-                  rowClassName={() => "editable-row"}
-                  rowSelection={{ type: "radio", ...rowSelection }}
-                  dataSource={flights.filter(
-                    (flight) =>
-                      (from === "all" || flight.from_airport === from) &&
-                      (to === "all" || flight.to_airport === to) &&
-                      (!date || date.format(dateFormat) === flight.flight_date)
-                  )}
-                  columns={flightColumns}
-                  pagination={{ pageSize: "5", hideOnSinglePage: true }}
-                />
+                <Spin spinning={loading}>
+                   <Table
+                    components={{
+                      body: { row: EditableRow, cell: EditableCell },
+                    }}
+                    rowClassName={() => "editable-row"}
+                    rowSelection={{ type: "radio", ...rowSelection }}
+                    dataSource={flights.filter(
+                      (flight) =>
+                        (from === "all" || flight.from_airport === from) &&
+                        (to === "all" || flight.to_airport === to) &&
+                        (!date || date.format(dateFormat) === flight.flight_date)
+                    )}
+                    columns={flightColumns}
+                    pagination={{ pageSize: "5", hideOnSinglePage: true }}
+                  />
+                </Spin>
               </Col>
               <Col align="middle">
                 <Button>
@@ -373,25 +402,26 @@ function BookFlight() {
                   </Button>,
                 ]}
                 onCancel={() => setBooking({ ...booking, is_booked: false })}
-              >
-                <Result
+              > 
+                 <Result
                   status="success"
                   title={`You have successfully booked ${booking.book_seats} seat(s) on Flight ${booking.flight_num}.`}
-                >
-                  <div style={{ background: "white" }}>
-                    <Descriptions size="default" column={1} bordered>
-                      <Descriptions.Item label="Booked Flight Number">
-                        {booking.flight_num}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Number of Seats">
-                        {booking.book_seats}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Amount Spent">
-                        {"$" + booking.book_cost}
-                      </Descriptions.Item>
-                    </Descriptions>
-                  </div>
-                </Result>
+                  extra={
+                    <div style={{ background: "white" }}>
+                      <Descriptions size="default" column={1} bordered>
+                        <Descriptions.Item label="Booked Flight Number">
+                          {booking.flight_num}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Number of Seats">
+                          {booking.book_seats}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Amount Spent">
+                          {"$" + booking.book_cost}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </div>
+                  }
+                />
               </Modal>
             </Row>
           </Col>

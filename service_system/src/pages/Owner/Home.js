@@ -13,6 +13,10 @@ const links = [
     label: "Remove Property",
     path: "/owner/remove-property",
   },
+  {
+    label: "Rate Customer",
+    path: "/owner/rate-customer",
+  },
 ];
 
 function Home(props) {
@@ -66,7 +70,7 @@ function Home(props) {
       <Content style={{ margin: '24px 24px 24px', background: "white"}}>
         <Row align="middle" justify="space-around">
           <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
-            <Row align="middle" gutter={[24, 24]} style={{ padding: "20% 10%"}}>
+            <Row justify="space-around" align="middle" gutter={[24, 24]} style={{ padding: "20% 10%"}}>
               <Modal
                   visible={visible}
                   title="Alert"

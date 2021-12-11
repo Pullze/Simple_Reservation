@@ -18,6 +18,7 @@ import ViewFlights from "./pages/Admin/ViewFlight";
 import CustomerHome from "./pages/Customer/Home";
 import BookFlight from "./pages/Customer/BookFlight";
 import CancelFlight from "./pages/Customer/CancelFlight";
+import CustomerViewFlight from "./pages/Customer/CustomerViewFlight";
 import ViewProperties from "./pages/Customer/ViewProperties";
 import ReserveProperty from "./pages/Customer/ReserveProperty";
 import ViewReservations from "./pages/Customer/ViewReservations";
@@ -47,6 +48,7 @@ function App() {
         <Route exact path="/admin/view-flight" component={ViewFlights}/>
         <Route exact path="/admin/process-date" component={ProcessDate}/>
         <Route exact path="/customer/home" component={CustomerHome} />
+        <Route exact path="/customer/view-flight" component={CustomerViewFlight}/>
         <Route exact path="/customer/book-flight" component={BookFlight} />
         <Route exact path="/customer/cancel-flight" component={CancelFlight} />
         <Route
