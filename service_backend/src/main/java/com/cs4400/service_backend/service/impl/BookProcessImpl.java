@@ -1,5 +1,7 @@
 package com.cs4400.service_backend.service.impl;
 
+import com.cs4400.service_backend.entity.Book;
+import com.cs4400.service_backend.entity.Customer;
 import com.cs4400.service_backend.mapper.BookMapper;
 import com.cs4400.service_backend.mapper.FlightMapper;
 import com.cs4400.service_backend.service.BookProcess;
@@ -7,6 +9,7 @@ import com.cs4400.service_backend.vo.BookInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class BookProcessImpl implements BookProcess {
@@ -41,7 +44,7 @@ public class BookProcessImpl implements BookProcess {
             if ( flightMapper.check_flight_seats(flight_num, airline_name) < book_seats) {
                 return new BookInfo("No sufficient seats to book!");
             } else {
-                bookMapper.update_book(flight_num, airline_name, customer_email, book_seats);
+                bookMapper.update_book_seats(flight_num, airline_name, customer_email, book_seats);
                 BookInfo returnBookInfo = bookMapper.check_bookInfo(flight_num, airline_name, customer_email, book_seats);
                 returnBookInfo.setBook_message("You have successfully updated booking on this flight.");
                 return returnBookInfo;
@@ -57,6 +60,15 @@ public class BookProcessImpl implements BookProcess {
             return returnBookInfo;
         }
 
+    }
 
+    @Override
+    public List<Book> customer_view_books(String customer_email) {
+        return bookMapper.check_all_book_customer(customer_email);
+    }
+
+    @Override
+    public Integer cancel_book(String flight_num, String airline_name, String customer_email) {
+        return bookMapper.cancel_book(flight_num, airline_name, customer_email);
     }
 }

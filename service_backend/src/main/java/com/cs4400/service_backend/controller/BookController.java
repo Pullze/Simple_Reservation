@@ -1,5 +1,6 @@
 package com.cs4400.service_backend.controller;
 
+import com.cs4400.service_backend.entity.Book;
 import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.BookProcess;
 import com.cs4400.service_backend.vo.BookInfo;
@@ -7,6 +8,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api (tags = "Book Controller")
 
@@ -40,5 +43,24 @@ public class BookController {
         }
 
         return response;
+    }
+
+    @GetMapping(value = "/customer_view_books")
+    @ApiModelProperty(value = "customer_view_books")
+    public Response<?> customer_view_books(@RequestParam String customer_email) {
+        List<Book> books = bookProcess.customer_view_books(customer_email);
+        Response<List<Book>> response =new Response<>(200, books);
+        return response;
+    }
+
+    @PostMapping(value = "/cancel_flight")
+    @ApiModelProperty(value = "cancel flight")
+    public Response<?> customer_cancel_book(@RequestParam  String flight_num, @RequestParam String airline_name, @RequestParam String customer_email) {
+        int cancelled = bookProcess.cancel_book(flight_num, airline_name, customer_email);
+        if (cancelled == 1) {
+            return new Response<>(200, "Successfully cancelled a flight!");
+        } else {
+            return new Response<>(400, "Failed to cancel this flight! ");
+        }
     }
 }

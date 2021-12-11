@@ -74,7 +74,6 @@ public class FlightProcessImpl implements FlightProcess {
         }
 
 
-
         if ( flightMapper.check_flight(flight_num, airline_name) != null) {
             returnFlightInfo.setMessage("The combination of the flight number and the airline name already exists!");
            return  returnFlightInfo;
@@ -121,7 +120,7 @@ public class FlightProcessImpl implements FlightProcess {
         if (!flightMapper.check_if_future_flight(flightNum, airlineName, paramDate)) { // check if is future flight
             return -3;
         } else {
-            count += bookMapper.remove_all_book(flightNum, airlineName);
+            count += bookMapper.remove_all_book_flight(flightNum, airlineName);
             count += flightMapper.remove_flight(flightNum, airlineName);
         }
 
@@ -156,7 +155,6 @@ public class FlightProcessImpl implements FlightProcess {
         return result;
 
     }
-
 
 
 
