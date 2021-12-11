@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Table, Input, Select } from "antd";
-import { useLocation } from "react-router";
+import { Layout, Row, Col, Table, Input, Select, Button } from "antd";
+import { useLocation, useHistory } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 import Highlighter from 'react-highlight-words';
 
 export default function ViewAirports(props) {
     const location = useLocation();
+    const history = useHistory();
     console.log(location.state);
 
     const state = useState;
@@ -157,7 +158,10 @@ export default function ViewAirports(props) {
                                 </span>
                             </Col>
                             <Col>
-                                <Table dataSource={filtered} columns={columns}/>
+                                <Table dataSource={filtered} columns={columns} pagination={{ pageSize: 8 }}/>
+                            </Col>
+                            <Col align="middle" span={24}>
+                                <Button onClick={() => history.goBack()}> Back </Button>
                             </Col>
                         </Row>
                     </Col>
