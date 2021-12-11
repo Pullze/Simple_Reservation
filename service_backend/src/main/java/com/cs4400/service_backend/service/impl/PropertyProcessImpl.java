@@ -92,7 +92,7 @@ public class PropertyProcessImpl implements PropertyProcess {
 
     @Override
     public String cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail) {
-        propertyMapper.cancelPropertytReservation(propertyName, ownerEmail, customerEmail);
+        propertyMapper.cancelPropertyReservation(propertyName, ownerEmail, customerEmail);
         return "cancel the reservation for " + propertyName + " succeeded!";
     }
 
