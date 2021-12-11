@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Layout, Row, Col, Button, Input, Modal } from "antd";
+import { Layout, Row, Col, Button, Input, Modal, Result } from "antd";
 import { useHistory, useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
@@ -14,6 +14,7 @@ export default function ProcessDate(props) {
     const [date, setDate] = state("");
     const [visible, setIsVisible] = state(false);
     const [message, setMessage] = state("");
+    const [status, setStatus] = state("warning");
 
     const showModal = () => {
         setIsVisible(true);
@@ -21,6 +22,7 @@ export default function ProcessDate(props) {
 
     const handleCancel = () => {
         setIsVisible(false);
+        setStatus("warning");
     };
 
     const processDate = () => {
@@ -32,6 +34,11 @@ export default function ProcessDate(props) {
             .then((res) => {
                 console.log(res.data);
                 setMessage(res.data.message)
+                if (res.data.code === 200) {
+                    setStatus("success");
+                } else {
+                    setStatus("error");
+                }
                 showModal();
             })
             .catch((err) => {
@@ -57,9 +64,8 @@ export default function ProcessDate(props) {
                             ]}
                             onCancel={() => handleCancel()}
                         >
-                            <p>
-                                {message}
-                            </p>
+                           <Result title={message} 
+                           status={status}/>
                         </Modal>
                         <Col span={24} align="middle">
                             <h2>Now logged in as {location.state.email}</h2>
