@@ -163,6 +163,14 @@ public class PropertyController {
         return result;
     }
 
+    @GetMapping(value = "/property-reservations")
+    @ApiOperation(value ="property reservations", notes = "property reservations")
+    public Response<?> viewPropertyReservations(@RequestParam String propertyName, @RequestParam String ownerEmail) {
+        List<ReserveInfo> result = propertyProcess.viewPropertyReservations(propertyName, ownerEmail);
+        System.out.println(result);
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+    }
+
 
 }
 

@@ -91,6 +91,11 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
+    public List<ReserveInfo> viewPropertyReservations(String propertyEmail, String ownerEmail) {
+        return propertyMapper.viewPropertyReservations(propertyEmail, ownerEmail);
+    }
+
+    @Override
     public String cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail) {
         propertyMapper.cancelPropertyReservation(propertyName, ownerEmail, customerEmail);
         return "cancel the reservation for " + propertyName + " succeeded!";
