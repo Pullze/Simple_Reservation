@@ -44,8 +44,7 @@ public class PropertyController {
         List<Property> result = propertyProcess.viewProperties(high, low);
         System.out.println(result);
 
-        Response<?> response = new Response<>(HttpStatus.OK.value(), "", result);
-        return response;
+        return new Response<>(HttpStatus.OK.value(), "", result);
     }
 
     /**
@@ -109,9 +108,9 @@ public class PropertyController {
     }
 
     /**
-     *
+     * Get reservations to review.
      * @param customerEmail customer's email
-     * @return
+     * @return response contain reservations to review.
      */
     @GetMapping(value = "/reservations_to_review")
     @ApiOperation(value ="customer view reservations to review", notes = "reservations to review")
@@ -122,11 +121,11 @@ public class PropertyController {
     }
 
     /**
-     *
+     * Get owners to review.
      * @param customerEmail customer's email
-     * @return
+     * @return response contain owners to review.
      */
-    @GetMapping(value = "/owners-to-rate")
+    @GetMapping(value = "/owners_to_rate")
     @ApiOperation(value ="customer view owners to rate", notes = "customer view owners to rate")
     public Response<?> viewOwnersToRate(@RequestParam String customerEmail) {
         List<ReserveInfo> result = propertyProcess.viewOwnersToRate(customerEmail);
@@ -135,11 +134,11 @@ public class PropertyController {
     }
 
     /**
-     *
+     * Get all properties to remove.
      * @param ownerEmail owner's email
-     * @return
+     * @return response contain all properties to remove.
      */
-    @GetMapping(value = "/properties to remove")
+    @GetMapping(value = "/properties_to_remove")
     @ApiOperation(value ="properties to remove", notes = "properties to remove")
     public Response<?> viewPropertiesToRemove(@RequestParam String ownerEmail) {
         List<Property> result = propertyProcess.viewPropertiesToRemove(ownerEmail);
@@ -167,14 +166,14 @@ public class PropertyController {
     public Response<?> cancelPropertyReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail) {
         String result = propertyProcess.cancelPropertyReservation(propertyName, ownerEmail, customerEmail);
         System.out.println(result);
-        return new Response(HttpStatus.OK.value(), "");
+        return new Response<>(HttpStatus.OK.value(), "");
     }
 
     /**
-     *
+     * Customer review reservation.
      * @param propertyName property's name
      * @param ownerEmail owner's email
-     * @param customerEmail cutomer's email
+     * @param customerEmail customer's email
      * @param content content
      * @param score score
      * @return Response object
@@ -187,6 +186,10 @@ public class PropertyController {
         return new Response<>(HttpStatus.OK.value(), "Success");
     }
 
+    /**
+     * Get all property_reservations.
+     * @return response contains property reservations.
+     */
     @GetMapping(value = "/property_reservations")
     @ApiOperation(value ="property reservations", notes = "property reservations")
     public Response<?> viewPropertyReservations() {
@@ -195,7 +198,14 @@ public class PropertyController {
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
-    @PostMapping(value = "/owner-add-property")
+    /**
+     * Owner add property.
+     * @param property the property to be added.
+     * @param nearestAirport the nearest airport.
+     * @param distance the distance to the airport.
+     * @return response indicates success or not.
+     */
+    @PostMapping(value = "/owner_add_property")
     @ApiOperation(value = "owner add property")
     public Response<?> ownerAddProperty(@RequestBody Property property, @RequestParam(required = false) String nearestAirport, @RequestParam(required = false) Integer distance) {
         PropertyInfo propertyInfo = propertyProcess.addProperty(property, nearestAirport, distance);
@@ -208,17 +218,17 @@ public class PropertyController {
     }
 
     /**
-     *
+     *  Owner remove property.
      * @param propertyName property's name
      * @param ownerEmail owner's email
-     * @return
+     * @return response indicates success or not.
      */
-    @GetMapping(value = "/remove property")
+    @GetMapping(value = "/remove_property")
     @ApiOperation(value ="remove property", notes = "owner remove property")
     public Response<?> removeProperty(@RequestParam String propertyName, @RequestParam String ownerEmail) {
         String result = propertyProcess.removeProperty(propertyName, ownerEmail);
         System.out.println(result);
-        return new Response(HttpStatus.OK.value(), "Success");
+        return new Response<>(HttpStatus.OK.value(), "Success");
     }
 }
 
