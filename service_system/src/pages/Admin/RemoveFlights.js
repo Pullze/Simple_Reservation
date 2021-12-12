@@ -35,7 +35,7 @@ function RemoveFlights() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
   const [flights, setFlights] = useState([]);
-  const [startDate, setStartDate] = useState("");
+  const [startDate, setStartDate] = useState(today.format(dateFormat));
   const [endDate, setEndDate] = useState("");
   const [airlineName, setAirlineName] = useState("");
   const [flightNumber, setFlightNumber] = useState("");
@@ -51,14 +51,21 @@ function RemoveFlights() {
 
   const handleReset = async () => {
     setLoading(true);
-    setStartDate("");
     setEndDate("");
     setAirlineName("");
     setFlightNumber("");
     setSelectedRowKeys([]);
     setSelectedRow([]);
     form.resetFields();
-    const res = await axios.get("/api/view_remove_flight");
+    setStartDate(today.format(dateFormat));
+    const res = await axios.get("/api/view_remove_flight", {
+      params: {
+        startDate: startDate,
+        endDate: endDate,
+        airlineName: airlineName,
+        flightNumber: flightNumber,
+      },
+    });
     setFlights(
       res.data.data.map((item, i) => ({
         ...item,
