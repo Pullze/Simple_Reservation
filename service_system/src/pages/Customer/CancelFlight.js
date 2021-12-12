@@ -11,6 +11,10 @@ import {
   Select,
   Table,
   Button,
+  Popconfirm,
+  Modal,
+  Result,
+  Empty,
   message,
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
@@ -30,12 +34,16 @@ const columns = [
   {
     title: "Flight Number",
     dataIndex: "flight_num",
-    sorter: (a, b) => a - b,
+    sorter: (a, b) => +a.flight_num - +b.flight_num,
   },
   {
     title: "Date",
     dataIndex: "flight_date",
-    sorter: null,
+    sorter: (a, b) => moment(a.flight_date) - moment(b.flight_date),
+  },
+  {
+    title: "Number of Seats",
+    dataIndex: "num_seats",
   },
 ];
 
@@ -44,37 +52,33 @@ function CancelFlight() {
   const [form] = Form.useForm();
   const [airlines, setAirlines] = useState([]);
   const [flights, setFlights] = useState([]);
-  const [query, setQuery] = useState({ airline_name: null, flight_num: null });
+  const [query, setQuery] = useState({ airline_name: "All", flight_num: "" });
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [cancelledBooking, setCancelledBooking] = useState({
+    airline_name: null,
+    flight_num: null,
+    is_cancelled: false,
+  });
 
   useEffect(() => {
     axios
       .get("/api/airlines")
-      .then((res) => setAirlines(res.data.data))
+      .then((res) => setAirlines([{ airline_name: "All" }, ...res.data.data]))
+      .catch((err) => console.error(err));
+    axios
+      .get("/api/customer_view_books", {
+        params: { customer_email: location.state.email },
+      })
+      .then((res) =>
+        setFlights(
+          res.data.data.map((item, i) => ({
+            ...item,
+            key: i,
+          }))
+        )
+      )
       .catch((err) => console.error(err));
   }, []);
-
-  //   useEffect(() => {
-  //     if (query) {
-  //       axios
-  //         .get("/api/flights", { params: query })
-  //         .then((res) =>
-  //           setFlights(
-  //             res.data.data.map((item, i) => ({
-  //               ...item,
-  //               key: i,
-  //  //           isCancelled: false
-  //             }))
-  //           )
-  //         )
-  //         .catch((err) => console.error(err));
-  //     }
-  //   }, [query]);
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys),
-  };
 
   const handleCancel = () => {
     if (selectedRowKeys.length === 0) {
@@ -82,30 +86,52 @@ function CancelFlight() {
     } else {
       const flight = flights.filter(({ key }) => key === selectedRowKeys[0])[0];
       const { airline_name, flight_num } = flight;
-      const formData = new FormData();
-      formData.append(
-        "jsonValue",
-        new Blob([JSON.stringify({ airline_name, flight_num })], {
-          type: "application/json",
-        })
-      );
-      axios
-        .post("/api/cancel-flight", formData)
-        .then((res) => {
-          if (res.data.code === 200) {
-            message.success("Success!");
-            setTimeout(() => {
-              setFlights(
-                flights.filter((item) => item.key !== selectedRowKeys[0])
-              );
-              setSelectedRowKeys([]);
-            }, 1000);
-          } else {
-            message.error(res.data.message);
-          }
-        })
-        .catch((err) => console.error(err));
+      axios({
+        method: "post",
+        url: "/api/cancel_flight",
+        params: {
+          airline_name,
+          flight_num,
+          customer_email: location.state.email,
+        },
+      }).then((res) => {
+        if (res.data.code === 200) {
+          setCancelledBooking({ airline_name, flight_num, is_cancelled: true });
+          setFlights(flights.filter(({ key }) => key !== selectedRowKeys[0]));
+          setSelectedRowKeys([]);
+        } else {
+          message.error(res.data.message);
+        }
+      });
+      // const formData = new FormData();
+      // formData.append(
+      //   "jsonValue",
+      //   new Blob([JSON.stringify({ airline_name, flight_num })], {
+      //     type: "application/json",
+      //   })
+      // );
+      // axios
+      //   .post("/api/cancel-flight", formData)
+      //   .then((res) => {
+      //     if (res.data.code === 200) {
+      //       message.success("Success!");
+      //       setTimeout(() => {
+      //         setFlights(
+      //           flights.filter((item) => item.key !== selectedRowKeys[0])
+      //         );
+      //         setSelectedRowKeys([]);
+      //       }, 1000);
+      //     } else {
+      //       message.error(res.data.message);
+      //     }
+      //   })
+      //   .catch((err) => console.error(err));
     }
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys),
   };
 
   return (
@@ -134,7 +160,13 @@ function CancelFlight() {
                   <Row justify="center" gutter={16}>
                     <Col span={14}>
                       <Form.Item name="airline_name" label="Airline">
-                        <Select>
+                        <Select
+                          showSearch
+                          defaultValue={"All"}
+                          onChange={(value) =>
+                            setQuery({ ...query, airline_name: value })
+                          }
+                        >
                           {airlines.map(({ airline_name }, i) => (
                             <Option key={i} value={airline_name}>
                               {airline_name}
@@ -145,7 +177,11 @@ function CancelFlight() {
                     </Col>
                     <Col span={10}>
                       <Form.Item name="flight_num" label="Flight Number">
-                        <Input />
+                        <Input
+                          onChange={(e) =>
+                            setQuery({ ...query, flight_num: e.target.value })
+                          }
+                        />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -153,11 +189,29 @@ function CancelFlight() {
               </Col>
               <Col span={24}>
                 <Table
-                  dataSource={flights}
+                  dataSource={flights.filter(
+                    (item) =>
+                      item !== undefined &&
+                      (query.airline_name === "All" ||
+                        item.airline_name
+                          .toLowerCase()
+                          .includes(query.airline_name.toLowerCase())) &&
+                      item.flight_num
+                        .toLowerCase()
+                        .includes(query.flight_num.toLowerCase())
+                  )}
                   columns={columns}
                   rowSelection={{ type: "radio", ...rowSelection }}
                   pagination={{ pageSize: "5", hideOnSinglePage: true }}
-                ></Table>
+                  locale={{
+                    emptyText: (
+                      <Empty
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        description="You don't have any future bookings!"
+                      />
+                    ),
+                  }}
+                />
               </Col>
               <Col span={24}>
                 <Row justify="center" gutter={16}>
@@ -174,12 +228,43 @@ function CancelFlight() {
                     </Button>
                   </Col>
                   <Col>
-                    <Button type="primary" onClick={handleCancel}>
-                      Cancel Flight
-                    </Button>
+                    <Popconfirm
+                      title="Are you sure to cancel this flight?"
+                      onConfirm={handleCancel}
+                      okText="Yes, cancel it"
+                      cancelText="No"
+                    >
+                      <Button type="primary">Cancel Flight</Button>
+                    </Popconfirm>
                   </Col>
                 </Row>
               </Col>
+              <Modal
+                visible={cancelledBooking.is_cancelled}
+                footer={[
+                  <Button
+                    onClick={() =>
+                      setCancelledBooking({
+                        ...cancelledBooking,
+                        is_cancelled: false,
+                      })
+                    }
+                  >
+                    OK
+                  </Button>,
+                ]}
+                onCancel={() =>
+                  setCancelledBooking({
+                    ...cancelledBooking,
+                    is_cancelled: false,
+                  })
+                }
+              >
+                <Result
+                  status="success"
+                  title={`You have successfully cancelled your booking on ${cancelledBooking.airline_name} ${cancelledBooking.flight_num}.`}
+                />
+              </Modal>
             </Row>
           </Col>
         </Row>

@@ -229,26 +229,34 @@ function ScheduleFlight() {
         >
           <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
             <Row justify="center" align="middle" gutter={[24, 24]}>
-              <Modal visible={visible}
-              title="Alert"
-              footer={[<Button type="primary" onClick={handleCancel}> OK </Button>]}
-              onCancel={handleCancel}>
-                <Result status="success" extra={
-                  <Descriptions bordered size="small" column={1}>
-                    {Object.entries(fieldLabel).map(([name, label], i) => (
-                      <Descriptions.Item label={label}>
-                        {flight[name]}
-                      </Descriptions.Item>
-                    ))}
-                  </Descriptions>
-                } 
-                title="Successfully scheduled a flight!" />
+              <Modal
+                visible={visible}
+                title="Alert"
+                footer={[
+                  <Button type="primary" onClick={handleCancel}>
+                    {" "}
+                    OK{" "}
+                  </Button>,
+                ]}
+                onCancel={handleCancel}
+              >
+                <Result
+                  status="success"
+                  extra={
+                    <Descriptions bordered size="small" column={1}>
+                      {Object.entries(fieldLabel).map(([name, label], i) => (
+                        <Descriptions.Item label={label}>
+                          {flight[name]}
+                        </Descriptions.Item>
+                      ))}
+                    </Descriptions>
+                  }
+                  title="Successfully scheduled a flight!"
+                />
               </Modal>
               <Col span={24} align="middle">
                 <h2>Now logged in as {location.state.email}</h2>
-              </Col>
-              <Col span={24} align="middle">
-                <h1>Schedule Flights</h1>
+                <h1 className="heading">Schedule Flights</h1>
               </Col>
               <Col span={24} align="middle">
                 <Form

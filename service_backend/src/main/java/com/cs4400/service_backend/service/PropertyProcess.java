@@ -2,6 +2,7 @@ package com.cs4400.service_backend.service;
 
 import com.cs4400.service_backend.entity.Property;
 import com.cs4400.service_backend.entity.Reserve;
+import com.cs4400.service_backend.vo.PropertyInfo;
 import com.cs4400.service_backend.vo.ReserveInfo;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface PropertyProcess {
 
     List<ReserveInfo> viewReservationsToReview(String customerEmail);
 
-    List<ReserveInfo> viewPropertyReservations(String propertyEmail, String ownerEmail);
+    List<ReserveInfo> viewPropertyReservations();
 
     List<ReserveInfo> viewOwnersToRate(String customerEmail);
 
@@ -29,5 +30,7 @@ public interface PropertyProcess {
     String reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score);
 
     String rateOwner(String ownerEmail, String customerEmail, Integer score);
+
+    PropertyInfo addProperty(Property property, String nearestAirport, Integer distance);
 
 }

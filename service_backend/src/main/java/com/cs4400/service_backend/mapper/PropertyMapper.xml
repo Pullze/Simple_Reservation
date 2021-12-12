@@ -54,7 +54,7 @@
 
 
     <select id = "viewCustomerFutureReservations" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
-        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ',', p.City, ',', p.State, ',', p.Zip) as address
+        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address
         from reserve as r, property as p
         where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date > CURDATE() and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
     </select>
@@ -68,13 +68,13 @@
     </update>
 
     <select id = "viewCustomerPastReservations" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
-        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ',', p.City, ',', p.State, ',', p.Zip) as address, review.content as review, review.Score as rating
+        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address, review.content as review, review.Score as rating
         from reserve as r left join review on r.Customer = review.Customer and r.Owner_Email = review.Owner_Email, property as p
         where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date &lt; CURDATE() and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
     </select>
 
     <select id = "viewOwnersToRate" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
-        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ',', p.City, ',', p.State, ',', p.Zip) as address, rate.Score as rating
+        select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address, rate.Score as rating
         from reserve as r left join customers_rate_owners as rate on r.Customer = rate.Customer and r.Owner_Email = rate.Owner_Email, property as p
         where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date &lt; CURDATE() and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
     </select>
@@ -92,19 +92,41 @@
     <select id = "viewPropertyReservations" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
         select
             p.Property_Name as propertyName,
+            p.Owner_Email as ownerEmail,
             res.Start_Date as startDate,
             res.End_Date as endDate,
             res.Customer as customerEmail,
-            cli.Phone_Number as custPhone,
+            cli.Phone_Number as customerPhone,
             p.Cost  * (1 - (0.8  * (res.Was_Cancelled))) * (res.End_Date - res.Start_Date + 1) as cost,
             rev.Score as rating,
             rev.Content as review
-        from property as p
-                 left join review as rev on p.Property_Name = rev.Property_Name
-                 left join reserve as res on p.Property_Name = res.Property_Name
+        from reserve as res
+                 left join property as p on (p.Property_Name, p.Owner_Email) = (res.Property_Name, res.Owner_Email)
+                 left join review as rev on (p.Property_Name, p.Owner_Email) = (rev.Property_Name, rev.Owner_Email)
                  left join clients as cli on res.Customer = cli.Email
-        where p.Property_Name = #{propertyName} and p.Owner_Email = #{ownerEmail}
         group by p.Property_Name, res.Was_Cancelled, res.Customer;
     </select>
+
+    <select id = "checkAddressExist" parameterType = "Property" resultType = "Property">
+        select * from Property where concat(Street, ',', City, ',', State, ',', Zip) = #{address};
+    </select>
+
+    <select id = "checkNameExist" parameterType = "Property" resultType = "Property">
+        select * from Property where Property_Name = #{property_name} and Owner_Email = #{owner_email};
+    </select>
+
+    <select id = "checkPropertyExist" resultType = "PropertyInfo">
+        select * from Property where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail};
+    </select>
+
+    <insert id = "addProperty" parameterType = "Property">
+        insert into Property(Property_Name, Owner_Email, Descr, Capacity, Cost, Street, City, State, Zip)
+        values (#{property_name}, #{owner_email}, #{descr}, #{capacity}, #{cost}, #{street}, #{city}, #{state}, #{zip})
+    </insert>
+
+    <insert id = "addCloseAirport">
+        insert into Is_Close_To(property_name, owner_email, airport, distance)
+        values (#{propertyName}, #{ownerEmail}, #{airportId}, #{distance})
+    </insert>
 
 </mapper>

@@ -1,10 +1,12 @@
 package com.cs4400.service_backend.service.impl;
 
 import com.cs4400.service_backend.entity.Reserve;
+import com.cs4400.service_backend.mapper.AirportMapper;
 import com.cs4400.service_backend.mapper.PropertyMapper;
 import com.cs4400.service_backend.entity.Property;
 import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.service.PropertyProcess;
+import com.cs4400.service_backend.vo.PropertyInfo;
 import com.cs4400.service_backend.vo.ReserveInfo;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class PropertyProcessImpl implements PropertyProcess {
 
     @Resource
     private PropertyMapper propertyMapper;
+
+    @Resource
+    private AirportMapper airportMapper;
 
     @Override
     public List<Property> viewProperties(Integer high, Integer low) {
@@ -91,8 +96,8 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public List<ReserveInfo> viewPropertyReservations(String propertyEmail, String ownerEmail) {
-        return propertyMapper.viewPropertyReservations(propertyEmail, ownerEmail);
+    public List<ReserveInfo> viewPropertyReservations() {
+        return propertyMapper.viewPropertyReservations();
     }
 
     @Override
@@ -103,8 +108,8 @@ public class PropertyProcessImpl implements PropertyProcess {
 
     @Override
     public String reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score) {
-        if (content == null || score == null) {
-            return "please type in valid content and score";
+        if (score == null) {
+            return "please type in valid score";
         }
         propertyMapper.reviewReservation(propertyName, ownerEmail, customerEmail, content, score);
         return "review the reservation for " + propertyName + " succeeded!";
@@ -129,5 +134,43 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
 
+    @Override
+    public PropertyInfo addProperty(Property property, String nearestAirport,   Integer distance) {
+        property.setAddress(property.getStreet() + ',' + property.getCity() + ',' + property.getState() + ',' + property.getZip());
+        PropertyInfo returnPropertyInfo = new PropertyInfo();
+        if (propertyMapper.checkAddressExist(property) != null) {
+            returnPropertyInfo.setMessage("Address already exists!");
+            return  returnPropertyInfo;
+        }
 
+        if (propertyMapper.checkNameExist(property) != null) {
+            returnPropertyInfo.setMessage("The property name already exists in your properties!");
+            return returnPropertyInfo;
+        }
+
+        if (property.getCapacity() <= 0) {
+            returnPropertyInfo.setMessage("Capacity must be larger than 0");
+            return returnPropertyInfo;
+        }
+
+        if (nearestAirport != null && airportMapper.check_airport(nearestAirport) == null) {
+            returnPropertyInfo.setMessage("This nearest airport does not exists!");
+            return returnPropertyInfo;
+        }
+
+        if (nearestAirport != null && distance == null) {
+            returnPropertyInfo.setMessage("You must enter the distance of the nearest airport");
+            return returnPropertyInfo;
+        }
+
+        propertyMapper.addProperty(property);
+        if (nearestAirport != null) {
+            propertyMapper.addCloseAirport(property.getProperty_name(), property.getOwner_email(), nearestAirport, distance);
+        }
+
+        returnPropertyInfo = propertyMapper.checkPropertyExist(property.getProperty_name(), property.getOwner_email());
+        returnPropertyInfo.setAddress(returnPropertyInfo.getStreet() + ',' + returnPropertyInfo.getCity() + ',' + returnPropertyInfo.getState() + ',' + returnPropertyInfo.getZip());
+        returnPropertyInfo.setMessage("Successfully added this property!");
+        return returnPropertyInfo;
+    }
 }

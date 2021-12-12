@@ -16,9 +16,11 @@ public interface FlightMapper {
 
     FlightInfo check_flight(String flight_num, String airline_name);
 
+
+//  retrieve remaining_seats
     Integer check_flight_seats(String flight_num, String airline_name);
 
-    List<Flight> view_flight(int minSeats);
+    List<Flight> customer_view_flight(int minSeats);
 
     List<ViewFlightInfo> get_flight_info();
 
@@ -26,9 +28,10 @@ public interface FlightMapper {
 
     Integer remove_flight(String flight_num, String airline_name);
 
-    Integer remove_book_flight(String flight_num, String airline_name);
+
 
     List<RemoveFlightInfo> view_remove_flight(String start_date, String end_date,
                                               String airline_name, String flight_num);
+
 
 }

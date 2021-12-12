@@ -1,28 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import { Layout, Row, Col, Table, Form, Input, Button, message } from "antd";
+import {
+  Layout,
+  Row,
+  Col,
+  Table,
+  Form,
+  Input,
+  Button,
+  Modal,
+  Result,
+  Empty,
+  message,
+} from "antd";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
+import moment from "moment";
+
+const today = moment();
 
 function ReviewProperty() {
   const location = useLocation();
   const [form] = Form.useForm();
-  const [properties, setProperties] = useState([]);
+  const [reservations, setReservations] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [review, setReview] = useState({
+    propertyName: null,
+    isReviewed: false,
+  });
 
   const columns = [
     {
       title: "Reservation Date",
-      dataIndex: "", //FIXME
+      dataIndex: "startDate", //FIXME
     },
     {
       title: "Property Name",
-      dataIndex: "property_name",
+      dataIndex: "propertyName",
     },
     {
       title: "Owner Email",
-      dataIndex: "owner_email",
+      dataIndex: "ownerEmail",
     },
     {
       title: "Address",
@@ -36,45 +55,59 @@ function ReviewProperty() {
   };
 
   const onFinish = (values) => {
-    console.log("Success:", values);
     if (selectedRowKeys.length === 0) {
       return message.error("Please select a property to review.");
     }
-    const property = properties.filter(
+    const property = reservations.filter(
       ({ key }) => key === selectedRowKeys[0]
     )[0];
-    const { property_name, owner_email } = property;
+    const { propertyName, ownerEmail } = property;
     const review = {
-      property_name,
-      owner_email,
-      customer_email: location.state.email,
-      content: values.content,
-      score: values.scores,
+      propertyName,
+      ownerEmail,
+      customerEmail: location.state.email,
+      content: values.content === undefined ? "" : values.content,
+      score: +values.score,
     };
-    const formData = new FormData();
-    formData.append(
-      "jsonValue",
-      new Blob([JSON.stringify(review)], { type: "application/json" })
-    );
-    axios.post("/api/review-property", formData).then((res) => {
-      if (res.data.code === 200) {
-        message.success("Successfully submitted review!");
-        setTimeout(() => {
-          setProperties(
-            properties.filter(({ key }) => key !== selectedRowKeys[0])
+    console.log(review);
+    axios({
+      method: "post",
+      url: "/api/review_reservation",
+      params: {
+        propertyName,
+        ownerEmail,
+        customerEmail: location.state.email,
+        content: values.content === undefined ? "" : values.content,
+        score: +values.score,
+      },
+    })
+      .then((res) => {
+        if (res.data.code === 200) {
+          setReview({ propertyName, isReviewed: true });
+          setReservations(
+            reservations.filter(({ key }) => key !== selectedRowKeys[0])
           );
           setSelectedRowKeys([]);
-        }, 1000);
-      }
-    });
+        } else {
+          message.error(res.data.message);
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
-  //   useEffect(() => {
-  //     axios
-  //       .get("/api/reservations", { params: { email: location.state.email } })
-  //       .then((res) => setProperties(res.data.data))
-  //       .catch((err) => console.error(err));
-  //   }, []);
+  useEffect(() => {
+    axios
+      .get("/api/customer_past_reservations", {
+        params: {
+          customerEmail: location.state.email,
+          currentDate: today.format("YYYY-MM-DD"),
+        },
+      })
+      .then((res) =>
+        setReservations(res.data.data.map((item, i) => ({ ...item, key: i })))
+      )
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -92,10 +125,18 @@ function ReviewProperty() {
               </Col>
               <Col span={24}>
                 <Table
-                  dataSource={properties}
+                  dataSource={reservations}
                   columns={columns}
                   rowSelection={{ type: "radio", ...rowSelection }}
                   pagination={{ pageSize: "5", hideOnSinglePage: true }}
+                  locale={{
+                    emptyText: (
+                      <Empty
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        description="No more properties to review!"
+                      />
+                    ),
+                  }}
                 ></Table>
               </Col>
               <Col span={24}>
@@ -134,13 +175,16 @@ function ReviewProperty() {
                             validator(_, value) {
                               if (
                                 !value ||
-                                (!isNaN(value) && value >= 1 && value <= 5)
+                                (!isNaN(value) &&
+                                  value.length === 1 &&
+                                  +value >= 1 &&
+                                  +value <= 5)
                               ) {
                                 return Promise.resolve();
                               }
                               return Promise.reject(
                                 new Error(
-                                  "Please enter a number between 1 and 5."
+                                  "Please enter an integer value between 1 and 5."
                                 )
                               );
                             },
@@ -176,6 +220,22 @@ function ReviewProperty() {
                   </Row>
                 </Form>
               </Col>
+              <Modal
+                visible={review.isReviewed}
+                footer={[
+                  <Button
+                    onClick={() => setReview({ ...review, isReviewed: false })}
+                  >
+                    OK
+                  </Button>,
+                ]}
+                onCancel={() => setReview({ ...review, isReviewed: false })}
+              >
+                <Result
+                  status="success"
+                  title={`You have successfully submitted a review for ${review.propertyName}.`}
+                ></Result>
+              </Modal>
             </Row>
           </Col>
         </Row>

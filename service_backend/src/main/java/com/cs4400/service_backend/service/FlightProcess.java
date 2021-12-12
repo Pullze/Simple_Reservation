@@ -10,12 +10,13 @@ import java.util.List;
 public interface FlightProcess {
     FlightInfo schedule_flight(FlightInfo flightInfo);
 
-    List<Flight> view_flight(int minSeats);
+    List<Flight> customer_view_flight(int minSeats);
 
     List<ViewFlightInfo> getFlightInfo();
 
     Integer removeFlight(String flightNum, String airlineName, String currentDate);
 
     List<RemoveFlightInfo> viewRemoveFlight(String startDate, String endDate, String airlineName, String flightNumber);
+
 
 }

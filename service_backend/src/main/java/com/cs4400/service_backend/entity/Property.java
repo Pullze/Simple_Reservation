@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class Property {
@@ -30,8 +31,21 @@ public class Property {
     @ApiModelProperty(value = "Address")
     private String address;
 
+    @ApiModelProperty(value = "state")
+    private String state;
+
+    @ApiModelProperty(value = "city")
+    private String city;
+
+    @ApiModelProperty(value = "street")
+    private String street;
+
+    @ApiModelProperty(value = "zip")
+    private String zip;
+
     @ApiModelProperty(value = "Amenities")
     private List<String> amenities;
 
-
+    @ApiModelProperty(value = "nearestAirports")
+    private Map<String, Integer> nearestAirports;
 }

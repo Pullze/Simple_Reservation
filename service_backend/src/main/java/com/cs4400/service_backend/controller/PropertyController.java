@@ -6,16 +6,14 @@ import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.Login;
 import com.cs4400.service_backend.service.PropertyProcess;
 import com.cs4400.service_backend.service.UserProcess;
+import com.cs4400.service_backend.vo.PropertyInfo;
 import com.cs4400.service_backend.vo.ReserveInfo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -102,7 +100,7 @@ public class PropertyController {
      * @param customerEmail customer's email
      * @return response contain of ReserveInfo
      */
-    @GetMapping(value = "/customer-past-reservations")
+    @GetMapping(value = "/customer_past_reservations")
     @ApiOperation(value ="customer past reservations", notes = "customer past reservations")
     public Response<?> viewCustomerPastReservations(@RequestParam String customerEmail) {
         List<ReserveInfo> result = propertyProcess.viewCustomerPastReservations(customerEmail);
@@ -136,12 +134,12 @@ public class PropertyController {
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
-    @GetMapping(value = "/rate-owner")
+    @PostMapping(value = "/rate_owner")
     @ApiOperation(value ="rate owner", notes = "rate owner")
-    public String reviewReservation(@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam Integer score) {
+    public Response<?> rateOwner(@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam Integer score) {
         String result = propertyProcess.rateOwner(ownerEmail, customerEmail, score);
         System.out.println(result);
-        return result;
+        return new Response<>(HttpStatus.OK.value(), result);
     }
 
     /**
@@ -166,24 +164,34 @@ public class PropertyController {
      * @param customerEmail cutomer's email
      * @param content content
      * @param score score
-     * @return
+     * @return Response object
      */
-    @GetMapping(value = "/reivew reservation")
+    @PostMapping(value = "/review_reservation")
     @ApiOperation(value ="review reservation", notes = "review reservation")
-    public String reviewReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam String content, @RequestParam Integer score) {
+    public Response<?> reviewReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam(required = false) String content, @RequestParam Integer score) {
         String result = propertyProcess.reviewReservation(propertyName, ownerEmail, customerEmail, content, score);
         System.out.println(result);
-        return result;
+        return new Response<>(HttpStatus.OK.value(), "Success");
     }
 
-    @GetMapping(value = "/property-reservations")
+    @GetMapping(value = "/property_reservations")
     @ApiOperation(value ="property reservations", notes = "property reservations")
-    public Response<?> viewPropertyReservations(@RequestParam String propertyName, @RequestParam String ownerEmail) {
-        List<ReserveInfo> result = propertyProcess.viewPropertyReservations(propertyName, ownerEmail);
+    public Response<?> viewPropertyReservations() {
+        List<ReserveInfo> result = propertyProcess.viewPropertyReservations();
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
-
+    @PostMapping(value = "/owner-add-property")
+    @ApiOperation(value = "owner add property")
+    public Response<?> ownerAddProperty(@RequestBody Property property, @RequestParam(required = false) String nearestAirport, @RequestParam(required = false) Integer distance) {
+        PropertyInfo propertyInfo = propertyProcess.addProperty(property, nearestAirport, distance);
+        String message = propertyInfo.getMessage();
+        if (message == "Successfully added this property!") {
+            return new Response<>(200, message, propertyInfo);
+        } else {
+            return new Response<>(400, message);
+        }
+    }
 }
 
