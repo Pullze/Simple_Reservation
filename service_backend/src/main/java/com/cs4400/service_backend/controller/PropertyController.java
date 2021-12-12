@@ -113,7 +113,7 @@ public class PropertyController {
      * @param customerEmail customer's email
      * @return
      */
-    @GetMapping(value = "/reservations-to-review")
+    @GetMapping(value = "/reservations_to_review")
     @ApiOperation(value ="customer view reservations to review", notes = "reservations to review")
     public Response<?> viewReservationsToReview(@RequestParam String customerEmail) {
         List<ReserveInfo> result = propertyProcess.viewReservationsToReview(customerEmail);
@@ -200,7 +200,7 @@ public class PropertyController {
     public Response<?> ownerAddProperty(@RequestBody Property property, @RequestParam(required = false) String nearestAirport, @RequestParam(required = false) Integer distance) {
         PropertyInfo propertyInfo = propertyProcess.addProperty(property, nearestAirport, distance);
         String message = propertyInfo.getMessage();
-        if (message == "Successfully added this property!") {
+        if (message.equals("Successfully added this property!")) {
             return new Response<>(200, message, propertyInfo);
         } else {
             return new Response<>(400, message);
