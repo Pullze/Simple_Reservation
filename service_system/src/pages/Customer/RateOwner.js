@@ -8,6 +8,7 @@ import {
   Table,
   Form,
   Input,
+  DatePicker,
   Button,
   Modal,
   Result,
@@ -18,6 +19,8 @@ import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 import moment from "moment";
 import "./EditableTable.css";
+
+const today = moment();
 
 // Editable Table helpers
 
@@ -122,7 +125,10 @@ function RateOwner() {
   useEffect(() => {
     axios
       .get("/api/owners_to_rate", {
-        params: { customerEmail: location.state.email },
+        params: {
+          customerEmail: location.state.email,
+          currentDate: today.format("YYYY-MM-DD"),
+        },
       })
       .then((res) =>
         setOwners(
@@ -216,7 +222,12 @@ function RateOwner() {
                 <h2>Now logged in as {location.state.email}</h2>
                 <h1 className="heading">Rate Owner</h1>
               </Col>
-              <Col align="middle">
+              <Col span={24}>
+                <Form.Item label="Current Date">
+                  <DatePicker disabled defaultValue={today} />
+                </Form.Item>
+              </Col>
+              <Col span={24} align="middle">
                 <Table
                   dataSource={owners}
                   columns={ownerColumns}

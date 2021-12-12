@@ -6,6 +6,8 @@ import {
   Row,
   Col,
   Table,
+  Form,
+  DatePicker,
   Button,
   Popconfirm,
   message,
@@ -15,6 +17,9 @@ import {
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
+import moment from "moment";
+
+const today = moment();
 
 function CancelProperty() {
   const location = useLocation();
@@ -80,8 +85,11 @@ function CancelProperty() {
 
   useEffect(() => {
     axios
-      .get("/api/customer-future-reservations", {
-        params: { customerEmail: location.state.email },
+      .get("/api/customer_future_reservations", {
+        params: {
+          customerEmail: location.state.email,
+          currentDate: today.format("YYYY-MM-DD"),
+        },
       })
       .then((res) =>
         setReservations(
@@ -107,6 +115,11 @@ function CancelProperty() {
               <Col span={24} align="middle">
                 <h2>Now logged in as {location.state.email}</h2>
                 <h1 className="heading">Cancel Property Reservation</h1>
+              </Col>
+              <Col span={24}>
+                <Form.Item label="Current Date">
+                  <DatePicker disabled defaultValue={today} />
+                </Form.Item>
               </Col>
               <Col span={24}>
                 <Table

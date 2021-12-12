@@ -8,6 +8,7 @@ import {
   Table,
   Form,
   Input,
+  DatePicker,
   Button,
   Modal,
   Result,
@@ -98,7 +99,10 @@ function ReviewProperty() {
   useEffect(() => {
     axios
       .get("/api/reservations_to_review", {
-        params: { customerEmail: location.state.email },
+        params: {
+          customerEmail: location.state.email,
+          currentDate: today.format("YYYY-MM-DD"),
+        },
       })
       .then((res) =>
         setReservations(res.data.data.map((item, i) => ({ ...item, key: i })))
@@ -119,6 +123,11 @@ function ReviewProperty() {
               <Col span={24} align="middle">
                 <h2>Now logged in as {location.state.email}</h2>
                 <h1 className="heading">Review Property</h1>
+              </Col>
+              <Col span={24}>
+                <Form.Item label="Current Date">
+                  <DatePicker disabled defaultValue={today} />
+                </Form.Item>
               </Col>
               <Col span={24}>
                 <Table

@@ -189,7 +189,9 @@ function BookFlight() {
       ])
     );
     axios
-      .get("/api/customer_view_flights", { params: { minSeats: 1 } })
+      .get("/api/customer_view_flights", {
+        params: { minSeats: 1, currentDate: today.format(dateFormat) },
+      })
       .then((res) => {
         setFlights(
           res.data.data.map((item, i) => ({

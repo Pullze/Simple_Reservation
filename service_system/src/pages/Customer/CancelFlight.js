@@ -67,7 +67,10 @@ function CancelFlight() {
       .catch((err) => console.error(err));
     axios
       .get("/api/customer_view_books", {
-        params: { customer_email: location.state.email },
+        params: {
+          customer_email: location.state.email,
+          currentDate: today.format("YYYY-MM-DD"),
+        },
       })
       .then((res) =>
         setFlights(
@@ -103,29 +106,6 @@ function CancelFlight() {
           message.error(res.data.message);
         }
       });
-      // const formData = new FormData();
-      // formData.append(
-      //   "jsonValue",
-      //   new Blob([JSON.stringify({ airline_name, flight_num })], {
-      //     type: "application/json",
-      //   })
-      // );
-      // axios
-      //   .post("/api/cancel-flight", formData)
-      //   .then((res) => {
-      //     if (res.data.code === 200) {
-      //       message.success("Success!");
-      //       setTimeout(() => {
-      //         setFlights(
-      //           flights.filter((item) => item.key !== selectedRowKeys[0])
-      //         );
-      //         setSelectedRowKeys([]);
-      //       }, 1000);
-      //     } else {
-      //       message.error(res.data.message);
-      //     }
-      //   })
-      //   .catch((err) => console.error(err));
     }
   };
 

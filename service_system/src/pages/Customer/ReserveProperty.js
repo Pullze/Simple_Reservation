@@ -22,7 +22,7 @@ import "./EditableTable.css";
 
 const { RangePicker } = DatePicker;
 
-const today = moment("2021-12-01");
+const today = moment();
 const dateFormat = "YYYY-MM-DD";
 
 // Columns
@@ -136,7 +136,7 @@ function ReserveProperty() {
   useEffect(() => {
     if (dates) {
       axios
-        .get("/api/available-properties", {
+        .get("/api/available_properties", {
           params: {
             start: dates[0].format(dateFormat),
             end: dates[1].format(dateFormat),
@@ -190,7 +190,7 @@ function ReserveProperty() {
           new Blob([JSON.stringify(reserve)], { type: "application/json" })
         );
         axios
-          .post("/api/reserve-property", formData)
+          .post("/api/reserve_property", formData)
           .then((res) => {
             if (res.data.code === 200) {
               const reservation = res.data.data;
