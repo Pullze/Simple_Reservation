@@ -3,13 +3,10 @@ package com.cs4400.service_backend.controller;
 import com.cs4400.service_backend.entity.Property;
 import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.entity.Response;
-import com.cs4400.service_backend.service.Login;
 import com.cs4400.service_backend.service.PropertyProcess;
-import com.cs4400.service_backend.service.UserProcess;
 import com.cs4400.service_backend.vo.PropertyInfo;
 import com.cs4400.service_backend.vo.ReserveInfo;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -121,10 +118,32 @@ public class PropertyController {
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
-    @PostMapping(value = "/rate_owner")
-    @ApiOperation(value ="rate owner", notes = "rate owner")
-    public Response<?> rateOwner(@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam Integer score) {
-        String result = propertyProcess.rateOwner(ownerEmail, customerEmail, score);
+    /**
+     *
+     * @param ownerEmail owner's email
+     * @return
+     */
+    @GetMapping(value = "/customers_to_rate")
+    @ApiOperation(value ="owner view customers to rate", notes = "owner view customers to rate")
+    public Response<?> viewCustomersToRate(@RequestParam String ownerEmail) {
+        List<ReserveInfo> result = propertyProcess.viewCustomersToRate(ownerEmail);
+        System.out.println(result);
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+    }
+
+
+    @PostMapping(value = "/customer_rate_owner")
+    @ApiOperation(value ="customer_rate owner", notes = "customer rate owner")
+    public Response<?> customerRateOwner(@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam Integer score) {
+        String result = propertyProcess.CustomerRateOwner(ownerEmail, customerEmail, score);
+        System.out.println(result);
+        return new Response<>(HttpStatus.OK.value(), result);
+    }
+
+    @PostMapping(value = "/owner_rate_customer")
+    @ApiOperation(value ="owner_rate_customer", notes = "owner rate customer")
+    public Response<?> ownerRateCustomer(@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam Integer score) {
+        String result = propertyProcess.OwnerRateCustomer(ownerEmail, customerEmail, score);
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), result);
     }

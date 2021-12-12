@@ -20,5 +20,4 @@ public class Customer extends Client{
     @ApiModelProperty(value = "Location")
     private String location;
 
-  
 }

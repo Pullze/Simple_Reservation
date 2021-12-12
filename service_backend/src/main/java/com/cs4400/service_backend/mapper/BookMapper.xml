@@ -40,7 +40,7 @@
 
     <select id = "check_all_book_customer" resultType = "Book">
         select * from Book natural join Flight
-        where Customer = #{customer} and Flight_Date &lt; CURDATE() and Was_Cancelled = 0;
+        where Customer = #{customer} and Flight_Date &gt; CURDATE() and Was_Cancelled = 0;
     </select>
 
     <update id = "cancel_book">

@@ -23,13 +23,17 @@ public interface PropertyProcess {
 
     List<ReserveInfo> viewPropertyReservations();
 
+    List<ReserveInfo> viewCustomersToRate(String ownerEmail);
+
     List<ReserveInfo> viewOwnersToRate(String customerEmail);
 
     String cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail);
 
     String reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score);
 
-    String rateOwner(String ownerEmail, String customerEmail, Integer score);
+    String CustomerRateOwner(String ownerEmail, String customerEmail, Integer score);
+
+    String OwnerRateCustomer(String ownerEmail, String customerEmail, Integer score);
 
     PropertyInfo addProperty(Property property, String nearestAirport, Integer distance);
 

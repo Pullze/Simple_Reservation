@@ -27,6 +27,7 @@
         Capacity - coalesce(SUM(b.Num_Seats * (1 - b.Was_Cancelled)), 0) as remaining_seats
 		from flight as f left join book as b on
         b.Airline_Name = f.Airline_Name and b.Flight_Num = f.Flight_Num
+        where Flight_Date > CURDATE()
 		group by f.Airline_Name , f.Flight_Num
 		having remaining_seats >= #{minSeats};
     </select>
