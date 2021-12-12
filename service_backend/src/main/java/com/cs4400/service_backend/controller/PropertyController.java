@@ -102,7 +102,7 @@ public class PropertyController {
      * @param customerEmail customer's email
      * @return response contain of ReserveInfo
      */
-    @GetMapping(value = "/customer-past-reservations")
+    @GetMapping(value = "/customer_past_reservations")
     @ApiOperation(value ="customer past reservations", notes = "customer past reservations")
     public Response<?> viewCustomerPastReservations(@RequestParam String customerEmail) {
         List<ReserveInfo> result = propertyProcess.viewCustomerPastReservations(customerEmail);
@@ -115,7 +115,7 @@ public class PropertyController {
      * @param customerEmail customer's email
      * @return
      */
-    @GetMapping(value = "/owners-to-rate")
+    @GetMapping(value = "/owners_to_rate")
     @ApiOperation(value ="customer view owners to rate", notes = "customer view owners to rate")
     public Response<?> viewOwnersToRate(@RequestParam String customerEmail) {
         List<ReserveInfo> result = propertyProcess.viewOwnersToRate(customerEmail);
@@ -123,12 +123,12 @@ public class PropertyController {
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
-    @GetMapping(value = "/rate-owner")
+    @PostMapping(value = "/rate_owner")
     @ApiOperation(value ="rate owner", notes = "rate owner")
-    public String reviewReservation(@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam Integer score) {
+    public Response<?> rateOwner(@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam Integer score) {
         String result = propertyProcess.rateOwner(ownerEmail, customerEmail, score);
         System.out.println(result);
-        return result;
+        return new Response<>(HttpStatus.OK.value(), result);
     }
 
     /**
@@ -153,20 +153,20 @@ public class PropertyController {
      * @param customerEmail cutomer's email
      * @param content content
      * @param score score
-     * @return
+     * @return Response object
      */
-    @GetMapping(value = "/reivew reservation")
+    @PostMapping(value = "/review_reservation")
     @ApiOperation(value ="review reservation", notes = "review reservation")
-    public String reviewReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam String content, @RequestParam Integer score) {
+    public Response<?> reviewReservation(@RequestParam String propertyName,@RequestParam String ownerEmail ,@RequestParam String customerEmail, @RequestParam(required = false) String content, @RequestParam Integer score) {
         String result = propertyProcess.reviewReservation(propertyName, ownerEmail, customerEmail, content, score);
         System.out.println(result);
-        return result;
+        return new Response<>(HttpStatus.OK.value(), "Success");
     }
 
-    @GetMapping(value = "/property-reservations")
+    @GetMapping(value = "/property_reservations")
     @ApiOperation(value ="property reservations", notes = "property reservations")
-    public Response<?> viewPropertyReservations(@RequestParam String propertyName, @RequestParam String ownerEmail) {
-        List<ReserveInfo> result = propertyProcess.viewPropertyReservations(propertyName, ownerEmail);
+    public Response<?> viewPropertyReservations() {
+        List<ReserveInfo> result = propertyProcess.viewPropertyReservations();
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }

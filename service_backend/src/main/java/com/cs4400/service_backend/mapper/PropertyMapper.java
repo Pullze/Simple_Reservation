@@ -28,7 +28,7 @@ public interface PropertyMapper {
 
    List<ReserveInfo> viewOwnersToRate(String customerEmail);
 
-   List<ReserveInfo> viewPropertyReservations(String propertyName, String ownerEmail);
+   List<ReserveInfo> viewPropertyReservations();
 
    Boolean check_owner_has_property(String email);
 

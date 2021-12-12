@@ -20,7 +20,7 @@ public interface PropertyProcess {
 
     List<ReserveInfo> viewReservationsToReview(String customerEmail);
 
-    List<ReserveInfo> viewPropertyReservations(String propertyEmail, String ownerEmail);
+    List<ReserveInfo> viewPropertyReservations();
 
     List<ReserveInfo> viewOwnersToRate(String customerEmail);
 
