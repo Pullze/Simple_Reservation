@@ -4,39 +4,38 @@ import { Link } from "react-router-dom";
 import { Layout, Row, Col, Form, Input, Button, Table } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
+import moment from "moment";
+
+const dateFormat = "MM/DD/YY";
 
 const columns = [
   {
     title: "Property Name",
-    dataIndex: "property_name",
+    dataIndex: "propertyName",
   },
   {
     title: "Start Date",
-    dataIndex: "start_date",
+    dataIndex: "startDate",
   },
   {
     title: "End Date",
-    dataIndex: "end_date",
+    dataIndex: "endDate",
   },
   {
     title: "Customer Email",
-    dataIndex: "customer_email", //FIXME
+    dataIndex: "customerEmail",
   },
   {
     title: "Customer Phone #",
-    dataIndex: "customer_phone", //FIXME
+    dataIndex: "customerPhone",
   },
   {
     title: "Cost",
-    dataIndex: "cost", //FIXME
-  },
-  {
-    title: "Review",
-    dataIndex: "review", //FIXME
+    dataIndex: "cost",
   },
   {
     title: "Rating",
-    dataIndex: "rating", //FIXME
+    dataIndex: "rating",
   },
 ];
 
@@ -46,12 +45,22 @@ function ViewReservations() {
   const [owner, setOwner] = useState("");
   const [property, setProperty] = useState("");
 
-  //   useEffect(() => {
-  //     axios
-  //       .get("api/reservations")
-  //       .then((res) => setReservations(res.data.data))
-  //       .catch((err) => console.error(err));
-  //   }, []);
+  useEffect(() => {
+    axios
+      .get("/api/property_reservations")
+      .then((res) =>
+        setReservations(
+          res.data.data.map((item, i) => ({
+            ...item,
+            key: i,
+            startDate: moment(item.startDate).format(dateFormat),
+            endDate: moment(item.endDate).format(dateFormat),
+            cost: "$" + item.cost,
+          }))
+        )
+      )
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -61,7 +70,7 @@ function ViewReservations() {
           align="middle"
           style={{ margin: "24px 24px 24px" }}
         >
-          <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
+          <Col xs={22} sm={20} md={20} lg={20} xl={20} xxl={18}>
             <Row justify="center" align="middle" gutter={[24, 24]}>
               <Col span={24} align="middle">
                 <h2>Now logged in as {location.state.email}</h2>
@@ -71,12 +80,12 @@ function ViewReservations() {
                 <Row justify="center" gutter={16}>
                   <Col>
                     <Form.Item name="owner_email" label="Owner Email">
-                      <Input onChange={(value) => setOwner(value)} />
+                      <Input onChange={(e) => setOwner(e.target.value)} />
                     </Form.Item>
                   </Col>
                   <Col>
                     <Form.Item name="property_name" label="Property">
-                      <Input onChange={(value) => setProperty(value)} />
+                      <Input onChange={(e) => setProperty(e.target.value)} />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -84,11 +93,25 @@ function ViewReservations() {
               <Col span={24}>
                 <Table
                   dataSource={reservations.filter(
-                    ({ owner_email, property_name }) =>
-                      owner_email.includes(owner) &&
-                      property_name.includes(property)
+                    (item) =>
+                      item !== undefined &&
+                      item.ownerEmail
+                        .toLowerCase()
+                        .includes(owner.toLowerCase()) &&
+                      item.propertyName
+                        .toLowerCase()
+                        .includes(property.toLowerCase())
                   )}
                   columns={columns}
+                  expandable={{
+                    expandedRowRender: (record) => (
+                      <p style={{ margin: 0 }}>
+                        <span style={{ fontWeight: "bold" }}>Review: </span>
+                        {record.review}
+                      </p>
+                    ),
+                  }}
+                  pagination={{ pageSize: 5 }}
                 />
               </Col>
               <Col span={24} align="left">

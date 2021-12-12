@@ -11,7 +11,7 @@ import {
   Layout,
   Modal,
   Space,
-  Result
+  Result,
 } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./Login.css";
@@ -74,7 +74,9 @@ export default function Login() {
           } else if (res.data.data.is_client) {
             buttRedirect("client");
           } else {
-            message.error("Login Failed. Please check your username and password.");
+            message.error(
+              "Login Failed. Please check your username and password."
+            );
           }
         } else {
           message.error("Connection Failed. Please check your connectoin.");
@@ -85,11 +87,9 @@ export default function Login() {
       });
   };
 
-  useEffect(
-    () => {
-      history.replace("/")
-    }, []
-  )
+  useEffect(() => {
+    history.replace("/");
+  }, []);
   return (
     <Layout>
       <Content style={{ margin: "24px, 24px, 24px", background: "white" }}>
@@ -110,7 +110,7 @@ export default function Login() {
           >
             <Result
               status="warning"
-              title="It seems that you are both a customer and a owner, please select
+              title="It seems that you are both a customer and a owner. Please select
               which panal you would like to go:"
               extra={
                 <Space>

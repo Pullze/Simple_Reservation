@@ -1,9 +1,22 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import { Layout, Row, Col, Table, Form, Input, Button, message } from "antd";
+import {
+  Layout,
+  Row,
+  Col,
+  Table,
+  Form,
+  Input,
+  Button,
+  Modal,
+  Result,
+  Empty,
+  message,
+} from "antd";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
+import moment from "moment";
 import "./EditableTable.css";
 
 // Editable Table helpers
@@ -79,19 +92,21 @@ const EditableCell = ({
 function RateOwner() {
   const location = useLocation();
   const [owners, setOwners] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [rating, setRating] = useState({ ownerEmail: null, isRated: false });
 
   const columns = [
     {
       title: "Reservation Date",
-      dataIndex: "", //FIXME
+      dataIndex: "startDate", //FIXME
     },
     {
       title: "Owner Email",
-      dataIndex: "owner_email",
+      dataIndex: "ownerEmail",
     },
     {
       title: "Property Name",
-      dataIndex: "property_name",
+      dataIndex: "propertyName",
     },
     {
       title: "Address",
@@ -99,49 +114,63 @@ function RateOwner() {
     },
     {
       title: "Rating",
-      dataIndex: "rating", //FIXME
+      dataIndex: "score",
       editable: true,
     },
   ];
 
-  //   useEffect(() => {
-  //     axios
-  //       .get("/api/owners", { params: { customer: location.state.email } })
-  //       .then((res) =>
-  //         setOwners(
-  //           res.data.data.map((item) => ({ ...item, rating: ""}))
-  //         )
-  //       );
-  //   }, []);
+  useEffect(() => {
+    axios
+      .get("/api/owners_to_rate", {
+        params: { customerEmail: location.state.email },
+      })
+      .then((res) =>
+        setOwners(
+          res.data.data.map((item, i) => ({
+            ...item,
+            key: i,
+            startDate: moment(item.startDate).format("MM/DD/YY"),
+            score: "",
+          }))
+        )
+      );
+  }, []);
 
   const handleSubmit = () => {
-    const unratedOwners = [...owners];
-    owners.forEach((owner) => {
-      if (owner.rating.length > 0 && !isNaN(owner.rating)) {
-        const formData = new FormData();
-        formData.append(
-          "jsonValue",
-          new Blob([JSON.stringify(formData)], { type: "application/json" })
-        );
-        axios.post("api/customer-rate-owner", formData).then((res) => {
+    if (selectedRowKeys.length === 0) {
+      return message.error("Please select an owner.");
+    } else {
+      const owner = owners.filter(({ key }) => key === selectedRowKeys[0])[0];
+      if (
+        isNaN(owner.score) ||
+        owner.score.length !== 1 ||
+        +owner.score < 1 ||
+        +owner.score > 5
+      ) {
+        return message.error("Please enter an integer value between 1 and 5.");
+      }
+
+      const { ownerEmail, score } = owner;
+      axios({
+        method: "post",
+        url: "/api/rate_owner",
+        params: {
+          ownerEmail,
+          customerEmail: location.state.email,
+          score: +score,
+        },
+      })
+        .then((res) => {
           if (res.data.code === 200) {
-            const index = unratedOwners.indexOf(owner);
-            unratedOwners.splice(index, 1);
+            setRating({ ownerEmail, isRated: true });
+            setOwners(owners.filter(({ key }) => key !== selectedRowKeys[0]));
+            setSelectedRowKeys([]);
           } else {
             message.error(res.data.message);
           }
-        });
-      }
-    });
-    if (unratedOwners.length === owners.length) {
-      return message.error("Please enter an integer value for rating.");
+        })
+        .catch((err) => console.log(err));
     }
-    message.success(
-      `Successfully rated ${owners.length - unratedOwners.length} owners!`
-    );
-    setTimeout(() => {
-      setOwners(unratedOwners);
-    }, 1000);
   };
 
   const handleSave = (row) => {
@@ -168,6 +197,11 @@ function RateOwner() {
     };
   });
 
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedRowKeys) => setSelectedRowKeys(selectedRowKeys),
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content style={{ margin: "24px 24px 24px", background: "white" }}>
@@ -190,8 +224,17 @@ function RateOwner() {
                     body: { row: EditableRow, cell: EditableCell },
                   }}
                   rowClassName={() => "editable-row"}
+                  rowSelection={{ type: "radio", ...rowSelection }}
                   pagination={{ pageSize: "5", hideOnSinglePage: true }}
-                ></Table>
+                  locale={{
+                    emptyText: (
+                      <Empty
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        description="No more owners to rate!"
+                      />
+                    ),
+                  }}
+                />
               </Col>
               <Col span={24}>
                 <Row justify="center" gutter={16}>
@@ -214,6 +257,22 @@ function RateOwner() {
                   </Col>
                 </Row>
               </Col>
+              <Modal
+                visible={rating.isRated}
+                footer={[
+                  <Button
+                    onClick={() => setRating({ ...rating, isRated: false })}
+                  >
+                    OK
+                  </Button>,
+                ]}
+                onCancel={() => setRating({ ...rating, isRated: false })}
+              >
+                <Result
+                  status="success"
+                  title={`You have successfully submitted a rating for ${rating.ownerEmail}.`}
+                />
+              </Modal>
             </Row>
           </Col>
         </Row>

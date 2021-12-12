@@ -15,7 +15,7 @@ import {
   Modal,
   Result,
   message,
-  Spin
+  Spin,
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import moment from "moment";
@@ -50,24 +50,30 @@ const columns = [
     title: "Date",
     dataIndex: "flight_date",
     sorter: {
-      compare: (a, b) => parseInt(a.flight_date.replaceAll('-', '')) - parseInt(b.flight_date.replaceAll('-', '')),
-      multiple: 1
+      compare: (a, b) =>
+        parseInt(a.flight_date.replaceAll("-", "")) -
+        parseInt(b.flight_date.replaceAll("-", "")),
+      multiple: 1,
     },
   },
   {
     title: "Departure Time",
     dataIndex: "departure_time",
     sorter: {
-      compare: (a, b) => parseInt(a.departure_time.replaceAll(':', '')) - parseInt(b.departure_time.replaceAll(':', '')),
-      multiple: 1
+      compare: (a, b) =>
+        parseInt(a.departure_time.replaceAll(":", "")) -
+        parseInt(b.departure_time.replaceAll(":", "")),
+      multiple: 1,
     },
   },
   {
     title: "Arrival Time",
     dataIndex: "arrival_time",
     sorter: {
-      compare: (a, b) => parseInt(a.arrival_time.replaceAll(':', '')) - parseInt(b.arrival_time.replaceAll(':', '')),
-      multiple: 1
+      compare: (a, b) =>
+        parseInt(a.arrival_time.replaceAll(":", "")) -
+        parseInt(b.arrival_time.replaceAll(":", "")),
+      multiple: 1,
     },
   },
   {
@@ -75,7 +81,7 @@ const columns = [
     dataIndex: "remaining_seats",
     sorter: {
       compare: (a, b) => a.remaining_seats - b.remaining_seats,
-      multiple: 1
+      multiple: 1,
     },
   },
   {
@@ -183,7 +189,7 @@ function BookFlight() {
       ])
     );
     axios
-      .get("/api/flights", { params: { minSeats: 1 } })
+      .get("/api/customer_view_flights", { params: { minSeats: 1 } })
       .then((res) => {
         setFlights(
           res.data.data.map((item, i) => ({
@@ -358,7 +364,7 @@ function BookFlight() {
               </Col>
               <Col span={24}>
                 <Spin spinning={loading}>
-                   <Table
+                  <Table
                     components={{
                       body: { row: EditableRow, cell: EditableCell },
                     }}
@@ -368,7 +374,8 @@ function BookFlight() {
                       (flight) =>
                         (from === "all" || flight.from_airport === from) &&
                         (to === "all" || flight.to_airport === to) &&
-                        (!date || date.format(dateFormat) === flight.flight_date)
+                        (!date ||
+                          date.format(dateFormat) === flight.flight_date)
                     )}
                     columns={flightColumns}
                     pagination={{ pageSize: "5", hideOnSinglePage: true }}
@@ -402,8 +409,8 @@ function BookFlight() {
                   </Button>,
                 ]}
                 onCancel={() => setBooking({ ...booking, is_booked: false })}
-              > 
-                 <Result
+              >
+                <Result
                   status="success"
                   title={`You have successfully booked ${booking.book_seats} seat(s) on Flight ${booking.flight_num}.`}
                   extra={

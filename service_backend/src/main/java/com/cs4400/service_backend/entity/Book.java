@@ -15,6 +15,9 @@ public class Book {
     @ApiModelProperty(value = "Airline Name")
     private String airline_name;
 
+    @ApiModelProperty(value = "Flight Date")
+    private String flight_date;
+
     //total seats booked
     @ApiModelProperty(value = "Number of Seats")
     private Integer num_seats;

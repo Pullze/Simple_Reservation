@@ -18,7 +18,7 @@ import ViewFlights from "./pages/Admin/ViewFlight";
 import CustomerHome from "./pages/Customer/Home";
 import BookFlight from "./pages/Customer/BookFlight";
 import CancelFlight from "./pages/Customer/CancelFlight";
-import CustomerViewFlight from "./pages/Customer/CustomerViewFlight";
+import CustomerViewFlight from "./pages/Customer/ViewFlight";
 import ViewProperties from "./pages/Customer/ViewProperties";
 import ReserveProperty from "./pages/Customer/ReserveProperty";
 import ViewReservations from "./pages/Customer/ViewReservations";
@@ -28,8 +28,6 @@ import CustomerRateOwner from "./pages/Customer/RateOwner";
 
 import OwnerHome from "./pages/Owner/Home";
 import NotFound from "./NotFound";
-
-
 
 function App() {
   return (
@@ -41,14 +39,18 @@ function App() {
         <Route exact path="/admin/home" component={AdminHome} />
         <Route exact path="/admin/schedule-flight" component={ScheduleFlight} />
         <Route exact path="/admin/remove-flight" component={RemoveFlights} />
-        <Route exact path="/admin/view-owner" component={ViewOwners}/>
-        <Route exact path="/admin/view-customer" component={ViewCustomers}/>
-        <Route exact path="/admin/view-airport" component={ViewAirports}/>
-        <Route exact path="/admin/view-airline" component={ViewAirlines}/>
-        <Route exact path="/admin/view-flight" component={ViewFlights}/>
-        <Route exact path="/admin/process-date" component={ProcessDate}/>
+        <Route exact path="/admin/view-owner" component={ViewOwners} />
+        <Route exact path="/admin/view-customer" component={ViewCustomers} />
+        <Route exact path="/admin/view-airport" component={ViewAirports} />
+        <Route exact path="/admin/view-airline" component={ViewAirlines} />
+        <Route exact path="/admin/view-flight" component={ViewFlights} />
+        <Route exact path="/admin/process-date" component={ProcessDate} />
         <Route exact path="/customer/home" component={CustomerHome} />
-        <Route exact path="/customer/view-flight" component={CustomerViewFlight}/>
+        <Route
+          exact
+          path="/customer/view-flight"
+          component={CustomerViewFlight}
+        />
         <Route exact path="/customer/book-flight" component={BookFlight} />
         <Route exact path="/customer/cancel-flight" component={CancelFlight} />
         <Route
@@ -82,7 +84,7 @@ function App() {
           component={CustomerRateOwner}
         />
         <Route exact path="/owner/home" component={OwnerHome} />
-        <Route path="*" component={NotFound}/>
+        <Route path="*" component={NotFound} />
       </Switch>
     </Router>
   );

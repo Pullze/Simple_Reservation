@@ -96,8 +96,8 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public List<ReserveInfo> viewPropertyReservations(String propertyEmail, String ownerEmail) {
-        return propertyMapper.viewPropertyReservations(propertyEmail, ownerEmail);
+    public List<ReserveInfo> viewPropertyReservations() {
+        return propertyMapper.viewPropertyReservations();
     }
 
     @Override
@@ -108,8 +108,8 @@ public class PropertyProcessImpl implements PropertyProcess {
 
     @Override
     public String reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score) {
-        if (content == null || score == null) {
-            return "please type in valid content and score";
+        if (score == null) {
+            return "please type in valid score";
         }
         propertyMapper.reviewReservation(propertyName, ownerEmail, customerEmail, content, score);
         return "review the reservation for " + propertyName + " succeeded!";
