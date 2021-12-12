@@ -1,5 +1,6 @@
 package com.cs4400.service_backend.controller;
 
+import com.cs4400.service_backend.entity.Airport;
 import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.AirportProcess;
 import com.cs4400.service_backend.vo.ViewAirportInfo;
@@ -37,6 +38,15 @@ public class AirportController {
     public Response<?> getTimeZones() {
 
         List<String> result = airportProcess.getTimeZones();
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+
+    }
+
+    @GetMapping(value = "/airports")
+    @ApiOperation(value = "Get all airports", notes = "only name, id")
+    public Response<?> getAirports() {
+
+        List<Airport> result = airportProcess.getAirports();
         return new Response<>(HttpStatus.OK.value(), "Success", result);
 
     }

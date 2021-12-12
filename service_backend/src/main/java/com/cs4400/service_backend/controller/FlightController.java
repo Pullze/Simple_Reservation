@@ -117,7 +117,7 @@ public class FlightController {
         int response = flightProcess.removeFlight(flightNum, airlineName, currentDate);
 
         if (response >= 0) { //Success
-            String msg = String.format("Success! There are %d related removed.", response);
+            String msg = String.format("Success! Removed 1 flight, and %d related books removed.", response-1);
             return new Response<>(HttpStatus.OK.value(), msg);
         } else if (response == -1) {
             String msg = String.format("Failed, Check your date format. Error status %d", response);
