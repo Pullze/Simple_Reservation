@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Layout, Row, Col, Button, Input, Modal, Result } from "antd";
+import { Layout, Row, Col, Button, Input, Modal, Result, DatePicker } from "antd";
 import { useHistory, useLocation } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
@@ -81,11 +81,7 @@ export default function ProcessDate(props) {
               <Col span={24} align="middle">
                 <p>
                   Set Current System Date:
-                  <Input
-                    style={{ maxWidth: "300px", marginLeft: "8px" }}
-                    placeholder={"yyyy-MM-dd"}
-                    onChange={(e) => setDate(e.target.value)}
-                  />
+                  <DatePicker onChange={(date, dateString) => setDate(dateString)} style={{ marginLeft: "8px", minWidth: "300px" }}/>
                 </p>
               </Col>
               <Col span={12} align="right">
