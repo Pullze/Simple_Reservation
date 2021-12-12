@@ -101,9 +101,11 @@
             rev.Score as rating,
             rev.Content as review
         from reserve as res
-                 left join property as p on (p.Property_Name, p.Owner_Email) = (res.Property_Name, res.Owner_Email)
-                 left join review as rev on (p.Property_Name, p.Owner_Email) = (rev.Property_Name, rev.Owner_Email)
                  left join clients as cli on res.Customer = cli.Email
+                 left join property as p on (p.Property_Name, p.Owner_Email)
+                                                = (res.Property_Name, res.Owner_Email)
+                 left join review as rev on (p.Property_Name, p.Owner_Email, cli.Email)
+                                                = (rev.Property_Name, rev.Owner_Email, rev.Customer)
         group by p.Property_Name, res.Was_Cancelled, res.Customer;
     </select>
 
