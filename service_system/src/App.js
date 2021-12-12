@@ -27,6 +27,8 @@ import ReviewProperty from "./pages/Customer/ReviewProperty";
 import CustomerRateOwner from "./pages/Customer/RateOwner";
 
 import OwnerHome from "./pages/Owner/Home";
+import AddProperty from "./pages/Owner/AddProperty";
+
 import NotFound from "./NotFound";
 
 function App() {
@@ -84,6 +86,7 @@ function App() {
           component={CustomerRateOwner}
         />
         <Route exact path="/owner/home" component={OwnerHome} />
+        <Route exact path="/owner/add-property" component={AddProperty} />
         <Route path="*" component={NotFound} />
       </Switch>
     </Router>
