@@ -35,4 +35,7 @@
         where Airport_Id = #{airport_id};
     </select>
 
+    <select id="get_airports" resultType="Airport">
+        select * from Airport
+    </select>
 </mapper>

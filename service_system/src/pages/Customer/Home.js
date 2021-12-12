@@ -55,7 +55,7 @@ function Home() {
                 justify="space-around"
                 align="middle"
                 gutter={[24, 24]}
-                style={{ padding: "20% 10%" }}
+                style={{ padding: "10% 10%" }}
               >
                 <Col span={24} align="middle">
                   <h2>Now logged in as {location.state.email} </h2>
