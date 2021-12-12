@@ -114,7 +114,7 @@ public class PropertyController {
      * @return
      */
     @GetMapping(value = "/reservations-to-review")
-    @ApiOperation(value ="customer view reservations to review", notes = "creservations to review")
+    @ApiOperation(value ="customer view reservations to review", notes = "reservations to review")
     public Response<?> viewReservationsToReview(@RequestParam String customerEmail) {
         List<ReserveInfo> result = propertyProcess.viewReservationsToReview(customerEmail);
         System.out.println(result);
@@ -130,6 +130,19 @@ public class PropertyController {
     @ApiOperation(value ="customer view owners to rate", notes = "customer view owners to rate")
     public Response<?> viewOwnersToRate(@RequestParam String customerEmail) {
         List<ReserveInfo> result = propertyProcess.viewOwnersToRate(customerEmail);
+        System.out.println(result);
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+    }
+
+    /**
+     *
+     * @param ownerEmail owner's email
+     * @return
+     */
+    @GetMapping(value = "/properties to remove")
+    @ApiOperation(value ="properties to remove", notes = "properties to remove")
+    public Response<?> viewPropertiesToRemove(@RequestParam String ownerEmail) {
+        List<Property> result = propertyProcess.viewPropertiesToRemove(ownerEmail);
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
@@ -192,6 +205,20 @@ public class PropertyController {
         } else {
             return new Response<>(400, message);
         }
+    }
+
+    /**
+     *
+     * @param propertyName property's name
+     * @param ownerEmail owner's email
+     * @return
+     */
+    @GetMapping(value = "/remove property")
+    @ApiOperation(value ="remove property", notes = "owner remove property")
+    public Response<?> removeProperty(@RequestParam String propertyName, @RequestParam String ownerEmail) {
+        String result = propertyProcess.removeProperty(propertyName, ownerEmail);
+        System.out.println(result);
+        return new Response(HttpStatus.OK.value(), "Success");
     }
 }
 

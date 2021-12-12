@@ -121,12 +121,39 @@
 
     <insert id = "addProperty" parameterType = "Property">
         insert into Property(Property_Name, Owner_Email, Descr, Capacity, Cost, Street, City, State, Zip)
-        values (#{property_name}, #{owner_email}, #{descr}, #{capacity}, #{cost}, #{street}, #{city}, #{state}, #{zip})
+        values (#{property_name}, #{owner_email}, #{descr}, #{capacity}, #{cost}, #{street}, #{city}, #{state}, #{zip});
     </insert>
 
     <insert id = "addCloseAirport">
         insert into Is_Close_To(property_name, owner_email, airport, distance)
-        values (#{propertyName}, #{ownerEmail}, #{airportId}, #{distance})
+        values (#{propertyName}, #{ownerEmail}, #{airportId}, #{distance});
     </insert>
+
+    <select id = "viewPropertiesToRemove" resultType = "Property">
+        select p.Property_Name as property_name, p.Descr as descr, p.Capacity as capacity, p.Cost as cost, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address
+               from Property as p where Owner_Email = #{ownerEmail}
+                                    and not exists(select Customer from Reserve as r where r.Property_Name = p.Property_Name and r.Owner_Email=p.Owner_Email
+                                             and Was_Cancelled = 0 and CURDATE() between Start_Date and End_Date);
+    </select>
+
+    <update id = "removePropertyFromReserve" >
+        delete from Reserve where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail};
+    </update>
+
+    <update id = "removePropertyFromReview" >
+        delete from Review where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail};
+    </update>
+
+    <update id = "removePropertyFromAmenity" >
+        delete from Amenity where Property_Name = #{propertyName} and Property_Owner = #{ownerEmail};
+    </update>
+
+    <update id = "removePropertyFromIsCloseTo" >
+        delete from Is_Close_To where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail};
+    </update>
+
+    <update id = "removeProperty" >
+        delete from Property where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail};
+    </update>
 
 </mapper>
