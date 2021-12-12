@@ -112,6 +112,7 @@ export default function ViewFlight() {
         console.log(err);
       });
   }
+
   useEffect(() => {
     getFlights();
   }, []);

@@ -223,7 +223,7 @@ public class PropertyController {
      */
     @PostMapping(value = "/owner_add_property")
     @ApiOperation(value = "owner add property")
-    public Response<?> ownerAddProperty(@RequestBody Property property,
+    public Response<?> ownerAddProperty(@RequestPart("jsonValue") Property property,
                                         @RequestParam(required = false) String nearestAirport,
                                         @RequestParam(required = false) Integer distance) {
 

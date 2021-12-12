@@ -10,6 +10,10 @@ const dateFormat = "MM/DD/YY";
 
 const columns = [
   {
+    title: "Owner Email",
+    dataIndex: "ownerEmail",
+  },
+  {
     title: "Property Name",
     dataIndex: "propertyName",
   },

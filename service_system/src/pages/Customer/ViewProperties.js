@@ -99,9 +99,14 @@ function ViewProperties() {
                           },
                           () => ({
                             validator(_, value) {
-                              if (!value || (!isNaN(value) && value >= 0)) {
+                              if (
+                                !value ||
+                                (!isNaN(value) &&
+                                  value >= 0 &&
+                                  !value.includes("."))
+                              ) {
                                 return Promise.resolve();
-                              } else if (isNaN(value)) {
+                              } else if (isNaN(value) || value.includes(".")) {
                                 return Promise.reject(
                                   new Error("Please enter an integer value.")
                                 );
@@ -141,10 +146,11 @@ function ViewProperties() {
                                 !value ||
                                 (!isNaN(value) &&
                                   +value >= 0 &&
-                                  +value > +getFieldValue("lowerbound"))
+                                  !value.includes(".") &&
+                                  +value >= +getFieldValue("lowerbound"))
                               ) {
                                 return Promise.resolve();
-                              } else if (isNaN(value)) {
+                              } else if (isNaN(value) || value.includes(".")) {
                                 return Promise.reject(
                                   new Error("Please enter an integer value.")
                                 );
@@ -157,7 +163,7 @@ function ViewProperties() {
                               } else {
                                 return Promise.reject(
                                   new Error(
-                                    "Upper bound must be greater than lower bound."
+                                    "Upper bound must be equal to or greater than lower bound."
                                   )
                                 );
                               }
