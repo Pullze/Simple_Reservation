@@ -19,7 +19,7 @@ public class ReserveInfo {
     private String endDate;
 
     @ApiModelProperty(value = "customer Phone number")
-    private String custPhone;
+    private String customerPhone;
 
     @ApiModelProperty(value = "customer Email")
     private String customerEmail;
