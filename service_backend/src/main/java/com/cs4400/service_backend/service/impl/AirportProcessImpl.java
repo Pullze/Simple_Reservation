@@ -1,5 +1,6 @@
 package com.cs4400.service_backend.service.impl;
 
+import com.cs4400.service_backend.entity.Airport;
 import com.cs4400.service_backend.mapper.AirportMapper;
 import com.cs4400.service_backend.service.AirportProcess;
 import com.cs4400.service_backend.vo.ViewAirportInfo;
@@ -22,6 +23,11 @@ public class AirportProcessImpl implements AirportProcess {
     @Override
     public List<String> getTimeZones() {
         return airportMapper.get_time_zones();
+    }
+
+    @Override
+    public List<Airport> getAirports() {
+        return  airportMapper.get_airports();
     }
 
 }

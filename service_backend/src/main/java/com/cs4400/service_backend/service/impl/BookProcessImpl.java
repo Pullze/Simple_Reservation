@@ -62,6 +62,7 @@ public class BookProcessImpl implements BookProcess {
 
     }
 
+    // view all books after current date
     @Override
     public List<Book> customer_view_books(String customer_email) {
         return bookMapper.check_all_book_customer(customer_email);

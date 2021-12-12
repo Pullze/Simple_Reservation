@@ -45,6 +45,11 @@ public class BookController {
         return response;
     }
 
+    /**
+     *
+     * @param customer_email customer email
+     * @return all books of this customer after current date
+     */
     @GetMapping(value = "/customer_view_books")
     @ApiModelProperty(value = "customer_view_books")
     public Response<?> customer_view_books(@RequestParam String customer_email) {

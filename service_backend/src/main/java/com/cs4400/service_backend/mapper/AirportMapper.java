@@ -15,5 +15,7 @@ public interface AirportMapper {
 
     Airport check_airport(String airport_id);
 
+    List<Airport> get_airports();
+
 }
 

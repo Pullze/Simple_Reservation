@@ -4,14 +4,12 @@ import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.mapper.AirportMapper;
 import com.cs4400.service_backend.mapper.PropertyMapper;
 import com.cs4400.service_backend.entity.Property;
-import com.cs4400.service_backend.entity.Reserve;
 import com.cs4400.service_backend.service.PropertyProcess;
 import com.cs4400.service_backend.vo.PropertyInfo;
 import com.cs4400.service_backend.vo.ReserveInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +76,7 @@ public class PropertyProcessImpl implements PropertyProcess {
         return propertyMapper.viewCustomerFutureReservations(customerEmail);
     }
 
+    // for debug only
     @Override
     public List<ReserveInfo> viewCustomerPastReservations(String customerEmail) {
         return propertyMapper.viewCustomerPastReservations(customerEmail);
@@ -94,6 +93,8 @@ public class PropertyProcessImpl implements PropertyProcess {
         }
         return reservationsToReview;
     }
+
+
 
     @Override
     public List<ReserveInfo> viewPropertyReservations() {
@@ -133,11 +134,28 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public String rateOwner(String ownerEmail, String customerEmail, Integer score) {
-        propertyMapper.rateOwner(ownerEmail, customerEmail, score);
-        return "rate " + ownerEmail + " succeed!";
+    public List<ReserveInfo> viewCustomersToRate(String ownerEmail) {
+        List<ReserveInfo> pastCustomers = propertyMapper.viewCustomersToRate(ownerEmail);
+        ArrayList<ReserveInfo> customersToRate = new ArrayList<>();
+        for (ReserveInfo reservation: pastCustomers) {
+            if (reservation.getRating() == null) {
+                customersToRate.add(reservation);
+            }
+        }
+        return customersToRate;
     }
 
+    @Override
+    public String CustomerRateOwner(String ownerEmail, String customerEmail, Integer score) {
+        propertyMapper.customerRateOwner(ownerEmail, customerEmail, score);
+        return "rate " + ownerEmail + " succeeded!";
+    }
+
+    @Override
+    public String OwnerRateCustomer(String ownerEmail, String customerEmail, Integer score) {
+        propertyMapper.ownerRateCustomer(ownerEmail, customerEmail, score);
+        return "rate " + customerEmail + " succeeded!";
+    }
     @Override
     public String removeProperty(String propertyName, String ownerEmail) {
         propertyMapper.removePropertyFromReserve(propertyName, ownerEmail);

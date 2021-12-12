@@ -31,6 +31,8 @@ public interface PropertyMapper {
 
    List<ReserveInfo> viewOwnersToRate(String customerEmail);
 
+   List<ReserveInfo> viewCustomersToRate(String ownerEmail);
+
    List<ReserveInfo> viewPropertyReservations();
 
    Boolean check_owner_has_property(String email);
@@ -39,7 +41,9 @@ public interface PropertyMapper {
 
    void reviewReservation(String propertyName, String ownerEmail, String customerEmail, String content, Integer score);
 
-   void rateOwner(String ownerEmail, String customerEmail, Integer score);
+   void customerRateOwner(String ownerEmail, String customerEmail, Integer score);
+
+   void ownerRateCustomer(String ownerEmail, String customerEmail, Integer score);
 
    Property checkAddressExist(Property property);
 

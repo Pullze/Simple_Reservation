@@ -16,7 +16,6 @@ import {
   message,
   Result,
   Descriptions,
-  PageHeader,
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import moment from "moment";
@@ -47,11 +46,13 @@ function ScheduleFlight() {
   const location = useLocation();
   const [form] = Form.useForm();
   const [airlines, setAirlines] = useState([]);
+  const [airports, setAirports] = useState([]);
   const [flight, setFlight] = useState({ isScheduled: false });
   const [visible, setIsVisible] = useState(false);
 
   useEffect(() => {
     axios.get("/api/airlines").then((res) => setAirlines(res.data.data));
+    getAirports();
   }, []);
 
   const scheduleFlight = (values) => {
@@ -88,6 +89,25 @@ function ScheduleFlight() {
       .catch((err) => console.log(err));
   };
 
+  function getAirports() {
+    axios.get("/api/airports")
+    .then(
+      (res) => {
+        console.log(res.data);
+        setAirports([
+        ...res.data.data.map(({ airport_id, airport_name }) => ({
+          value: airport_id,
+          label: `${airport_name} (${airport_id})`,
+        })),]);
+        console.log(airports);
+      }
+    )
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+
   const showModal = () => {
     setIsVisible(true);
   };
@@ -108,7 +128,9 @@ function ScheduleFlight() {
       name: "airline_name",
       rules: [{ required: true, message: "Please select the airline." }],
       input: (
-        <Select>
+        <Select
+          showSearch
+        >
           {airlines.map((airline, i) => (
             <Option
               key={i}
@@ -124,7 +146,15 @@ function ScheduleFlight() {
     {
       name: "from_airport",
       rules: [{ required: true, message: "Please enter the from airport ID." }],
-      input: <Input style={{ width: "100%" }} />,
+      input: <Select
+                showSearch
+              >
+                {airports.map((airport, i) => (
+                  <Option key={i} value={airport.value}>
+                    {airport.label}
+                  </Option>
+                ))}
+              </Select>,
     },
     {
       name: "to_airport",
@@ -141,7 +171,13 @@ function ScheduleFlight() {
           },
         }),
       ],
-      input: <Input style={{ width: "100%" }} />,
+      input: <Select showSearch>
+              {airports.map((airport, i) => (
+                <Option key={i} value={airport.value}>
+                  {airport.label}
+                </Option>
+              ))}
+            </Select>,
     },
     {
       name: "departure_time",
