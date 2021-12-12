@@ -102,6 +102,11 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
+    public List<Property> viewPropertiesToRemove(String ownerEmail) {
+        return propertyMapper.viewPropertiesToRemove(ownerEmail);
+    }
+
+    @Override
     public String cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail) {
         propertyMapper.cancelPropertyReservation(propertyName, ownerEmail, customerEmail);
         return "cancel the reservation for " + propertyName + " succeeded!";
@@ -151,6 +156,17 @@ public class PropertyProcessImpl implements PropertyProcess {
         propertyMapper.ownerRateCustomer(ownerEmail, customerEmail, score);
         return "rate " + customerEmail + " succeeded!";
     }
+    @Override
+    public String removeProperty(String propertyName, String ownerEmail) {
+        propertyMapper.removePropertyFromReserve(propertyName, ownerEmail);
+        propertyMapper.removePropertyFromReview(propertyName, ownerEmail);
+        propertyMapper.removePropertyFromAmenity(propertyName, ownerEmail);
+        propertyMapper.removePropertyFromIsCloseTo(propertyName, ownerEmail);
+        propertyMapper.removeProperty(propertyName, ownerEmail);
+        return "remove property succeed!";
+    }
+
+
 
     @Override
     public PropertyInfo addProperty(Property property, String nearestAirport,   Integer distance) {

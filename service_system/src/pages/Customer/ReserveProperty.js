@@ -22,7 +22,7 @@ import "./EditableTable.css";
 
 const { RangePicker } = DatePicker;
 
-const today = moment();
+const today = moment("2021-12-01");
 const dateFormat = "YYYY-MM-DD";
 
 // Columns
@@ -332,21 +332,22 @@ function ReserveProperty() {
             <Result
               status="success"
               title={`You have successfully made a reservation at ${reservation.property_name}.`}
-            >
-              <div style={{ background: "white" }}>
-                <Descriptions size="default" column={1} bordered>
-                  <Descriptions.Item label="Booked Property Name">
-                    {reservation.property_name}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Number of Guests">
-                    {reservation.num_guests}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Amount Spent">
-                    {"$" + reservation.total_cost}
-                  </Descriptions.Item>
-                </Descriptions>
-              </div>
-            </Result>
+              extra={
+                <div style={{ background: "white" }}>
+                  <Descriptions size="default" column={1} bordered>
+                    <Descriptions.Item label="Booked Property Name">
+                      {reservation.property_name}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Number of Guests">
+                      {reservation.num_guests}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Amount Spent">
+                      {"$" + reservation.total_cost}
+                    </Descriptions.Item>
+                  </Descriptions>
+                </div>
+              }
+            />
           </Modal>
         </Row>
       </Content>

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Layout, Row, Col, Button, Table, Form, Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { Layout, Row, Col, Button, Table, Form, Input, Spin } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
@@ -34,8 +34,23 @@ function ViewProperties() {
   const [form] = Form.useForm();
   const [properties, setProperties] = useState([]);
   const [bounds, setBounds] = useState({ low: "", high: "" });
+  const [loading, setLoading]  = useState(false);
+
+  const handleReset = async () => {
+    setLoading(true);
+    setBounds({ low: "", high: "" });
+    form.resetFields();
+    axios
+      .get("/api/properties")
+      .then((res) => {
+         setProperties(res.data.data.map((item, i) => ({ ...item, key: i })));
+        setLoading(false);
+      })
+      .catch((err) => console.error(err));
+  }
 
   const getProperties = () => {
+    setLoading(true);
     const params = {};
     if (bounds.low.length > 0 && !isNaN(bounds.low)) {
       params.low = +bounds.low;
@@ -46,11 +61,16 @@ function ViewProperties() {
     console.log(params);
     axios
       .get("/api/properties", { params })
-      .then((res) =>
-        setProperties(res.data.data.map((item, i) => ({ ...item, key: i })))
-      )
+      .then((res) => {
+         setProperties(res.data.data.map((item, i) => ({ ...item, key: i })));
+        setLoading(false);
+      })
       .catch((err) => console.error(err));
   };
+
+  useEffect(() => {
+    getProperties();
+  }, []);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -163,16 +183,18 @@ function ViewProperties() {
                 <h3>Click '+' to read each property's description!</h3>
               </Col>
               <Col span={24}>
-                <Table
-                  dataSource={properties}
-                  columns={columns}
-                  expandable={{
-                    expandedRowRender: (record) => (
-                      <p style={{ margin: 0 }}>{record.descr}</p>
-                    ),
-                  }}
-                  pagination={{ pageSize: "5" }}
-                ></Table>
+                <Spin spinning={loading}>
+                   <Table
+                    dataSource={properties}
+                    columns={columns}
+                    expandable={{
+                      expandedRowRender: (record) => (
+                        <p style={{ margin: 0 }}>{record.descr}</p>
+                      ),
+                    }}
+                    pagination={{ pageSize: "5" }}
+                  ></Table>
+                </Spin>
               </Col>
               <Col span={24}>
                 <Row justify="center" gutter={16}>
@@ -187,6 +209,9 @@ function ViewProperties() {
                         Back
                       </Link>
                     </Button>
+                  </Col>
+                  <Col>
+                    <Button onClick={handleReset}> Reset </Button>
                   </Col>
                   <Col>
                     <Button type="primary" onClick={getProperties}>

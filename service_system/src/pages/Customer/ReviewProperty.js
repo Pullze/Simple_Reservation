@@ -97,11 +97,8 @@ function ReviewProperty() {
 
   useEffect(() => {
     axios
-      .get("/api/customer_past_reservations", {
-        params: {
-          customerEmail: location.state.email,
-          currentDate: today.format("YYYY-MM-DD"),
-        },
+      .get("/api/reservations_to_review", {
+        params: { customerEmail: location.state.email },
       })
       .then((res) =>
         setReservations(res.data.data.map((item, i) => ({ ...item, key: i })))
