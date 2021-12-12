@@ -107,20 +107,26 @@
         group by p.Property_Name, res.Was_Cancelled, res.Customer;
     </select>
 
-    <select id = "checkAddressExist" parameterType = "Property" resultType = "PropertyInfo">
+    <select id = "checkAddressExist" parameterType = "Property" resultType = "Property">
         select * from Property where concat(Street, ',', City, ',', State, ',', Zip) = #{address};
     </select>
 
-    <select id = "checkNameExist" parameterType = "Property" resultType = "PropertyInfo">
+    <select id = "checkNameExist" parameterType = "Property" resultType = "Property">
         select * from Property where Property_Name = #{property_name} and Owner_Email = #{owner_email};
     </select>
 
     <select id = "checkPropertyExist" resultType = "PropertyInfo">
-        select * from Property where Property_Name = #{prepertyName} and Owner_Email = #{ownerEmail};
+        select * from Property where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail};
     </select>
 
     <insert id = "addProperty" parameterType = "Property">
         insert into Property(Property_Name, Owner_Email, Descr, Capacity, Cost, Street, City, State, Zip)
-        values (#{property_name})
+        values (#{property_name}, #{owner_email}, #{descr}, #{capacity}, #{cost}, #{street}, #{city}, #{state}, #{zip})
     </insert>
+
+    <insert id = "addCloseAirport">
+        insert into Is_Close_To(property_name, owner_email, airport, distance)
+        values (#{propertyName}, #{ownerEmail}, #{airportId}, #{distance})
+    </insert>
+
 </mapper>

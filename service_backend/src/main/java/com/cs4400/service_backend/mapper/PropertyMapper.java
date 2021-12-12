@@ -39,12 +39,14 @@ public interface PropertyMapper {
 
    void rateOwner(String ownerEmail, String customerEmail, Integer score);
 
-   PropertyInfo checkAddressExist(Property property);
+   Property checkAddressExist(Property property);
 
-   PropertyInfo checkNameExist(Property property);
+   Property checkNameExist(Property property);
 
    PropertyInfo checkPropertyExist(String propertyName, String ownerEmail);
 
    void addProperty(Property property);
+
+   void addCloseAirport(String propertyName, String ownerEmail, String airportId, int distance);
 
 }

@@ -1,10 +1,11 @@
 package com.cs4400.service_backend.vo;
 
+import com.cs4400.service_backend.entity.Property;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class PropertyInfo {
+public class PropertyInfo extends Property {
 
     @ApiModelProperty("Message")
     private String message = null;

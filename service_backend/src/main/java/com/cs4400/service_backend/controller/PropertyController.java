@@ -6,16 +6,14 @@ import com.cs4400.service_backend.entity.Response;
 import com.cs4400.service_backend.service.Login;
 import com.cs4400.service_backend.service.PropertyProcess;
 import com.cs4400.service_backend.service.UserProcess;
+import com.cs4400.service_backend.vo.PropertyInfo;
 import com.cs4400.service_backend.vo.ReserveInfo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -171,6 +169,16 @@ public class PropertyController {
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
-
+    @PostMapping(value = "/owner-add-property")
+    @ApiOperation(value = "owner add property")
+    public Response<?> ownerAddProperty(@RequestBody Property property, @RequestParam(required = false) String nearestAirport, @RequestParam(required = false) Integer distance) {
+        PropertyInfo propertyInfo = propertyProcess.addProperty(property, nearestAirport, distance);
+        String message = propertyInfo.getMessage();
+        if (message == "Successfully added this property!") {
+            return new Response<>(200, message, propertyInfo);
+        } else {
+            return new Response<>(400, message);
+        }
+    }
 }
 

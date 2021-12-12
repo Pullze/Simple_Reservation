@@ -21,7 +21,8 @@ public class PropertyProcessImpl implements PropertyProcess {
     @Resource
     private PropertyMapper propertyMapper;
 
-    @Resource AirportMapper airportMapper;
+    @Resource
+    private AirportMapper airportMapper;
 
     @Override
     public List<Property> viewProperties(Integer high, Integer low) {
@@ -134,27 +135,42 @@ public class PropertyProcessImpl implements PropertyProcess {
 
 
     @Override
-    public PropertyInfo addProperty(Property property, String nearestAirport, int distance) {
-
+    public PropertyInfo addProperty(Property property, String nearestAirport,   Integer distance) {
+        property.setAddress(property.getStreet() + ',' + property.getCity() + ',' + property.getState() + ',' + property.getZip());
+        PropertyInfo returnPropertyInfo = new PropertyInfo();
         if (propertyMapper.checkAddressExist(property) != null) {
-            PropertyInfo returnPropertyInfo = new PropertyInfo();
             returnPropertyInfo.setMessage("Address already exists!");
+            return  returnPropertyInfo;
         }
 
         if (propertyMapper.checkNameExist(property) != null) {
-            PropertyInfo returnPropertyInfo = new PropertyInfo();
             returnPropertyInfo.setMessage("The property name already exists in your properties!");
+            return returnPropertyInfo;
+        }
+
+        if (property.getCapacity() <= 0) {
+            returnPropertyInfo.setMessage("Capacity must be larger than 0");
+            return returnPropertyInfo;
         }
 
         if (nearestAirport != null && airportMapper.check_airport(nearestAirport) == null) {
-            PropertyInfo returnPropertyInfo = new PropertyInfo();
             returnPropertyInfo.setMessage("This nearest airport does not exists!");
+            return returnPropertyInfo;
         }
 
+        if (nearestAirport != null && distance == null) {
+            returnPropertyInfo.setMessage("You must enter the distance of the nearest airport");
+            return returnPropertyInfo;
+        }
 
+        propertyMapper.addProperty(property);
+        if (nearestAirport != null) {
+            propertyMapper.addCloseAirport(property.getProperty_name(), property.getOwner_email(), nearestAirport, distance);
+        }
 
-
-
-        return null;
+        returnPropertyInfo = propertyMapper.checkPropertyExist(property.getProperty_name(), property.getOwner_email());
+        returnPropertyInfo.setAddress(returnPropertyInfo.getStreet() + ',' + returnPropertyInfo.getCity() + ',' + returnPropertyInfo.getState() + ',' + returnPropertyInfo.getZip());
+        returnPropertyInfo.setMessage("Successfully added this property!");
+        return returnPropertyInfo;
     }
 }
