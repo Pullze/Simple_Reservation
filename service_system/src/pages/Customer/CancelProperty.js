@@ -11,6 +11,7 @@ import {
   message,
   Modal,
   Result,
+  Empty,
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
@@ -69,6 +70,8 @@ function CancelProperty() {
               reservations.filter(({ key }) => key !== selectedRowKeys[0])
             );
             setSelectedRowKeys([]);
+          } else {
+            message.error(res.data.message);
           }
         })
         .catch((err) => console.error(err));
@@ -111,7 +114,15 @@ function CancelProperty() {
                   columns={columns}
                   rowSelection={{ type: "radio", ...rowSelection }}
                   pagination={{ pageSize: "5", hideOnSinglePage: true }}
-                ></Table>
+                  locale={{
+                    emptyText: (
+                      <Empty
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        description="You don't have any future reservation!"
+                      />
+                    ),
+                  }}
+                />
               </Col>
               <Col span={24}>
                 <Row justify="center" gutter={16}>
