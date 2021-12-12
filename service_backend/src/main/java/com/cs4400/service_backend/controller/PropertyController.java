@@ -115,6 +115,19 @@ public class PropertyController {
      * @param customerEmail customer's email
      * @return
      */
+    @GetMapping(value = "/reservations-to-review")
+    @ApiOperation(value ="customer view reservations to review", notes = "creservations to review")
+    public Response<?> viewReservationsToReview(@RequestParam String customerEmail) {
+        List<ReserveInfo> result = propertyProcess.viewReservationsToReview(customerEmail);
+        System.out.println(result);
+        return new Response<>(HttpStatus.OK.value(), "Success", result);
+    }
+
+    /**
+     *
+     * @param customerEmail customer's email
+     * @return
+     */
     @GetMapping(value = "/owners-to-rate")
     @ApiOperation(value ="customer view owners to rate", notes = "customer view owners to rate")
     public Response<?> viewOwnersToRate(@RequestParam String customerEmail) {
