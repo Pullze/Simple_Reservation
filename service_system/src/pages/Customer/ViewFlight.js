@@ -93,7 +93,7 @@ export default function ViewFlight() {
     setSeat(value);
     setFiltered(
       flights.filter((flight) =>
-        ("" + flight.num_empty_seats).startsWith(value)
+        ("" + flight.remaining_seats).startsWith(value)
       )
     );
     console.log(filtered);
