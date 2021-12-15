@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, Button, Table, Form, Input, Spin } from "antd";
-import { Content } from "antd/lib/layout/layout";
-import { useLocation } from "react-router";
-import { Link } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Button, Col, Form, Input, Layout, Row, Spin, Table} from "antd";
+import {Content} from "antd/lib/layout/layout";
+import {useLocation} from "react-router";
+import {Link} from "react-router-dom";
 import axios from "axios";
 
 const columns = [
@@ -33,17 +33,17 @@ function ViewProperties() {
   const location = useLocation();
   const [form] = Form.useForm();
   const [properties, setProperties] = useState([]);
-  const [bounds, setBounds] = useState({ low: "", high: "" });
-  const [loading, setLoading]  = useState(false);
+  const [bounds, setBounds] = useState({low: "", high: ""});
+  const [loading, setLoading] = useState(false);
 
   const handleReset = async () => {
     setLoading(true);
-    setBounds({ low: "", high: "" });
+    setBounds({low: "", high: ""});
     form.resetFields();
     axios
       .get("/api/properties")
       .then((res) => {
-         setProperties(res.data.data.map((item, i) => ({ ...item, key: i })));
+        setProperties(res.data.data.map((item, i) => ({...item, key: i})));
         setLoading(false);
       })
       .catch((err) => console.error(err));
@@ -60,9 +60,9 @@ function ViewProperties() {
     }
     console.log(params);
     axios
-      .get("/api/properties", { params })
+      .get("/api/properties", {params})
       .then((res) => {
-         setProperties(res.data.data.map((item, i) => ({ ...item, key: i })));
+        setProperties(res.data.data.map((item, i) => ({...item, key: i})));
         setLoading(false);
       })
       .catch((err) => console.error(err));
@@ -73,12 +73,12 @@ function ViewProperties() {
   }, []);
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Content style={{ margin: "24px 24px 24px", background: "white" }}>
+    <Layout style={{minHeight: "100vh"}}>
+      <Content style={{margin: "24px 24px 24px", background: "white"}}>
         <Row
           justify="center"
           align="middle"
-          style={{ margin: "24px 24px 24px" }}
+          style={{margin: "24px 24px 24px"}}
         >
           <Col xs={22} sm={20} md={16} lg={15} xl={15} xxl={15}>
             <Row justify="center" align="middle" gutter={[16, 24]}>
@@ -88,7 +88,7 @@ function ViewProperties() {
               </Col>
               <Col span={24} align="middle">
                 <Form form={form} name="view-properties" scrollToFirstError>
-                  <Form.Item label="Capacity" style={{ margin: 0 }}>
+                  <Form.Item label="Capacity" style={{margin: 0}}>
                     <Input.Group compact>
                       <Form.Item
                         name="lowerbound"
@@ -122,7 +122,7 @@ function ViewProperties() {
                         ]}
                       >
                         <Input
-                          style={{ width: "30%" }}
+                          style={{width: "30%"}}
                           onChange={(e) =>
                             setBounds((curr) => ({
                               ...curr,
@@ -140,7 +140,7 @@ function ViewProperties() {
                             required: true,
                             message: "Please enter the upper bound.",
                           },
-                          ({ getFieldValue }) => ({
+                          ({getFieldValue}) => ({
                             validator(_, value) {
                               if (
                                 !value ||
@@ -172,7 +172,7 @@ function ViewProperties() {
                         ]}
                       >
                         <Input
-                          style={{ width: "30%" }}
+                          style={{width: "30%"}}
                           onChange={(e) =>
                             setBounds((curr) => ({
                               ...curr,
@@ -190,16 +190,16 @@ function ViewProperties() {
               </Col>
               <Col span={24}>
                 <Spin spinning={loading}>
-                   <Table
+                  <Table
                     dataSource={properties}
                     columns={columns}
                     expandable={{
                       expandedRowRender: (record) => (
-                        <p style={{ margin: 0 }}>{record.descr}</p>
+                        <p style={{margin: 0}}>{record.descr}</p>
                       ),
                     }}
-                    pagination={{ pageSize: "5" }}
-                  ></Table>
+                    pagination={{pageSize: "5"}}
+                  />
                 </Spin>
               </Col>
               <Col span={24}>
@@ -209,7 +209,7 @@ function ViewProperties() {
                       <Link
                         to={{
                           pathname: "/customer/home",
-                          state: { email: location.state.email },
+                          state: {email: location.state.email},
                         }}
                       >
                         Back
