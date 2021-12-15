@@ -30,6 +30,7 @@ import AddProperty from "./pages/Owner/AddProperty";
 
 import NotFound from "./NotFound";
 import RemoveProperty from "./pages/Owner/RemoveProperty";
+import RateCustomer from "./pages/Owner/RateCustomer";
 
 function App() {
   return (
@@ -87,6 +88,7 @@ function App() {
         <Route exact path="/owner/home" component={OwnerHome}/>
         <Route exact path="/owner/add-property" component={AddProperty}/>
         <Route exact path="/owner/remove-property" component={RemoveProperty}/>
+        <Route exact path="/owner/rate-customer" component={RateCustomer}/>
         <Route path="*" component={NotFound}/>
       </Switch>
     </Router>

@@ -14,6 +14,7 @@ import {
   Result,
   Empty,
   message,
+  Spin
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
@@ -30,6 +31,7 @@ function ReviewProperty() {
     propertyName: null,
     isReviewed: false,
   });
+  const [loading, setLoading] = useState(true);
 
   const columns = [
     {
@@ -104,8 +106,10 @@ function ReviewProperty() {
           currentDate: today.format("YYYY-MM-DD"),
         },
       })
-      .then((res) =>
-        setReservations(res.data.data.map((item, i) => ({ ...item, key: i })))
+      .then((res) => {
+          setReservations(res.data.data.map((item, i) => ({...item, key: i})));
+          setLoading(false);
+        }
       )
       .catch((err) => console.error(err));
   }, []);
@@ -130,20 +134,22 @@ function ReviewProperty() {
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <Table
-                  dataSource={reservations}
-                  columns={columns}
-                  rowSelection={{ type: "radio", ...rowSelection }}
-                  pagination={{ pageSize: "5", hideOnSinglePage: true }}
-                  locale={{
-                    emptyText: (
-                      <Empty
-                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        description="No more properties to review!"
-                      />
-                    ),
-                  }}
-                ></Table>
+                <Spin spinning={loading}>
+                  <Table
+                    dataSource={reservations}
+                    columns={columns}
+                    rowSelection={{type: "radio", ...rowSelection}}
+                    pagination={{pageSize: "5", hideOnSinglePage: true}}
+                    locale={{
+                      emptyText: (
+                        <Empty
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          description="No more properties to review!"
+                        />
+                      ),
+                    }}
+                  />
+                </Spin>
               </Col>
               <Col span={24}>
                 <Form

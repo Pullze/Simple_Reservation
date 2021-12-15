@@ -22,7 +22,7 @@ import "./EditableTable.css";
 
 const { RangePicker } = DatePicker;
 
-const today = moment();
+const today = moment("2021-10-07");
 const dateFormat = "YYYY-MM-DD";
 
 // Columns

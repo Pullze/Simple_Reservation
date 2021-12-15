@@ -13,8 +13,7 @@ import {
   Modal,
   Result,
   Empty,
-  message,
-  Spin
+  message, Spin,
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
@@ -39,14 +38,14 @@ const EditableRow = ({ index, ...props }) => {
 };
 
 const EditableCell = ({
-  title,
-  editable,
-  children,
-  dataIndex,
-  record,
-  handleSave,
-  ...restProps
-}) => {
+                        title,
+                        editable,
+                        children,
+                        dataIndex,
+                        record,
+                        handleSave,
+                        ...restProps
+                      }) => {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef(null);
   const form = useContext(EditableContext);
@@ -93,9 +92,9 @@ const EditableCell = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-function RateOwner() {
+function RateCustomer() {
   const location = useLocation();
-  const [owners, setOwners] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [rating, setRating] = useState({ ownerEmail: null, isRated: false });
   const [loading, setLoading] = useState(true);
@@ -106,8 +105,8 @@ function RateOwner() {
       dataIndex: "startDate", //FIXME
     },
     {
-      title: "Owner Email",
-      dataIndex: "ownerEmail",
+      title: "Customer Email",
+      dataIndex: "customerEmail",
     },
     {
       title: "Property Name",
@@ -126,14 +125,14 @@ function RateOwner() {
 
   useEffect(() => {
     axios
-      .get("/api/owners_to_rate", {
+      .get("/api/customers_to_rate", {
         params: {
-          customerEmail: location.state.email,
+          ownerEmail: location.state.email,
           currentDate: today.format("YYYY-MM-DD"),
         },
       })
       .then((res) => {
-        setOwners(
+        setCustomers(
           res.data.data.map((item, i) => ({
             ...item,
             key: i,
@@ -147,32 +146,32 @@ function RateOwner() {
 
   const handleSubmit = () => {
     if (selectedRowKeys.length === 0) {
-      return message.error("Please select an owner.");
+      return message.error("Please select a customer.");
     } else {
-      const owner = owners.filter(({ key }) => key === selectedRowKeys[0])[0];
+      const customer = customers.filter(({ key }) => key === selectedRowKeys[0])[0];
       if (
-        isNaN(owner.score) ||
-        owner.score.length !== 1 ||
-        +owner.score < 1 ||
-        +owner.score > 5
+        isNaN(customer.score) ||
+        customer.score.length !== 1 ||
+        +customer.score < 1 ||
+        +customer.score > 5
       ) {
         return message.error("Please enter an integer value between 1 and 5.");
       }
 
-      const { ownerEmail, score } = owner;
+      const { customerEmail, score } = customer;
       axios({
         method: "post",
-        url: "/api/customer_rate_owner",
+        url: "/api/owner_rate_customer",
         params: {
-          ownerEmail,
-          customerEmail: location.state.email,
+          customerEmail,
+          ownerEmail: location.state.email,
           score: +score,
         },
       })
         .then((res) => {
           if (res.data.code === 200) {
-            setRating({ ownerEmail, isRated: true });
-            setOwners(owners.filter(({ key }) => key !== selectedRowKeys[0]));
+            setRating({ customerEmail, isRated: true });
+            setCustomers(customers.filter(({ key }) => key !== selectedRowKeys[0]));
             setSelectedRowKeys([]);
           } else {
             message.error(res.data.message);
@@ -183,14 +182,14 @@ function RateOwner() {
   };
 
   const handleSave = (row) => {
-    const newData = [...owners];
+    const newData = [...customers];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, { ...item, ...row });
-    setOwners(newData);
+    setCustomers(newData);
   };
 
-  const ownerColumns = columns.map((col) => {
+  const customerColumns = columns.map((col) => {
     if (!col.editable) {
       return col;
     }
@@ -223,7 +222,7 @@ function RateOwner() {
             <Row justify="center" align="middle" gutter={[24, 24]}>
               <Col span={24} align="middle">
                 <h2>Now logged in as {location.state.email}</h2>
-                <h1 className="heading">Rate Owner</h1>
+                <h1 className="heading">Rate Customer</h1>
               </Col>
               <Col span={24}>
                 <Form.Item label="Current Date">
@@ -233,8 +232,8 @@ function RateOwner() {
               <Col span={24} align="middle">
                 <Spin spinning={loading}>
                   <Table
-                    dataSource={owners}
-                    columns={ownerColumns}
+                    dataSource={customers}
+                    columns={customerColumns}
                     components={{
                       body: { row: EditableRow, cell: EditableCell },
                     }}
@@ -258,7 +257,7 @@ function RateOwner() {
                     <Button>
                       <Link
                         to={{
-                          pathname: "/customer/home",
+                          pathname: "/owner/home",
                           state: { email: location.state.email },
                         }}
                       >
@@ -286,7 +285,7 @@ function RateOwner() {
               >
                 <Result
                   status="success"
-                  title={`You have successfully submitted a rating for ${rating.ownerEmail}.`}
+                  title={`You have successfully submitted a rating for ${rating.customerEmail}.`}
                 />
               </Modal>
             </Row>
@@ -297,4 +296,4 @@ function RateOwner() {
   );
 }
 
-export default RateOwner;
+export default RateCustomer;
