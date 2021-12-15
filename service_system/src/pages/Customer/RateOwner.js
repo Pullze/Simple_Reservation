@@ -159,7 +159,7 @@ function RateOwner() {
       const { ownerEmail, score } = owner;
       axios({
         method: "post",
-        url: "/api/custome_rate_owner",
+        url: "/api/customer_rate_owner",
         params: {
           ownerEmail,
           customerEmail: location.state.email,

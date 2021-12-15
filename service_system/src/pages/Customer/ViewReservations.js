@@ -118,8 +118,8 @@ function ViewReservations() {
                   pagination={{ pageSize: 5 }}
                 />
               </Col>
-              <Col span={24} align="left">
-                <Button type="primary">
+              <Col span={24} align="middle">
+                <Button>
                   <Link
                     to={{
                       pathname: "/customer/home",
