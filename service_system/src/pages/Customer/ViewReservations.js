@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import { Layout, Row, Col, Form, Input, Button, Table } from "antd";
+import { Layout, Row, Col, Form, Input, Button, Table, Spin } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 import moment from "moment";
@@ -48,11 +48,12 @@ function ViewReservations() {
   const [reservations, setReservations] = useState([]);
   const [owner, setOwner] = useState("");
   const [property, setProperty] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get("/api/property_reservations")
-      .then((res) =>
+      .then((res) => {
         setReservations(
           res.data.data.map((item, i) => ({
             ...item,
@@ -61,8 +62,9 @@ function ViewReservations() {
             endDate: moment(item.endDate).format(dateFormat),
             cost: "$" + item.cost,
           }))
-        )
-      )
+        );
+        setLoading(false);
+      })
       .catch((err) => console.error(err));
   }, []);
 
@@ -95,28 +97,30 @@ function ViewReservations() {
                 </Row>
               </Col>
               <Col span={24}>
-                <Table
-                  dataSource={reservations.filter(
-                    (item) =>
-                      item !== undefined &&
-                      item.ownerEmail
-                        .toLowerCase()
-                        .includes(owner.toLowerCase()) &&
-                      item.propertyName
-                        .toLowerCase()
-                        .includes(property.toLowerCase())
-                  )}
-                  columns={columns}
-                  expandable={{
-                    expandedRowRender: (record) => (
-                      <p style={{ margin: 0 }}>
-                        <span style={{ fontWeight: "bold" }}>Review: </span>
-                        {record.review}
-                      </p>
-                    ),
-                  }}
-                  pagination={{ pageSize: 5 }}
-                />
+                <Spin spinning={loading}>
+                  <Table
+                    dataSource={reservations.filter(
+                      (item) =>
+                        item !== undefined &&
+                        item.ownerEmail
+                          .toLowerCase()
+                          .includes(owner.toLowerCase()) &&
+                        item.propertyName
+                          .toLowerCase()
+                          .includes(property.toLowerCase())
+                    )}
+                    columns={columns}
+                    expandable={{
+                      expandedRowRender: (record) => (
+                        <p style={{ margin: 0 }}>
+                          <span style={{ fontWeight: "bold" }}>Review: </span>
+                          {record.review}
+                        </p>
+                      ),
+                    }}
+                    pagination={{ pageSize: 5 }}
+                  />
+                </Spin>
               </Col>
               <Col span={24} align="middle">
                 <Button>
