@@ -23,7 +23,7 @@ Simple-Travel-Reservations-Service
 This is the root directory for the Spring-boot based project's backend. We use Maven for project management.
 
 #### `service_system`
-This is the root directory for the React App front end.
+This is the root directory for the React App frontend.
 
 ## Set-up
 
@@ -33,7 +33,7 @@ This is the root directory for the React App front end.
   - Maven @ version 3.8.1.
 - `service_system`
   - Node.js @ version 14.0 or higher.
-  - `npm` or `npx` or `yarn`.
+  - `npm` or `yarn`.
 
 ### Start Up Backend
 1. Open the `service_backend` directory as a **Maven** projecet in any IDE you like.
@@ -57,3 +57,19 @@ This is the root directory for the React App front end.
     * Execute `npm start server` if you use `npm`.
 4. After starting up, a tab to `localhost:3000` will be opened in your browser, or you could go to this address by yourself.
 5. Normally, the backend and frontend will automatically connect with each other.
+
+## Technologies Used
+
+### Backend
+
+For the backend, we use the Spring Boot Architecture to build a RESTful web service. It consists of three layers: controller, service and mapper.  It receives HTTP GET, POST, and DELETE requests. 
+
+We have six controllers marked by `@Restcontroller` including airline controller, airport controller, book controller, flight controller, property controller, and user controller. These controllers process incoming REST requests from the React front end. We have 14 entitie classes and 11 vo classes to save the information of “account”, “airline”, “airport”, “reserve”, etc. These classes improve the efficiency of processing the data belonging to one class. The controller receives requests from the frontend, and passes the variable to the service APIs.
+
+In the service layer, we implements the corresponding APIs. We check the edge cases, process the data, update the MySQL Database through mappers. Interacting with the MySQL Database, we use the mybatis framework to prepare custom SQL queries to the database. The result finally returns to the controller and is passed back to the front end.
+
+### Frontend
+    
+We use` React.js`, an open-source front-end JavaScript library, to build our user interfaces. These interfaces are styled with Ant Design, `antd`, a React UI library consisting of a set of React components. We also use `axios` to make HTTP requests to our API endpoints in the backend.
+
+## Work Distribution
