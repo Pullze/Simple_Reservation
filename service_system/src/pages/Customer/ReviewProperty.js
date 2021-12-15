@@ -103,7 +103,7 @@ function ReviewProperty() {
       .get("/api/reservations_to_review", {
         params: {
           customerEmail: location.state.email,
-          currentDate: today.format("YYYY-MM-DD"),
+          curDate: today.format("YYYY-MM-DD"),
         },
       })
       .then((res) => {

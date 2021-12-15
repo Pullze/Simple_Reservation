@@ -335,6 +335,11 @@ function ScheduleFlight() {
                           </Button>
                         </Form.Item>
                         <Form.Item>
+                          <Button onClick={() => form.resetFields()}>
+                            Reset
+                          </Button>
+                        </Form.Item>
+                        <Form.Item>
                           <Button type="primary" htmlType="submit">
                             Schedule
                           </Button>
