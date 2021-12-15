@@ -17,7 +17,7 @@ public interface PropertyMapper {
 
    List<Property> viewAvailableProperties(String start, String end);
 
-   List<Property> viewPropertiesToRemove(String ownerEmail);
+   List<Property> viewPropertiesToRemove(String ownerEmail, String curDate);
 
    Reserve checkReserveExist(String propertyName, String ownerEmail, String customerEmail);
 
@@ -25,13 +25,13 @@ public interface PropertyMapper {
 
    void reserveProperty(String propertyName, String ownerEmail, String customerEmail, String startDate, String endDate, Integer numGuests);
 
-   List<ReserveInfo> viewCustomerFutureReservations(String customerEmail);
+   List<ReserveInfo> viewCustomerFutureReservations(String customerEmail, String curDate);
 
-   List<ReserveInfo> viewCustomerPastReservations(String customerEmail);
+   List<ReserveInfo> viewCustomerPastReservations(String customerEmail, String curDate);
 
    List<ReserveInfo> viewOwnersToRate(String customerEmail);
 
-   List<ReserveInfo> viewCustomersToRate(String ownerEmail);
+   List<ReserveInfo> viewCustomersToRate(String ownerEmail, String curDate);
 
    List<ReserveInfo> viewPropertyReservations();
 

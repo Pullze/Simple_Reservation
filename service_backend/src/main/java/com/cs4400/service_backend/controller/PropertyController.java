@@ -85,8 +85,8 @@ public class PropertyController {
      */
     @GetMapping(value = "/customer_future_reservations")
     @ApiOperation(value ="customer future reservations", notes = "customer future reservations")
-    public Response<?> viewCustomerFutureReservations(@RequestParam String customerEmail) {
-        List<ReserveInfo> result = propertyProcess.viewCustomerFutureReservations(customerEmail);
+    public Response<?> viewCustomerFutureReservations(@RequestParam String customerEmail, @RequestParam String curDate) {
+        List<ReserveInfo> result = propertyProcess.viewCustomerFutureReservations(customerEmail, curDate);
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
@@ -98,8 +98,8 @@ public class PropertyController {
      */
     @GetMapping(value = "/customer_past_reservations")
     @ApiOperation(value ="customer past reservations", notes = "customer past reservations")
-    public Response<?> viewCustomerPastReservations(@RequestParam String customerEmail) {
-        List<ReserveInfo> result = propertyProcess.viewCustomerPastReservations(customerEmail);
+    public Response<?> viewCustomerPastReservations(@RequestParam String customerEmail, @RequestParam String curDate) {
+        List<ReserveInfo> result = propertyProcess.viewCustomerPastReservations(customerEmail, curDate);
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
@@ -111,8 +111,8 @@ public class PropertyController {
      */
     @GetMapping(value = "/reservations_to_review")
     @ApiOperation(value ="customer view reservations to review", notes = "reservations to review")
-    public Response<?> viewReservationsToReview(@RequestParam String customerEmail) {
-        List<ReserveInfo> result = propertyProcess.viewReservationsToReview(customerEmail);
+    public Response<?> viewReservationsToReview(@RequestParam String customerEmail, String curDate) {
+        List<ReserveInfo> result = propertyProcess.viewReservationsToReview(customerEmail, curDate);
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
@@ -136,8 +136,8 @@ public class PropertyController {
      */
     @GetMapping(value = "/customers_to_rate")
     @ApiOperation(value ="owner view customers to rate", notes = "owner view customers to rate")
-    public Response<?> viewCustomersToRate(@RequestParam String ownerEmail) {
-        List<ReserveInfo> result = propertyProcess.viewCustomersToRate(ownerEmail);
+    public Response<?> viewCustomersToRate(@RequestParam String ownerEmail, @RequestParam String curDate) {
+        List<ReserveInfo> result = propertyProcess.viewCustomersToRate(ownerEmail, curDate);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
@@ -162,8 +162,8 @@ public class PropertyController {
      */
     @GetMapping(value = "/properties_to_remove")
     @ApiOperation(value ="properties to remove", notes = "properties to remove")
-    public Response<?> viewPropertiesToRemove(@RequestParam String ownerEmail) {
-        List<Property> result = propertyProcess.viewPropertiesToRemove(ownerEmail);
+    public Response<?> viewPropertiesToRemove(@RequestParam String ownerEmail, @RequestParam String curDate) {
+        List<Property> result = propertyProcess.viewPropertiesToRemove(ownerEmail, curDate);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 

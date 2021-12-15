@@ -71,20 +71,20 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public List<ReserveInfo> viewCustomerFutureReservations(String customerEmail) {
+    public List<ReserveInfo> viewCustomerFutureReservations(String customerEmail, String curDate) {
 //        System.out.println(propertyMapperr.viewCustomerFutureReservations(customerEmail));
-        return propertyMapper.viewCustomerFutureReservations(customerEmail);
+        return propertyMapper.viewCustomerFutureReservations(customerEmail, curDate);
     }
 
     // for debug only
     @Override
-    public List<ReserveInfo> viewCustomerPastReservations(String customerEmail) {
-        return propertyMapper.viewCustomerPastReservations(customerEmail);
+    public List<ReserveInfo> viewCustomerPastReservations(String customerEmail, String curDate) {
+        return propertyMapper.viewCustomerPastReservations(customerEmail, curDate);
     }
 
     @Override
-    public List<ReserveInfo> viewReservationsToReview(String customerEmail) {
-        List<ReserveInfo> pastReservations = propertyMapper.viewCustomerPastReservations(customerEmail);
+    public List<ReserveInfo> viewReservationsToReview(String customerEmail, String curDate) {
+        List<ReserveInfo> pastReservations = propertyMapper.viewCustomerPastReservations(customerEmail, curDate);
         ArrayList<ReserveInfo> reservationsToReview = new ArrayList<>();
         for (ReserveInfo reservation: pastReservations) {
             if (reservation.getReview() == null) {
@@ -102,8 +102,8 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public List<Property> viewPropertiesToRemove(String ownerEmail) {
-        return propertyMapper.viewPropertiesToRemove(ownerEmail);
+    public List<Property> viewPropertiesToRemove(String ownerEmail, String curDate) {
+        return propertyMapper.viewPropertiesToRemove(ownerEmail, curDate);
     }
 
     @Override
@@ -134,8 +134,8 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public List<ReserveInfo> viewCustomersToRate(String ownerEmail) {
-        List<ReserveInfo> pastCustomers = propertyMapper.viewCustomersToRate(ownerEmail);
+    public List<ReserveInfo> viewCustomersToRate(String ownerEmail, String curDate) {
+        List<ReserveInfo> pastCustomers = propertyMapper.viewCustomersToRate(ownerEmail, curDate);
         ArrayList<ReserveInfo> customersToRate = new ArrayList<>();
         for (ReserveInfo reservation: pastCustomers) {
             if (reservation.getRating() == null) {

@@ -56,7 +56,7 @@
     <select id = "viewCustomerFutureReservations" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
         select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address
         from reserve as r, property as p
-        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date > CURDATE() and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
+        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date > #{curDate} and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
     </select>
 
     <select id="check_owner_has_property" resultType="Boolean">
@@ -70,20 +70,20 @@
     <select id = "viewCustomerPastReservations" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
         select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address, review.content as review, review.Score as rating
         from reserve as r left join review on r.Customer = review.Customer and r.Owner_Email = review.Owner_Email, property as p
-        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date &lt;= CURDATE() and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
+        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date &lt;= #{curDate} and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
     </select>
 
     <select id = "viewOwnersToRate" resultType = "com.cs4400.service_backend.vo.ReserveInfo">
         select r.Start_Date as startDate, p.Property_Name as propertyName, p.Owner_Email as ownerEmail, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address, rate.Score as rating
         from reserve as r left join customers_rate_owners as rate on r.Customer = rate.Customer and r.Owner_Email = rate.Owner_Email, property as p
-        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date &lt;= CURDATE() and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
+        where r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email and r.Start_Date &lt;= #{curDate} and r.Customer = #{customerEmail} and r.Was_Cancelled = 0;
     </select>
 
     <select id = "viewCustomersToRate" resultType = "ReserveInfo">
         select r.Start_Date as startDate, p.Property_Name as propertyName, r.Customer as customerEmail, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address, rate.Score as rating
         from Reserve as r left join  Owners_Rate_Customers as rate on r.Customer = rate.Customer and r.Owner_Email = rate.Owner_Email
         left join property as p on r.Property_Name = p.Property_Name and r.Owner_Email = p.Owner_Email
-        where  r.Start_Date &lt;= CURDATE() and r.Owner_Email = #{ownerEmail} and r.Was_Cancelled = 0;
+        where  r.Start_Date &lt;= #{curDate} and r.Owner_Email = #{ownerEmail} and r.Was_Cancelled = 0;
     </select>
 
     <update id = "reviewReservation" >
@@ -147,7 +147,7 @@
         select p.Property_Name as property_name, p.Descr as descr, p.Capacity as capacity, p.Cost as cost, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address
                from Property as p where Owner_Email = #{ownerEmail}
                                     and not exists(select Customer from Reserve as r where r.Property_Name = p.Property_Name and r.Owner_Email=p.Owner_Email
-                                             and Was_Cancelled = 0 and CURDATE() between Start_Date and End_Date);
+                                             and Was_Cancelled = 0 and #{curDate} between Start_Date and End_Date);
     </select>
 
     <update id = "removePropertyFromReserve" >
