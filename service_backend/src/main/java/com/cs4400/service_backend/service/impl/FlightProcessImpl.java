@@ -39,11 +39,7 @@ public class FlightProcessImpl implements FlightProcess {
         String airline_name = flightInfo.getAirline_name();
         String from_airport = flightInfo.getFrom_airport();
         String to_airport = flightInfo.getTo_airport();
-        String departure_time = flightInfo.getDeparture_time();
-        String arrival_time = flightInfo.getArrival_time();
         String flight_date = flightInfo.getFlight_date();
-        double cost = flightInfo.getCost();
-        int capacity = flightInfo.getCapacity();
         String current_date = flightInfo.getCurrent_date();
 
         FlightInfo returnFlightInfo = new FlightInfo();
@@ -78,8 +74,7 @@ public class FlightProcessImpl implements FlightProcess {
             returnFlightInfo.setMessage("The combination of the flight number and the airline name already exists!");
            return  returnFlightInfo;
         } else {
-            flightMapper.schedule_flight(flight_num, airline_name, from_airport , to_airport,
-                    departure_time, arrival_time, flight_date, cost, capacity);
+            flightMapper.schedule_flight(flightInfo);
             returnFlightInfo = flightMapper.check_flight(flight_num, airline_name);
             returnFlightInfo.setMessage("Schedule succeeded!");
            return returnFlightInfo;
