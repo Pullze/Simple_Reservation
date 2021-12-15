@@ -10,7 +10,7 @@ import java.util.List;
 public interface FlightProcess {
     FlightInfo schedule_flight(FlightInfo flightInfo);
 
-    List<Flight> customer_view_flight(int minSeats);
+    List<Flight> customer_view_flight(int minSeats, String currentDate);
 
     List<ViewFlightInfo> getFlightInfo();
 

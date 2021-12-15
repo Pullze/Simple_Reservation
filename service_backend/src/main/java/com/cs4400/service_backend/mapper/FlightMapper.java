@@ -20,7 +20,7 @@ public interface FlightMapper {
 //  retrieve remaining_seats
     Integer check_flight_seats(String flight_num, String airline_name);
 
-    List<Flight> customer_view_flight(int minSeats);
+    List<Flight> customer_view_flight(int minSeats, String currentDate);
 
     List<ViewFlightInfo> get_flight_info();
 

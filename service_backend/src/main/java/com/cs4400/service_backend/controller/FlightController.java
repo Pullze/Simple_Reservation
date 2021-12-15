@@ -56,9 +56,9 @@ public class FlightController {
      */
     @GetMapping(value =  "/customer_view_flights")
     @ApiOperation(value = "Customer view flights", notes = "customer view flights")
-    public Response<?> getFlights(@RequestParam(required = false) Integer minSeats) {
+    public Response<?> getFlights(@RequestParam(required = false) Integer minSeats, @RequestParam String currentDate) {
 
-        List<Flight> result = flightProcess.customer_view_flight((minSeats != null)? minSeats : 0);
+        List<Flight> result = flightProcess.customer_view_flight((minSeats != null)? minSeats : 0, currentDate);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
 
     }

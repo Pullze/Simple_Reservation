@@ -89,8 +89,8 @@ public class FlightProcessImpl implements FlightProcess {
 
 
     @Override
-    public List<Flight> customer_view_flight(int minSeats) {
-        return flightMapper.customer_view_flight(minSeats);
+    public List<Flight> customer_view_flight(int minSeats, String currentDate) {
+        return flightMapper.customer_view_flight(minSeats, currentDate);
     }
 
     @Override

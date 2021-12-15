@@ -52,8 +52,8 @@ public class BookController {
      */
     @GetMapping(value = "/customer_view_books")
     @ApiModelProperty(value = "customer_view_books")
-    public Response<?> customer_view_books(@RequestParam String customer_email) {
-        List<Book> books = bookProcess.customer_view_books(customer_email);
+    public Response<?> customer_view_books(@RequestParam String customer_email, @RequestParam String currentDate) {
+        List<Book> books = bookProcess.customer_view_books(customer_email, currentDate);
         Response<List<Book>> response =new Response<>(200, books);
         return response;
     }

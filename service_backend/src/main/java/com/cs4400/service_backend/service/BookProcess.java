@@ -10,7 +10,7 @@ public interface BookProcess {
 
     BookInfo book_flight(BookInfo bookInfo);
 
-    List<Book> customer_view_books(String customer_email);
+    List<Book> customer_view_books(String customer_email, String currentDate);
 
     Integer cancel_book (String flight_num, String airline_name, String customer_email);
 }

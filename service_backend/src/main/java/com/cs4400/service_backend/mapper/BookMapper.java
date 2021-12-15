@@ -28,7 +28,7 @@ public interface BookMapper {
     Integer remove_all_book_flight(String flight_num, String airline_name);
 
     // retrieve all non-cancelled books of a customer after current date
-    List<Book> check_all_book_customer(String customer_email);
+    List<Book> check_all_book_customer(String customer_email, String currentDate);
 
 
 }
