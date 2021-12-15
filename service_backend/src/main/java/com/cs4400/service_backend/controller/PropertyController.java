@@ -124,8 +124,8 @@ public class PropertyController {
      */
     @GetMapping(value = "/owners_to_rate")
     @ApiOperation(value ="customer view owners to rate", notes = "customer view owners to rate")
-    public Response<?> viewOwnersToRate(@RequestParam String customerEmail) {
-        List<ReserveInfo> result = propertyProcess.viewOwnersToRate(customerEmail);
+    public Response<?> viewOwnersToRate(@RequestParam String customerEmail, @RequestParam String curDate) {
+        List<ReserveInfo> result = propertyProcess.viewOwnersToRate(customerEmail, curDate);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 

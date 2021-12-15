@@ -3,6 +3,7 @@ import {Layout, Row, Col, Button, Modal, Result, Select, Form, Spin, Table, Popc
 import { useHistory, useLocation } from "react-router";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const { Option } = Select;
 const { Content } = Layout;
@@ -18,6 +19,9 @@ export default function RemoveProperty(props) {
   const [visible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const today = moment();
+  const dateFormat = "YYYY-MM-DD";
+
   const showModal = () => {
     setIsVisible(true);
   };
@@ -30,7 +34,8 @@ export default function RemoveProperty(props) {
   const getProperties = () => {
     axios.get("/api/properties_to_remove", {
       params: {
-        ownerEmail: location.state.email
+        ownerEmail: location.state.email,
+        curDate: today.format(dateFormat),
       }
     }).then((res) => {
         const proplist = res.data.data;

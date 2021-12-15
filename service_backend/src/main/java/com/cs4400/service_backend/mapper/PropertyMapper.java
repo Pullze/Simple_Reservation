@@ -29,7 +29,7 @@ public interface PropertyMapper {
 
    List<ReserveInfo> viewCustomerPastReservations(String customerEmail, String curDate);
 
-   List<ReserveInfo> viewOwnersToRate(String customerEmail);
+   List<ReserveInfo> viewOwnersToRate(String customerEmail, String curDate);
 
    List<ReserveInfo> viewCustomersToRate(String ownerEmail, String curDate);
 

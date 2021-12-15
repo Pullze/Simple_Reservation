@@ -87,7 +87,7 @@ function CancelProperty() {
       .get("/api/customer_future_reservations", {
         params: {
           customerEmail: location.state.email,
-          currentDate: today.format("YYYY-MM-DD"),
+          curDate: today.format("YYYY-MM-DD"),
         },
       })
       .then((res) =>

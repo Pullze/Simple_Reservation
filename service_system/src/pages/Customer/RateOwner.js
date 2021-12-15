@@ -100,6 +100,9 @@ function RateOwner() {
   const [rating, setRating] = useState({ ownerEmail: null, isRated: false });
   const [loading, setLoading] = useState(true);
 
+  const today = moment();
+  const dateFormat = "YYYY-MM-DD";
+
   const columns = [
     {
       title: "Reservation Date",
@@ -129,7 +132,7 @@ function RateOwner() {
       .get("/api/owners_to_rate", {
         params: {
           customerEmail: location.state.email,
-          currentDate: today.format("YYYY-MM-DD"),
+          curDate: today.format("YYYY-MM-DD"),
         },
       })
       .then((res) => {
@@ -172,7 +175,7 @@ function RateOwner() {
         .then((res) => {
           if (res.data.code === 200) {
             setRating({ ownerEmail, isRated: true });
-            setOwners(owners.filter(({ key }) => key !== selectedRowKeys[0]));
+            handleReset();
             setSelectedRowKeys([]);
           } else {
             message.error(res.data.message);
@@ -181,6 +184,28 @@ function RateOwner() {
         .catch((err) => console.log(err));
     }
   };
+
+  const handleReset = () => {
+    setLoading(true);
+    axios
+      .get("/api/owners_to_rate", {
+        params: {
+          customerEmail: location.state.email,
+          currentDate: today.format("YYYY-MM-DD"),
+        },
+      })
+      .then((res) => {
+        setOwners(
+          res.data.data.map((item, i) => ({
+            ...item,
+            key: i,
+            startDate: moment(item.startDate).format("MM/DD/YY"),
+            score: "",
+          }))
+        );
+        setLoading(false);
+      });
+  }
 
   const handleSave = (row) => {
     const newData = [...owners];

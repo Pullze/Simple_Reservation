@@ -128,7 +128,7 @@ function RateCustomer() {
       .get("/api/customers_to_rate", {
         params: {
           ownerEmail: location.state.email,
-          currentDate: today.format("YYYY-MM-DD"),
+          curDate: today.format("YYYY-MM-DD"),
         },
       })
       .then((res) => {
@@ -171,7 +171,7 @@ function RateCustomer() {
         .then((res) => {
           if (res.data.code === 200) {
             setRating({ customerEmail, isRated: true });
-            setCustomers(customers.filter(({ key }) => key !== selectedRowKeys[0]));
+            handleReset();
             setSelectedRowKeys([]);
           } else {
             message.error(res.data.message);
@@ -180,6 +180,29 @@ function RateCustomer() {
         .catch((err) => console.log(err));
     }
   };
+
+  const handleReset= () => {
+    setLoading(true);
+    axios
+      .get("/api/customers_to_rate", {
+        params: {
+          ownerEmail: location.state.email,
+          currentDate: today.format("YYYY-MM-DD"),
+        },
+      })
+      .then((res) => {
+        setCustomers(
+          res.data.data.map((item, i) => ({
+            ...item,
+            key: i,
+            startDate: moment(item.startDate).format("MM/DD/YY"),
+            score: "",
+          }))
+        );
+        setLoading(false);
+      });
+  }
+
 
   const handleSave = (row) => {
     const newData = [...customers];

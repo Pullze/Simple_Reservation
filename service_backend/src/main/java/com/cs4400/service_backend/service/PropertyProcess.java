@@ -29,7 +29,7 @@ public interface PropertyProcess {
 
     List<ReserveInfo> viewCustomersToRate(String ownerEmail, String curDate);
 
-    List<ReserveInfo> viewOwnersToRate(String customerEmail);
+    List<ReserveInfo> viewOwnersToRate(String customerEmail, String curDate);
 
     String cancelPropertyReservation(String propertyName, String ownerEmail, String customerEmail);
 

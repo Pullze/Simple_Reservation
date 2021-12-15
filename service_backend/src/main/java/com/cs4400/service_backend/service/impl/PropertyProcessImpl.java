@@ -122,8 +122,8 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public List<ReserveInfo> viewOwnersToRate(String customerEmail) {
-        List<ReserveInfo> pastOwners = propertyMapper.viewOwnersToRate(customerEmail);
+    public List<ReserveInfo> viewOwnersToRate(String customerEmail, String curDate) {
+        List<ReserveInfo> pastOwners = propertyMapper.viewOwnersToRate(customerEmail, curDate);
         ArrayList<ReserveInfo> ownersToRate = new ArrayList<>();
         for (ReserveInfo reservation: pastOwners) {
             if (reservation.getRating() == null) {
