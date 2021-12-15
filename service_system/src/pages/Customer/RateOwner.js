@@ -191,7 +191,7 @@ function RateOwner() {
       .get("/api/owners_to_rate", {
         params: {
           customerEmail: location.state.email,
-          currentDate: today.format("YYYY-MM-DD"),
+          curDate: today.format("YYYY-MM-DD"),
         },
       })
       .then((res) => {
