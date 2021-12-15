@@ -73,3 +73,32 @@ In the service layer, we implements the corresponding APIs. We check the edge ca
 We use` React.js`, an open-source front-end JavaScript library, to build our user interfaces. These interfaces are styled with Ant Design, `antd`, a React UI library consisting of a set of React components. We also use `axios` to make HTTP requests to our API endpoints in the backend.
 
 ## Work Distribution
+
+| Page                                           | Frontend | Backend           |
+| ---------------------------------------------- | -------- | ----------------- |
+| Login                                          | Lai      | Lai               |
+| Register Owner                                 | Qian     | Jiacheng, Wantian |
+| Admin Home                                     | Qian     | N/A               |
+| Admin Schedule Flight                          | Qian     | Jiacheng          |
+| Admin Remove Flight                            | Qian     | Jiacheng          |
+| Admin View Airports                            | Lai      | Lai, Jiacheng     |
+| Admin View Airlines                            | Lai      | Lai               |
+| Admin View Customers                           | Lai      | Lai               |
+| Admin View Owners                              | Lai      | Lai               |
+| Admin Process Date                             | Lai      | Lai               |
+| Customer Home                                  | Qian     | N/A               |
+| Customer Book Flight                           | Qian     | Jiacheng          |
+| Customer Cancel Flight                         | Qian     | Jiacheng          |
+| Customer View Flights                          | Lai      | Jiacheng          |
+| Customer Reserve Property                      | Qian     | Wantian           |
+| Customer Cancel Property Reservation           | Qian     | Wantian           |
+| Customer Review Property                       | Qian     | Wantian           |
+| Customer Rate Owner                            | Qian     | Wantian           |
+| Customer View Properties                       | Qian     | Wantian           |
+| Customer View Individual Property Reservations | Qian     | Wantian           |
+| Owner Home                                     | Qian     | N/A               |
+| Owner Add Property                             | Qian     | Jiacheng          |
+| Owner Remove Property                          | Lai      | Wantian           |
+| Owner Rate Customer                            | Lai      | Jiacheng          |
+| Owner Deletes Account                          | Lai      | Lai               |
+
