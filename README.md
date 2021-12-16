@@ -64,9 +64,11 @@ This is the root directory for the React App frontend.
 
 For the backend, we use the Spring Boot Architecture to build a RESTful web service. It consists of three layers: controller, service and mapper.  It receives HTTP GET, POST, and DELETE requests. 
 
-We have six controllers marked by `@Restcontroller` including airline controller, airport controller, book controller, flight controller, property controller, and user controller. These controllers process incoming REST requests from the React front end. We have 14 entitie classes and 11 vo classes to save the information of “account”, “airline”, “airport”, “reserve”, etc. These classes improve the efficiency of processing the data belonging to one class. The controller receives requests from the frontend, and passes the variable to the service APIs.
+We built 14 entity objects and 11 value objects (VO) as classes. Entities save the information of “account”, “airline”, “airport”, “reserve”, etc. VOs are used to transfer data from the database to other interfaces and the front end. These classes improve the efficiency of processing the data.
 
-In the service layer, we implements the corresponding APIs. We check the edge cases, process the data, update the MySQL Database through mappers. Interacting with the MySQL Database, we use the mybatis framework to prepare custom SQL queries to the database. The result finally returns to the controller and is passed back to the front end.
+We have six controllers marked by @Restcontroller including airline controller, airport controller, book controller, flight controller, property controller, and user controller. These controllers process incoming REST requests from the React front end. And they passes VOs and other parameters to the service APIs.
+
+In the service layer, we check the edge cases, process the data, implement different web service functionalities and update the MySQL Database through Mybatis mappers. The Mybatis mapper methods can custom SQL queries and interact with the MySQL database. The result returns to the controller through service APIs and is finally passed back to the front end.
 
 ### Frontend
     
