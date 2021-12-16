@@ -102,7 +102,7 @@ export default function ViewFlights(props) {
     setSeat(value);
     setFiltered(
       flights.filter((flight) =>
-        ("" + flight.num_empty_seats).startsWith(value)
+        (+flight.num_empty_seats)>=(+value)
       )
     );
     console.log(filtered);

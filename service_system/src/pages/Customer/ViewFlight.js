@@ -94,7 +94,7 @@ export default function ViewFlight() {
     setSeat(value);
     setFiltered(
       flights.filter((flight) =>
-        ("" + flight.remaining_seats).startsWith(value)
+        (+flight.remaining_seats)>=(+value)
       )
     );
     console.log(filtered);
