@@ -166,7 +166,7 @@ public class PropertyProcessImpl implements PropertyProcess {
         propertyMapper.removePropertyFromAmenity(propertyName, ownerEmail);
         propertyMapper.removePropertyFromIsCloseTo(propertyName, ownerEmail);
         propertyMapper.removeProperty(propertyName, ownerEmail);
-        return "remove property succeed!";
+        return "Remove property succeed!";
     }
 
 

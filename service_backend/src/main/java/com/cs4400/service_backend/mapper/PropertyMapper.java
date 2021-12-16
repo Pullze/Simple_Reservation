@@ -19,7 +19,7 @@ public interface PropertyMapper {
 
    List<Property> viewAllProperties(String ownerEmail);
 
-   List<Property> checkIfReserved(String ownerEmail, String propertyName, String currentDate);
+   Property checkIfReserved(String ownerEmail, String propertyName, String currentDate);
 
    void removeProperty(String propertyName, String ownerEmail);
 

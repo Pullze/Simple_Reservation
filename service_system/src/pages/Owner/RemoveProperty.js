@@ -59,7 +59,7 @@ export default function RemoveProperty(props) {
         params: {
           ownerEmail: location.state.email,
           propertyName: selectedRow[0].property_name,
-          curDate: today.format(dateFormat),
+          currentDate: today.format(dateFormat),
         }
       }).then((res) => {
         console.log(res.data);

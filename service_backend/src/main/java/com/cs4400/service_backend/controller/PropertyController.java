@@ -251,7 +251,7 @@ public class PropertyController {
                                       @RequestParam String ownerEmail, @RequestParam String currentDate) {
 
         String result = propertyProcess.removeProperty(propertyName, ownerEmail, currentDate);
-        if (result == "remove property succeed!") {
+        if (result.equals("Remove property succeed!")) {
             return new Response<>(HttpStatus.OK.value(), result, result);
         } else {
             return new Response<>(400, result, result);
