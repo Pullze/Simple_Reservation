@@ -25,7 +25,7 @@ const columns = [
   {
     title: "Cost",
     dataIndex: "cost",
-    sorter: (a, b) => a - b,
+    sorter: (a, b) => a.cost - b.cost,
   },
 ];
 
