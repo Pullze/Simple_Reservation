@@ -162,8 +162,8 @@ public class PropertyController {
      */
     @GetMapping(value = "/properties_to_remove")
     @ApiOperation(value ="properties to remove", notes = "properties to remove")
-    public Response<?> viewPropertiesToRemove(@RequestParam String ownerEmail, @RequestParam String curDate) {
-        List<Property> result = propertyProcess.viewPropertiesToRemove(ownerEmail, curDate);
+    public Response<?> viewPropertiesToRemove(@RequestParam String ownerEmail) {
+        List<Property> result = propertyProcess.viewPropertiesToRemove(ownerEmail);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
     }
 
@@ -248,11 +248,15 @@ public class PropertyController {
     @GetMapping(value = "/remove_property")
     @ApiOperation(value ="remove property", notes = "owner remove property")
     public Response<?> removeProperty(@RequestParam String propertyName,
-                                      @RequestParam String ownerEmail) {
+                                      @RequestParam String ownerEmail, @RequestParam String currentDate) {
 
-        String result = propertyProcess.removeProperty(propertyName, ownerEmail);
-        System.out.println(result);
-        return new Response<>(HttpStatus.OK.value(), "Success");
+        String result = propertyProcess.removeProperty(propertyName, ownerEmail, currentDate);
+        if (result == "remove property succeed!") {
+            return new Response<>(HttpStatus.OK.value(), result, result);
+        } else {
+            return new Response<>(400, result, result);
+        }
+
     }
 }
 

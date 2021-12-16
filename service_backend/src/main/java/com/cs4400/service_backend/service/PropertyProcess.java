@@ -13,11 +13,11 @@ public interface PropertyProcess {
 
     List<Property> viewAvailableProperties(String start, String end);
 
-    List<Property> viewPropertiesToRemove(String ownerEmail, String curDate);
+    List<Property> viewPropertiesToRemove(String ownerEmail);
 
     String reserveProperty(Reserve reserve);
 
-    String removeProperty(String propertyName, String ownerEmail);
+    String removeProperty(String propertyName, String ownerEmail, String CurrentDate);
 
     List<ReserveInfo> viewCustomerFutureReservations(String customerEmail, String curDate);
 

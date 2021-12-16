@@ -17,7 +17,11 @@ public interface PropertyMapper {
 
    List<Property> viewAvailableProperties(String start, String end);
 
-   List<Property> viewPropertiesToRemove(String ownerEmail, String curDate);
+   List<Property> viewAllProperties(String ownerEmail);
+
+   List<Property> checkIfReserved(String ownerEmail, String propertyName, String currentDate);
+
+   void removeProperty(String propertyName, String ownerEmail);
 
    Reserve checkReserveExist(String propertyName, String ownerEmail, String customerEmail);
 
@@ -63,6 +67,6 @@ public interface PropertyMapper {
 
    void removePropertyFromIsCloseTo(String propertyName, String ownerEmail);
 
-   void removeProperty(String propertyName, String ownerEmail);
+
 
 }

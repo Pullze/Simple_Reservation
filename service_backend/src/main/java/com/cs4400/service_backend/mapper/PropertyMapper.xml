@@ -143,11 +143,13 @@
         values (#{propertyName}, #{ownerEmail}, #{airportId}, #{distance});
     </insert>
 
-    <select id = "viewPropertiesToRemove" resultType = "Property">
+    <select id = "viewAllProperties" resultType = "Property">
         select p.Property_Name as property_name, p.Descr as descr, p.Capacity as capacity, p.Cost as cost, concat(p.Street, ', ', p.City, ', ', p.State, ', ', p.Zip) as address
-               from Property as p where Owner_Email = #{ownerEmail}
-                                    and not exists(select Customer from Reserve as r where r.Property_Name = p.Property_Name and r.Owner_Email=p.Owner_Email
-                                             and Was_Cancelled = 0 and #{curDate} between Start_Date and End_Date);
+               from Property as p where Owner_Email = #{ownerEmail};
+    </select>
+
+    <select id = "checkIfReserved" resultType = "Property">
+        select p.Property_Name from Property as p natural join Reserve as r where p.Property_Name = #{propertyName} and p.Owner_Email = #{ownerEmail} and #{currentDate} between Start_Date and End_Date;
     </select>
 
     <update id = "removePropertyFromReserve" >

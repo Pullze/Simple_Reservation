@@ -102,8 +102,8 @@ public class PropertyProcessImpl implements PropertyProcess {
     }
 
     @Override
-    public List<Property> viewPropertiesToRemove(String ownerEmail, String curDate) {
-        return propertyMapper.viewPropertiesToRemove(ownerEmail, curDate);
+    public List<Property> viewPropertiesToRemove(String ownerEmail) {
+        return propertyMapper.viewAllProperties(ownerEmail);
     }
 
     @Override
@@ -157,7 +157,10 @@ public class PropertyProcessImpl implements PropertyProcess {
         return "rate " + customerEmail + " succeeded!";
     }
     @Override
-    public String removeProperty(String propertyName, String ownerEmail) {
+    public String removeProperty(String propertyName, String ownerEmail, String currentDate) {
+        if (propertyMapper.checkIfReserved(ownerEmail, propertyName, currentDate) != null) {
+            return "This property is reserved today!";
+        }
         propertyMapper.removePropertyFromReserve(propertyName, ownerEmail);
         propertyMapper.removePropertyFromReview(propertyName, ownerEmail);
         propertyMapper.removePropertyFromAmenity(propertyName, ownerEmail);

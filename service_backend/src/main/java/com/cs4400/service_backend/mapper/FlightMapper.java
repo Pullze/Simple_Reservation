@@ -11,8 +11,7 @@ import java.util.List;
 
 @Mapper
 public interface FlightMapper {
-    void schedule_flight(String flight_num, String airline_name, String  from_airport , String to_airport,
-                           String departure_time, String arrival_time, String flight_date, double cost, int capacity);
+    void schedule_flight(FlightInfo flightInfo);
 
     FlightInfo check_flight(String flight_num, String airline_name);
 
