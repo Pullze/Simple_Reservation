@@ -35,7 +35,6 @@ export default function RemoveProperty(props) {
     axios.get("/api/properties_to_remove", {
       params: {
         ownerEmail: location.state.email,
-        curDate: today.format(dateFormat),
       }
     }).then((res) => {
         const proplist = res.data.data;
@@ -60,6 +59,7 @@ export default function RemoveProperty(props) {
         params: {
           ownerEmail: location.state.email,
           propertyName: selectedRow[0].property_name,
+          curDate: today.format(dateFormat),
         }
       }).then((res) => {
         console.log(res.data);
