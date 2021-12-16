@@ -4,7 +4,8 @@ import { useLocation, useHistory } from "react-router";
 import { Content } from "antd/lib/layout/layout";
 import axios from "axios";
 import Highlighter from "react-highlight-words";
-
+import moment from "moment";
+const today = moment();
 export default function ViewFlight() {
   const location = useLocation();
   const history = useHistory();
@@ -101,7 +102,7 @@ export default function ViewFlight() {
 
   function getFlights() {
     axios
-      .get("/api/customer_view_flights")
+      .get("/api/customer_view_flights", {params:{minSeats: 1, currentDate: today.format("YYYY-MM-DD")}})
       .then((res) => {
         console.log(res.data);
         setFlights(res.data.data);
