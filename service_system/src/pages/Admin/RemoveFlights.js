@@ -50,20 +50,21 @@ function RemoveFlights() {
   }, []);
 
   const handleReset = async () => {
+    form.resetFields();
     setLoading(true);
     setEndDate("");
     setAirlineName("");
     setFlightNumber("");
     setSelectedRowKeys([]);
     setSelectedRow([]);
-    form.resetFields();
+    setFlights([]);
     setStartDate(today.format(dateFormat));
     const res = await axios.get("/api/view_remove_flight", {
       params: {
-        startDate: startDate,
-        endDate: endDate,
-        airlineName: airlineName,
-        flightNumber: flightNumber,
+        startDate: today.format(dateFormat),
+        endDate: "",
+        airlineName: "",
+        flightNumber: "",
       },
     });
     setFlights(
