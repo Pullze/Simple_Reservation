@@ -21,7 +21,6 @@ import axios from "axios";
 import moment from "moment";
 import "./EditableTable.css";
 
-const today = moment();
 
 // Editable Table helpers
 

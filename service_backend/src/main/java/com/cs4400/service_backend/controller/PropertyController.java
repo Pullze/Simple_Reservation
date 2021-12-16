@@ -111,7 +111,7 @@ public class PropertyController {
      */
     @GetMapping(value = "/reservations_to_review")
     @ApiOperation(value ="customer view reservations to review", notes = "reservations to review")
-    public Response<?> viewReservationsToReview(@RequestParam String customerEmail, String curDate) {
+    public Response<?> viewReservationsToReview(@RequestParam String customerEmail, @RequestParam String curDate) {
         List<ReserveInfo> result = propertyProcess.viewReservationsToReview(customerEmail, curDate);
         System.out.println(result);
         return new Response<>(HttpStatus.OK.value(), "Success", result);
@@ -247,7 +247,7 @@ public class PropertyController {
                                       @RequestParam String ownerEmail, @RequestParam String currentDate) {
 
         String result = propertyProcess.removeProperty(propertyName, ownerEmail, currentDate);
-        if (result.equals("remove property succeed!") ) {
+        if (result.equals("Remove property succeed!") ) {
             return new Response<>(HttpStatus.OK.value(), result, result);
         } else {
             return new Response<>(400, result, result);

@@ -149,7 +149,7 @@
     </select>
 
     <select id = "checkIfReserved" resultType = "Property">
-        select p.Property_Name from Property as p natural join Reserve as r where p.Property_Name = #{propertyName} and p.Owner_Email = #{ownerEmail} and #{currentDate} between Start_Date and End_Date;
+        select p.Property_Name from Property as p natural join Reserve as r where p.Property_Name = #{propertyName} and p.Owner_Email = #{ownerEmail} and #{currentDate} between Start_Date and End_Date and Was_Cancelled = 0;
     </select>
 
     <update id = "removePropertyFromReserve" >

@@ -34,7 +34,7 @@ const columns = [
     dataIndex: "customerPhone",
   },
   {
-    title: "Cost",
+    title: "Total Spent",
     dataIndex: "cost",
   },
   {
