@@ -221,18 +221,17 @@ function AddProperty() {
 
   const onFinish = (values) => {
     const property = { ...values, owner_email: location.state.email };
+    const { nearest_airport, distance } = values;
+    if (nearest_airport) {
+      property.nearestAirport = nearest_airport;
+      property.distance = distance;
+    }
     const formData = new FormData();
     formData.append(
       "jsonValue",
       new Blob([JSON.stringify(property)], { type: "application/json" })
     );
-    const params = {};
-    const { nearest_airport, distance } = values;
-    if (nearest_airport) {
-      params.nearest_airport = nearest_airport;
-      params.distance = distance;
-    }
-    axios.post("/api/owner_add_property", formData, { params }).then((res) => {
+    axios.post("/api/owner_add_property", formData).then((res) => {
       if (res.data.code === 200) {
         setProperty({ ...res.data.data, isAdded: true });
       } else {

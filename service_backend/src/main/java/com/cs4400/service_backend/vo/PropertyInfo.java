@@ -10,5 +10,9 @@ public class PropertyInfo extends Property {
     @ApiModelProperty("Message")
     private String message = null;
 
+    @ApiModelProperty("nearestAirport")
+    private String nearestAirport;
 
+    @ApiModelProperty("distance")
+    private Integer distance;
 }

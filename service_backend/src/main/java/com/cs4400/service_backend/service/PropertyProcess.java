@@ -39,6 +39,6 @@ public interface PropertyProcess {
 
     String OwnerRateCustomer(String ownerEmail, String customerEmail, Integer score);
 
-    PropertyInfo addProperty(Property property, String nearestAirport, Integer distance);
+    PropertyInfo addProperty(PropertyInfo propertyInfo);
 
 }

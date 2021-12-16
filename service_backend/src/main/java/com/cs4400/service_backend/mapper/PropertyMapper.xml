@@ -26,7 +26,7 @@
         select p.Property_Name, p.Owner_Email, ifnull(p.capacity - reserved_seats, p.capacity) as capacity, p.Cost
         from property as p
             left join (select Property_name, Owner_Email, sum(Num_Guests) as reserved_Seats
-                        from reserve where Was_Cancelled = 0 and Start_Date >= #{end} and End_Date &lt;= #{start}
+                        from reserve where Was_Cancelled = 0 and Start_Date &lt;= #{end} and End_Date &gt;= #{start}
                         group by Property_name, Owner_Email) as r
             on p.Property_Name = r.Property_Name and p.Owner_Email = r.Owner_Email
         where ifnull(r.reserved_seats, 0) &lt; p.capacity;
@@ -121,11 +121,11 @@
         group by p.Property_Name, res.Was_Cancelled, res.Customer;
     </select>
 
-    <select id = "checkAddressExist" parameterType = "Property" resultType = "Property">
+    <select id = "checkAddressExist" parameterType = "PropertyInfo" resultType = "Property">
         select * from Property where concat(Street, ',', City, ',', State, ',', Zip) = #{address};
     </select>
 
-    <select id = "checkNameExist" parameterType = "Property" resultType = "Property">
+    <select id = "checkNameExist" parameterType = "PropertyInfo" resultType = "Property">
         select * from Property where Property_Name = #{property_name} and Owner_Email = #{owner_email};
     </select>
 
@@ -133,7 +133,7 @@
         select * from Property where Property_Name = #{propertyName} and Owner_Email = #{ownerEmail};
     </select>
 
-    <insert id = "addProperty" parameterType = "Property">
+    <insert id = "addProperty" parameterType = "PropertyInfo">
         insert into Property(Property_Name, Owner_Email, Descr, Capacity, Cost, Street, City, State, Zip)
         values (#{property_name}, #{owner_email}, #{descr}, #{capacity}, #{cost}, #{street}, #{city}, #{state}, #{zip});
     </insert>

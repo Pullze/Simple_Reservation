@@ -172,23 +172,26 @@ public class PropertyProcessImpl implements PropertyProcess {
 
 
     @Override
-    public PropertyInfo addProperty(Property property, String nearestAirport,   Integer distance) {
-        property.setAddress(property.getStreet() + ',' + property.getCity() + ',' + property.getState() + ',' + property.getZip());
+    public PropertyInfo addProperty(PropertyInfo propertyInfo) {
+        propertyInfo.setAddress(propertyInfo.getStreet() + ',' + propertyInfo.getCity() + ',' + propertyInfo.getState() + ',' + propertyInfo.getZip());
         PropertyInfo returnPropertyInfo = new PropertyInfo();
-        if (propertyMapper.checkAddressExist(property) != null) {
+        if (propertyMapper.checkAddressExist(propertyInfo) != null) {
             returnPropertyInfo.setMessage("Address already exists!");
             return  returnPropertyInfo;
         }
 
-        if (propertyMapper.checkNameExist(property) != null) {
+        if (propertyMapper.checkNameExist(propertyInfo) != null) {
             returnPropertyInfo.setMessage("The property name already exists in your properties!");
             return returnPropertyInfo;
         }
 
-        if (property.getCapacity() <= 0) {
+        if (propertyInfo.getCapacity() <= 0) {
             returnPropertyInfo.setMessage("Capacity must be larger than 0");
             return returnPropertyInfo;
         }
+
+        String nearestAirport = propertyInfo.getNearestAirport();
+        Integer distance = propertyInfo.getDistance();
 
         if (nearestAirport != null && airportMapper.check_airport(nearestAirport) == null) {
             returnPropertyInfo.setMessage("This nearest airport does not exists!");
@@ -200,12 +203,13 @@ public class PropertyProcessImpl implements PropertyProcess {
             return returnPropertyInfo;
         }
 
-        propertyMapper.addProperty(property);
+        propertyMapper.addProperty(propertyInfo);
+        System.out.println(nearestAirport);
         if (nearestAirport != null) {
-            propertyMapper.addCloseAirport(property.getProperty_name(), property.getOwner_email(), nearestAirport, distance);
+            propertyMapper.addCloseAirport(propertyInfo.getProperty_name(), propertyInfo.getOwner_email(), nearestAirport, distance);
         }
 
-        returnPropertyInfo = propertyMapper.checkPropertyExist(property.getProperty_name(), property.getOwner_email());
+        returnPropertyInfo = propertyMapper.checkPropertyExist(propertyInfo.getProperty_name(), propertyInfo.getOwner_email());
         returnPropertyInfo.setAddress(returnPropertyInfo.getStreet() + ',' + returnPropertyInfo.getCity() + ',' + returnPropertyInfo.getState() + ',' + returnPropertyInfo.getZip());
         returnPropertyInfo.setMessage("Successfully added this property!");
         return returnPropertyInfo;

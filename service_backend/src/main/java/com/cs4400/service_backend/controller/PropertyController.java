@@ -219,21 +219,17 @@ public class PropertyController {
 
     /**
      * Owner add property.
-     * @param property the property to be added.
-     * @param nearestAirport the nearest airport.
-     * @param distance the distance to the airport.
+     * @param propertyInfo the property to be added.
      * @return response indicates success or not.
      */
     @PostMapping(value = "/owner_add_property")
     @ApiOperation(value = "owner add property")
-    public Response<?> ownerAddProperty(@RequestPart("jsonValue") Property property,
-                                        @RequestParam(required = false) String nearestAirport,
-                                        @RequestParam(required = false) Integer distance) {
+    public Response<?> ownerAddProperty(@RequestPart("jsonValue") PropertyInfo propertyInfo) {
 
-        PropertyInfo propertyInfo = propertyProcess.addProperty(property, nearestAirport, distance);
-        String message = propertyInfo.getMessage();
+        PropertyInfo returnPropertyInfo = propertyProcess.addProperty(propertyInfo);
+        String message = returnPropertyInfo.getMessage();
         if (message.equals("Successfully added this property!")) {
-            return new Response<>(200, message, propertyInfo);
+            return new Response<>(200, message, returnPropertyInfo);
         } else {
             return new Response<>(400, message);
         }

@@ -49,13 +49,13 @@ public interface PropertyMapper {
 
    void ownerRateCustomer(String ownerEmail, String customerEmail, Integer score);
 
-   Property checkAddressExist(Property property);
+   Property checkAddressExist(PropertyInfo propertyInfo);
 
-   Property checkNameExist(Property property);
+   Property checkNameExist(PropertyInfo propertyInfo);
 
    PropertyInfo checkPropertyExist(String propertyName, String ownerEmail);
 
-   void addProperty(Property property);
+   void addProperty(PropertyInfo propertyInfo);
 
    void addCloseAirport(String propertyName, String ownerEmail, String airportId, int distance);
 
